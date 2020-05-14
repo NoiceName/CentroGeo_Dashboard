@@ -1,0 +1,9 @@
+/CentroGeo.iml
+/.idea/
+/target/
+.classpath
+target/
+.project
+.settings/ 
+/lib/
+lib/
