@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Log in</title>
+    <script src="https://kit.fontawesome.com/7a198ceb62.js"></script>
+	<link rel = "stylesheet" href = "register.css">
+</head>
+<body>
+	<div id="register-box">
+		<h1>Register</h1>
+		<div class = "form">
+			<div class = "item">
+			<i class="fas fa-user"></i>
+			<input type = "text" placeholder="Username">
+			</div>
+			
+			<div class = "item">
+			<i class="fas fa-unlock-alt"></i>
+			<input type = "text" placeholder="Password">
+			</div>
+			
+			<div class = "item">
+			<i class="fas fa-envelope"></i>
+			<input type = "email" placeholder="Email">
+			</div>
+		</div>
+		<a href = ""> 
+		    <button>Submit</button>
+		</a>
+	</div>
+	<script>
+	     var buttonClick = document.getElementByTag("button");
+	     var submit = function(){
+	    	 // not finish yet, after the user submit a valid input to the database, the link will go to log in page
+	    	 document.getElementByTag("a").href = "log_in.html";	
+	     }
+	     submit.addEventListener("click",submit);     
+	</script>
+
+</body>
+</html>
