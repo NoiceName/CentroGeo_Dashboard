@@ -17,6 +17,15 @@ create table "projectSchema".Snapshot(
 	time real
 );
 
+create table "projectSchema".Lane(
+	lane_id text constraint lane_id_pk primary key,
+	index integer,
+	length real,
+	shape text
+);
 
-
+create table "projectSchema".User(
+	user_id serial constraint user_id_pk primary key,
+	password_hash text
+);
 
