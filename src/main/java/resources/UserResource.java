@@ -2,6 +2,7 @@ package resources;
 
 import java.io.*;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,13 +15,37 @@ import javax.ws.rs.core.*;
 import dao.UserDAO;
 import model.User;
 
-@Path("UserResource")
+@Path("/UserResource")
 public class UserResource {
 	
 	private static final String SUCCESS_RESULT="<result>success</result>";
 	private static final String FAILURE_RESULT="<result>failure</result>";
 	private static final String FAILURE_RESULT_PASSWORD="<result>failurePassword</result>";	
 	private static final String FAILURE_RESULT_NAME="<result>failureName</result>";	
+	
+	@Context
+	UriInfo uriInfo;
+	
+	@Context
+	Request request;
+
+	@Context
+	Response response;
+	
+	
+	/**
+	 * @param servletResponse
+	 * Redirects the user to the login page
+	 */
+	@GET
+	@Produces("text/html")
+	public void loginPage(@Context HttpServletResponse servletResponse) {
+		try {
+			servletResponse.sendRedirect("../log_in.html");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@POST
 	@Path("/users")
