@@ -27,9 +27,9 @@ body{
 	border-bottom:2px solid #fff;
 	padding:5px 10px;
 	background:#ffffff00;
-	color:#fff;
+	color:#000;
 }
-#login-box button{
+#login-button{
 	margin-top:15px;
 	width:180px;
 	height:30px;

@@ -9,52 +9,49 @@
 <body>
 	<div id="login-box">
 		<h1>Login</h1>
+		<form id="myform" action="../CentroGeo/Resources/UserResource/users" method="POST">
 		<div class = "form">
 			<div class = "item">
 			<i class="fas fa-user"></i>
-			<input id = "username" type = "text" placeholder="Username">
+			<input id = "username" name = username type = "text" placeholder="Username">
 			</div>
 			
 			<div class = "item">
 			<i class="fas fa-unlock-alt"></i>
-			<input id = "userpassword" type = "password" placeholder="Password">
+			<input id = "userpassword" name = password type = "password" placeholder="Password">
 			</div>
-		</div>
-		 	<a href = ""> 
-		    <button onclick= "login" >Login</button>
-			</a>
+		</div>	    	 	
+		    <input id = "login-button" type  ="submit" value = "Submit" > 	    
+		</form>
 		
 	</div>
-	
-	<script>
-	var restServlet = "http://localhost:8080/CentroGeo/UserResource/users/";
-    let userName = document.getElementById("username");
-    let userPassword = document.getElementById("password");
 
-	function login() {
-		
-	    var	xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-		    if (this.readyState == 4 && this.status == 200) {
-		      
-		    	let xmlDoc = this.responseXML;
-		    	result = xmlDoc.getElementByTag("result");
-		    	if (result == "failurePassword"){
-		    	   alert("pass word is wrong !");
-		        }
-		        else if (result == "failureName"){
-		        	alert("user name doesn't exist !");
-		        }
-		        else {
-		        	document.getElementByTag("a").href = "homepage.html";
-		        }
-		    }
-		}
-		xmlhttp.open("GET", restServlet + userName +"/"+ userPassword, true);
-		xmlhttp.send();
-	};
-  
-	</script>
+<script>
+
+function login() {
+	
+ //   var	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	    	
+	    	let xmlDoc = this.responseXML;
+	    	result = xmlDoc.getElementByTag("result");
+	    	if (result == "failurePassword"){
+	    	   alert("pass word is wrong !");
+	        }
+	        else if (result == "failureName"){
+	        	alert("user name doesn't exist !");
+	        }
+	        else {
+	        	alert("log in successfully");
+	        	document.getElementById("myform").action= "homepage.html";
+	        }
+	    }
+	}
+
+};
+</script>
+
 
 </body>
 </html>

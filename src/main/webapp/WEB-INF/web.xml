@@ -18,7 +18,9 @@
     		<param-name>jersey.config.server.provider.packages</param-name>
     		<param-value>resources</param-value>
     	</init-param>
-    </servlet><servlet-mapping>
+    </servlet>
+    
+<servlet-mapping>
         <servlet-name>testServlet</servlet-name>
         <url-pattern>/test/*</url-pattern>
 </servlet-mapping>
