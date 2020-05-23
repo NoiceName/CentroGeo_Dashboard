@@ -2,10 +2,13 @@ package resources;
 
 
 
+import java.io.IOException;
+
+
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
-
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -22,6 +25,30 @@ public class UserResource {
 	private static final String FAILURE_RESULT_PASSWORD="<result>failurePassword</result>";	
 	private static final String FAILURE_RESULT_NAME="<result>failureName</result>";	
 	
+
+	@Context
+	UriInfo uriInfo;
+	
+	@Context
+	Request request;
+
+	@Context
+	Response response;
+	
+	
+	/**
+	 * @param servletResponse
+	 * Redirects the user to the login page
+	 */
+	@GET
+	@Produces("text/html")
+	public void loginPage(@Context HttpServletResponse servletResponse) {
+		try {
+			servletResponse.sendRedirect("../login/log_in.html");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	
 	@POST
