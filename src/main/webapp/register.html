@@ -12,30 +12,51 @@
 		<div class = "form">
 			<div class = "item">
 			<i class="fas fa-user"></i>
-			<input type = "text" placeholder="Username">
+			<input id = "username" type = "text" placeholder="Username">
 			</div>
 			
 			<div class = "item">
 			<i class="fas fa-unlock-alt"></i>
-			<input type = "text" placeholder="Password">
+			<input id = "password" type = "text" placeholder="Password">
 			</div>
-			
-			<div class = "item">
-			<i class="fas fa-envelope"></i>
-			<input type = "email" placeholder="Email">
-			</div>
+
 		</div>
 		<a href = ""> 
-		    <button>Submit</button>
+		    <button onclick="register">Submit</button>
 		</a>
 	</div>
 	<script>
-	     var buttonClick = document.getElementByTag("button");
-	     var submit = function(){
-	    	 // not finish yet, after the user submit a valid input to the database, the link will go to log in page
-	    	 document.getElementByTag("a").href = "log_in.html";	
-	     }
-	     submit.addEventListener("click",submit);     
+	
+	    var restServlet = "http://localhost:8080/CentroGeo/UserResource/users";
+	    let userName = document.getElementById("username");
+	    let userPassword = document.getElementById("password");
+     
+	    function register() {
+	    	
+    	var	xmlhttp = new XMLHttpRequest();
+    	xmlhttp.onreadystatechange = function() {
+    	    if (this.readyState == 4 && this.status == 204) {
+    	    	
+            	xmlhttp.onreadystatechange = function() {
+            	    if (this.readyState == 4 && this.status == 200) {
+        		    	
+            	    	let xmlDoc = this.responseXML;
+        		    	result = xmlDoc.getElementByTag("result");
+        		    	if(result == "success"){
+           	           		 document.getElementByTag("a").href = "log_in.html";
+           	           		 console.log("register successfully! You can log in now.");
+        		        }
+        		        else{
+        		    	   console.log("user already exists, please log in directly");
+        		       }
+    	            }
+                 }    
+             }
+    	}	    
+    	     xmlhttp.open("POST", restServlet, true);
+    	     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    		 xmlhttp.send("name=userName&password=userPassword");
+	 };
 	</script>
 
 </body>

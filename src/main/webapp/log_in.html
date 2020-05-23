@@ -12,28 +12,48 @@
 		<div class = "form">
 			<div class = "item">
 			<i class="fas fa-user"></i>
-			<input type = "text" placeholder="Username">
+			<input id = "username" type = "text" placeholder="Username">
 			</div>
 			
 			<div class = "item">
 			<i class="fas fa-unlock-alt"></i>
-			<input type = "text" placeholder="Password">
+			<input id = "userpassword" type = "password" placeholder="Password">
 			</div>
 		</div>
 		 	<a href = ""> 
-		    <button>Login</button>
+		    <button onclick= "login" >Login</button>
 			</a>
 		
 	</div>
 	
 	<script>
-	
-    var buttonClick = document.getElementByTag("button");
-    var login = function(){
-   	 // not finish yet, check if the account exists, if it is , the link will go to home page
-   	 document.getElementByTag("a").href = "homepage.html";	
-    }
-    submit.addEventListener("click",login);  
+	var restServlet = "http://localhost:8080/CentroGeo/UserResource/users/";
+    let userName = document.getElementById("username");
+    let userPassword = document.getElementById("password");
+
+	function login() {
+		
+	    var	xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		      
+		    	let xmlDoc = this.responseXML;
+		    	result = xmlDoc.getElementByTag("result");
+		    	if (result == "failurePassword"){
+		    	   alert("pass word is wrong !");
+		        }
+		        else if (result == "failureName"){
+		        	alert("user name doesn't exist !");
+		        }
+		        else {
+		        	document.getElementByTag("a").href = "homepage.html";
+		        }
+		    }
+		}
+		xmlhttp.open("GET", restServlet + userName +"/"+ userPassword, true);
+		xmlhttp.send();
+	};
+  
 	</script>
 
 </body>
