@@ -44,7 +44,8 @@ public class UserResource {
 	@Produces("text/html")
 	public void loginPage(@Context HttpServletResponse servletResponse) {
 		try {
-			servletResponse.sendRedirect("../login/log_in.html");
+			servletResponse.sendRedirect("../login/log_in.html");		
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -55,10 +56,10 @@ public class UserResource {
 	@Path("/users")
 	@Produces({ MediaType.APPLICATION_ATOM_XML})
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String getUser(@FormParam("username") String name, @FormParam("password") String password,
+	public String getUser(@FormParam("username") String username, @FormParam("password") String password,
 			@Context HttpServletResponse servletResponse) {
 
-		User user = UserDAO.instance.getModel().get(name);
+		User user = UserDAO.instance.getModel().get(username);
 
 		if (user == null) {
 		

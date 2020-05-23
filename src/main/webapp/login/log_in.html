@@ -9,7 +9,7 @@
 <body>
 	<div id="login-box">
 		<h1>Login</h1>
-		<form id="myform" action="../CentroGeo/Resources/UserResource/users" method="POST">
+		<form id="myform">
 		<div class = "form">
 			<div class = "item">
 			<i class="fas fa-user"></i>
@@ -21,7 +21,7 @@
 			<input id = "userpassword" name = password type = "password" placeholder="Password">
 			</div>
 		</div>	    	 	
-		    <input id = "login-button" type  ="submit" value = "Submit" > 	    
+		    <input id = "login-button" type  ="submit" value = "Submit" onclick="login" > 	    
 		</form>
 		
 	</div>
@@ -29,10 +29,11 @@
 <script>
 
 function login() {
-	
- //   var	xmlhttp = new XMLHttpRequest();
+	    
+    var formData = new FormData(document.getElementById("myform"));
+    var	xmlPost = new XMLHttpRequest();
  
-	xmlhttp.onreadystatechange = function() {
+    xmlPost.onreadystatechange = function() {
 	    if (this.readyState == 4 && this.status == 200) {
 	    	
 	    	let xmlDoc = this.responseXML;
@@ -45,10 +46,13 @@ function login() {
 	        }
 	        else {
 	        	alert("log in successfully");
-	        	document.getElementById("myform").action = "../homepage.html";
+	        	window.open( "../homepage.html");
 	        }
 	    }
 	}
+    xmlPost.open("POST", "http://localhost:8080/CentroGeo/Resources/UserResource/users",true);
+    xmlhttpPost.setRequestHeader("Content-type", "MediaType.APPLICATION_FORM_URLENCODED");
+    xmlPost.send(formData);
 
 };
 </script>
