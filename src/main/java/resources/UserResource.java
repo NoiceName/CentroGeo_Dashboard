@@ -4,7 +4,7 @@ package resources;
 
 import java.io.IOException;
 
-
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -35,6 +35,8 @@ public class UserResource {
 	Response response;
 	
 	
+	
+	
 	/**
 	 * @param servletResponse
 	 * Redirects the user to the login page
@@ -43,12 +45,22 @@ public class UserResource {
 	@Produces("text/html")
 	public void loginPage(@Context HttpServletResponse servletResponse) {
 		try {
+			System.out.println("Return something");
 			servletResponse.sendRedirect("../login/log_in.html");		
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	@POST
+	@Consumes("application/json")
+	public void login(@Context HttpServletRequest request) {
+//		javax.servlet.http.Cookie[] cookies = request.getCookies();
+		System.out.println("Hello!");
+	}
+
 
 	
 	@POST
