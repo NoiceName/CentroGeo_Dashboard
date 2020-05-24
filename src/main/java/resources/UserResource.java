@@ -21,7 +21,6 @@ import model.User;
 public class UserResource {
 	
 	private static final String SUCCESS_RESULT="<result>success</result>";
-//	private static final String FAILURE_RESULT="<result>failure</result>";
 	private static final String FAILURE_RESULT_PASSWORD="<result>failurePassword</result>";	
 	private static final String FAILURE_RESULT_NAME="<result>failureName</result>";	
 	
@@ -54,10 +53,11 @@ public class UserResource {
 	
 	@POST
 	@Path("/users")
-	@Produces({ MediaType.APPLICATION_ATOM_XML})
+	@Produces(MediaType.TEXT_XML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String getUser(@FormParam("username") String username, @FormParam("password") String password,
-			@Context HttpServletResponse servletResponse) {
+	public String getUser(@FormParam("username") String username, 
+			@FormParam("password") String password,@Context HttpServletResponse servletResponse
+			) {
 
 		User user = UserDAO.instance.getModel().get(username);
 
@@ -70,10 +70,17 @@ public class UserResource {
 			return FAILURE_RESULT_PASSWORD;	//password is wrong
 		}
 		else {
+			try {
+				servletResponse.sendRedirect("../../homepage.html");		
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-		return SUCCESS_RESULT;	
+		    return SUCCESS_RESULT;	
 		}
 
 	}
+	//action="http://localhost:8080/CentroGeo/Resources/UserResource/users" method = "post"
 
 }

@@ -10,7 +10,6 @@ public class User {
      private String name;
      private String password;
  
-
 	public User(){
     	 
      }
@@ -36,5 +35,5 @@ public class User {
 	protected void setPassword(String password) {
 		this.password = password;
 	}    
-
+	
 }
