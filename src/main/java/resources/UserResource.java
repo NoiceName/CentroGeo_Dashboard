@@ -55,19 +55,21 @@ public class UserResource {
 	@Path("/users")
 	@Produces(MediaType.TEXT_XML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public String getUser(@FormParam("username") String username, 
+	public void getUser(@FormParam("username") String username, 
 			@FormParam("password") String password,@Context HttpServletResponse servletResponse
 			) {
 
 		User user = UserDAO.instance.getModel().get(username);
 
-		if (user == null) {
-		
-		    return FAILURE_RESULT_NAME;	//user name doesn't exist
-	    }
-		else if(!password.equals(user.getPassword()) ){
-	
-			return FAILURE_RESULT_PASSWORD;	//password is wrong
+		if (user == null||!password.equals(user.getPassword())) {
+			
+			try {
+				
+				servletResponse.sendRedirect("../../login/log_in_alert.html");		
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		else {
 			try {
@@ -75,12 +77,7 @@ public class UserResource {
 				
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-
-		    return SUCCESS_RESULT;	
+			}		  
 		}
-
 	}
-	//action="http://localhost:8080/CentroGeo/Resources/UserResource/users" method = "post"
-
 }
