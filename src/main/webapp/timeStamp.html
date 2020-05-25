@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Log in</title>
+    <script src="https://kit.fontawesome.com/7a198ceb62.js"></script>
+	<link rel = "stylesheet" href = "timeStamp.css">
+</head>
+<body>
+	<div id="filter-box">
+		<h1>Login</h1>
+		<form id="list" action="http://localhost:8080/CentroGeo/Resources/UserResource/users" method = "post">
+		<div class = "list">
+			<div class = "item">
+			<i class="user"></i>
+			<input id = "timefactor" name = timefactor type = "text" placeholder="timefactor">
+			</div>
+			
+			<div class = "item">
+			<i class="user"></i>
+			<input id = "data" name = data type = "file" placeholder="data">
+			</div>
+		</div>	    	 	
+		    <input id = "close-button" type  ="submit" value = "Submit" > 	    
+		</form>
+		
+	</div>
+</body>	
+</html>
