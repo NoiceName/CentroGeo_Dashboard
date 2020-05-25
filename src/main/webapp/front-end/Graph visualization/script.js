@@ -36,19 +36,21 @@
 
 
 
-      function drawPieChart() {
+      function drawPieChart(dataArray, title) {
 
-        var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        // [
+        //   ['Task', 'Hours per Day'],
+        //   ['Work',     11],
+        //   ['Eat',      2],
+        //   ['Commute',  2],
+        //   ['Watch TV', 2],
+        //   ['Sleep',    7]
+        // ]
 
         var options = {
-          title: 'My Daily Activities'
+          title: title
         };
 
         var chart = new google.visualization.PieChart(document.getElementById("mainChart"));
@@ -59,14 +61,16 @@
 
 
 
-      function drawLineChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
-        ]);
+      function drawLineChart(dataArray) {
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        //  [
+        //   ['Year', 'Sales', 'Expenses'],
+        //   ['2004',  1000,      400],
+        //   ['2005',  1170,      460],
+        //   ['2006',  660,       1120],
+        //   ['2007',  1030,      540]
+        // ]
 
         var options = {
           title: 'Company Performance',
@@ -82,10 +86,6 @@
 
 
 
-
-      function drawEmptyChart() {
-      	
-      }
 
 
 
@@ -105,6 +105,25 @@
       	if (chartType == "pieC") {drawPieChart();}
       	if (chartType == "lineC") {drawLineChart();}
       	if (chartType == "barC") { drawBarChart();}
-      	if (chartType == "otherC") { drawEmptyChart();}
+      	if (chartType == "otherC") { drawPieChart(getXMLarray(getXML()), "Vehicles and their speed");}
 
+      } 
+
+
+      function getXMLarray(xmlFile) {
+
+        //Return array containing every vehicle + the speed of that vehicle
+        var vArray =  xmlFile.getElementsByTagName('vehicle');
+        var outArray = [[]];
+        outArray[0] = ["Vehicle id", "Speed"];
+
+        for (var i = 0; i < vArray.length; i++) {
+          outArray[i+1] = [];
+          outArray[i+1][0] = vArray[i].getAttribute("id");
+          outArray[i+1][1] = parseInt(vArray[i].getAttribute("speed"));
+        }
+
+
+        // console.log(outArray.slice(0, 6));
+        return outArray;
       }
