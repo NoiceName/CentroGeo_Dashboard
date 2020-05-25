@@ -1,23 +1,32 @@
 $(function () {
-});
-
-
-$(function () {
 	$( '#myform' ).submit(function( event ) {
 		event.preventDefault();
-		console.log("submitted a form")
-
-
-		var form = $( this );
+		
+		var username = $( '#username' );
+		var password = $( '#userpassword' );
+		
+		var formData = JSON.stringify({
+			'username' : username.val(),
+			'password' : password.val()
+		});
+		
+		console.log(formData);
 
 		$.ajax({
+			url: 'http://localhost:8080/CentroGeo/Resources/UserResource',
+			data: formData,
+			//try with application/json later
 			type: 'POST',
-			url: 'CentroGeo/Resources/UserResource',
-			data: form.serialize(),
-			dataType: 'json',
+			dataType: "application/json",
+			contentType : "application/json",
 			success: function ( resp ) {
 				console.log(resp);
-			}
+			},
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' ' + errorThrown);
+            }
 		});
-	});
+		console.log("Request sent!");
+		});
+
 }); 

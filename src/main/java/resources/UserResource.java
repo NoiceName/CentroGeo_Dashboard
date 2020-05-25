@@ -2,7 +2,9 @@ package resources;
 
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +15,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
+
+import org.json.JSONObject;
 
 import dao.UserDAO;
 import model.User;
@@ -35,8 +39,6 @@ public class UserResource {
 	Response response;
 	
 	
-	
-	
 	/**
 	 * @param servletResponse
 	 * Redirects the user to the login page
@@ -55,10 +57,9 @@ public class UserResource {
 	
 	
 	@POST
-	@Consumes("application/json")
-	public void login(@Context HttpServletRequest request) {
-//		javax.servlet.http.Cookie[] cookies = request.getCookies();
-		System.out.println("Hello!");
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void login(User newUser) {
+		System.out.println("hello");
 	}
 
 

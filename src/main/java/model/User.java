@@ -7,25 +7,25 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class User {
-     private String name;
-     private String password;
+
+     String username;
+     String password;
  
 	public User(){
     	 
      }
-     
-    public User(String name, String password) {
- 
-    	 setName(name);
-    	 setPassword(password);
-     }
-
-	public String getName() {
-		return name;
+	
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
 	}
 
-	protected void setName(String name) {
-		this.name = name;
+	public String getUserName() {
+		return username;
+	}
+
+	protected void setUserName(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
