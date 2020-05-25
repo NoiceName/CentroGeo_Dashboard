@@ -1,0 +1,41 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="importXML.js"></script>
+  <script src="script.js"></script>
+
+	<title>
+		Welcome to my test
+	</title>
+
+</head>
+
+<body>
+
+<h1>CentroGeo SUMO</h1>
+
+<nav>
+	<a href="#">Home</a>
+	<a href="#">Simulations</a>
+	<a href="#">Dashboard</a>
+	<a href="#">Account</a>
+	<a href="#">Manual</a>
+	<div class="animation start-home"></div>
+</nav>
+
+
+			<select id="chartChoice" onchange="getSelectValue();">
+				<option>Choose a chart type</option>
+				<option value="pieC">PieChart</option>
+				<option value="barC">BarChart</option>
+				<option value="lineC">LineChart</option>
+				<option value="otherC">console log xml</option> 		
+			</select>
+	<div id="mainChart"></div>
+
+
+</body>
+
+</html>
