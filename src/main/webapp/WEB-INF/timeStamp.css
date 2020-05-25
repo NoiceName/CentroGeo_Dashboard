@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+body{
+	background:#556B2F;
+}
+#filter-box{
+	height:auto;
+	margin:0 auto;
+	margin-top:15%;
+	text-align:center;
+	background:#00000060;
+	padding:20px 50px;
+}
+#login-box h1{
+	color:#fff;
+}
+#login-box .list .item{
+	margin-top:15px;
+}
+#login-box .list .item i{
+	font-size:18px;
+	color:#fff;
+}
+#login-box .list .item input{
+	border:0;
+	width:180px;
+	font-size:18px;
+	border-bottom:2px solid #fff;
+	padding:5px 10px;
+	background:#ffffff00;
+	color:#000;
+}
+#close-button{
+	margin-top:15px;
+	width:180px;
+	height:30px;
+	background-image: linear-gradient(-20deg, #dcb0ed 0%, #99c99c 100%);
+}
