@@ -30,7 +30,7 @@ public class CookieManager {
 	}
 
 	/**
-	 * Generates a token
+	 * Generates a secure token
 	 * @return
 	 */
 	private static String generateToken() {
@@ -53,6 +53,14 @@ public class CookieManager {
 		}
 		else {return false;}
 	}
-
-
+	
+	
+	/**
+	 * Check if the given connection is authenticated
+	 * @return
+	 */
+	public static boolean checkAuth() {
+		return false;
+	}
+	
 }

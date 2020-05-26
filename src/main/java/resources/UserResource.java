@@ -2,22 +2,20 @@ package resources;
 
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.servlet.http.Cookie;
 import javax.ws.rs.core.*;
 
 import org.json.JSONObject;
 
+import cookie_manager.CookieManager;
 import dao.UserDAO;
 import model.User;
 
@@ -74,10 +72,17 @@ public class UserResource {
 		System.out.println(userJson);
 	}
 
+	/**
+	 * Processes the user input login information.
+	 * In the case the login is successful a token is generated and is set as a cookie.
+	 * @param userInformation
+	 * @param httpResponse
+	 * @return - A JSON Object which has a single tag of 'result' which is set to true in the case the login succeeds and false otherwise.
+	 */
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public String getUser(String userInformation) {
+	public String login(String userInformation, @Context HttpServletResponse httpResponse) {
 		JSONObject userJson = new JSONObject(userInformation);
 		String username = userJson.getString("username");
 		String password = userJson.getString("password");
@@ -85,12 +90,17 @@ public class UserResource {
 		User user = UserDAO.instance.getModel().get(username);
 		JSONObject response = new JSONObject();
 		if (user == null||!password.equals(user.getPassword())) {
-			response.put("sucess", "success");
+			response.put("result", "false");
 		}
 		else {
-			response.put("fail","fail");
+			//Generate and save a new token and send it to the user inform of a cookie 
+			String token = CookieManager.assignCookie(user);
+			Cookie authCookie = new Cookie("auth",token);
+			authCookie.setMaxAge(60*60);
+			httpResponse.addCookie(authCookie);
+			response.put("result","true");
 		}
-		System.out.println(response);
 		return response.toString();
 	}
+	
 }
