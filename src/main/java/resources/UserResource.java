@@ -93,4 +93,17 @@ public class UserResource {
 			}		  
 		}
 	}
+	
+	@POST
+	@Produces(MediaType.TEXT_XML)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void uploadZip(@FormParam("zip-file") String file, @Context HttpServletResponse servletResponse) {
+		try {
+			servletResponse.sendRedirect("../../homepage.html");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

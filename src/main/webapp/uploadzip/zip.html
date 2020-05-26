@@ -9,8 +9,12 @@
 	<button type="button" id="zip-button">choose zip file</button>
 	<span id="custom-text">no file chosen</span>
 	<br><br>
-	<input type="text" id="zip-submit" accept=".zip" hidden="hidden"/>
-	<button type="button" id="submit-button">Submit</button>
+	<form id=zipform action="../zipfiles.html">
+ 	 <input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
+ 	 <button type="button" id="zip-button">choose zip file</button>
+ 	 <span id="custom-text">no file chosen</span>
+	 <input type="submit" value="Submit">
+	</form> 
 	<br><br>
 	<span id="uploadedzip">no zip files uploaded</span>
 	<script type="text/javascript" src="zip.js"></script>
