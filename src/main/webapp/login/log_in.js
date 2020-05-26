@@ -19,14 +19,18 @@ $(function () {
 			type: 'POST',
 			dataType: 'json',
 			contentType : 'application/json',
-			success: function ( resp ) {
-				console.log(resp);
-			},
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error: ' + textStatus + ' ' + errorThrown);
+			success:function (resp) {successLogin(resp)},
+             error: function(jqXHR, textStatus, errorThrown) {
+                alert('Cannot contact the server!');
             }
 		});
 		console.log("Request sent!");
 		});
 
 }); 
+
+function successLogin(resp) {
+	console.log(resp);
+	var response = JSON.parse(resp);
+}
+

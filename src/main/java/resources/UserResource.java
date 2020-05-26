@@ -56,11 +56,8 @@ public class UserResource {
 	}
 	
 	
-	/**
-	 * Receives a User object from the login page
-	 * Use this for reference if trying to send some json back to the client!!!
-	 * @param newUser
-	 */
+//This codes receives json from a post request and creates a user object and returns it back to the client
+//	@POST
 //	@POST
 //	@Produces("application/json")
 //	@Consumes("application/json")
@@ -70,36 +67,30 @@ public class UserResource {
 //		return newUser;
 //	}
 
-
-
-	
 	@POST
-	@Path("/users")
-	@Produces(MediaType.TEXT_XML)
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void getUser(@FormParam("username") String username, 
-			@FormParam("password") String password,@Context HttpServletResponse servletResponse
-			) {
+	@Consumes("application/json")
+	public void login(String userInformation) {
+		JSONObject userJson = new JSONObject(userInformation);
+		System.out.println(userJson);
+	}
 
+	@POST
+	@Consumes("application/json")
+	@Produces("application/json")
+	public String getUser(String userInformation) {
+		JSONObject userJson = new JSONObject(userInformation);
+		String username = userJson.getString("username");
+		String password = userJson.getString("password");
+		
 		User user = UserDAO.instance.getModel().get(username);
-
+		JSONObject response = new JSONObject();
 		if (user == null||!password.equals(user.getPassword())) {
-			
-			try {
-				
-				servletResponse.sendRedirect("../../login/log_in_alert.html");		
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			response.put("sucess", "success");
 		}
 		else {
-			try {
-				servletResponse.sendRedirect("../../homepage.html");		
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}		  
+			response.put("fail","fail");
 		}
+		System.out.println(response);
+		return response.toString();
 	}
 }
