@@ -13,7 +13,7 @@ $(function () {
 		console.log(formData);
 
 		$.ajax({
-			url: 'http://localhost:8080/CentroGeo/Resources/UserResource',
+			url: '/CentroGeo/Resources/UserResource',
 			data: formData,
 			//try with application/json later
 			type: 'POST',
