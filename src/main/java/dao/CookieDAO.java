@@ -2,13 +2,16 @@ package dao;
 
 import java.util.HashMap;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import model.User;
 
 public enum CookieDAO {
 	instance;
-	HashMap<User, String> cookies = new HashMap<>();
+	BiMap<String, User> cookies = HashBiMap.create();
 	
-	public HashMap<User, String> getModel() {
+	public BiMap<String, User> getModel() {
 		return this.cookies;
 	}
 

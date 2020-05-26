@@ -37,4 +37,13 @@ class CookieManagerTest {
 	
 	}	
 	
+	@Test 
+	void updateCookies() {
+		User user1 = new User();
+		String firstToken = CookieManager.assignCookie(user1);
+		String secondToken = CookieManager.assignCookie(user1);
+		assertFalse(CookieManager.checkCookie(firstToken));
+		assertTrue(CookieManager.checkCookie(secondToken));
+	}
+	
 }
