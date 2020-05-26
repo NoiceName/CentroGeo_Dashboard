@@ -17,8 +17,8 @@ $(function () {
 			data: formData,
 			//try with application/json later
 			type: 'POST',
-			dataType: "application/json",
-			contentType : "application/json",
+			dataType: 'json',
+			contentType : 'application/json',
 			success: function ( resp ) {
 				console.log(resp);
 			},

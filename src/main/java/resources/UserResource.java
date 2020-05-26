@@ -56,11 +56,20 @@ public class UserResource {
 	}
 	
 	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void login(User newUser) {
-		System.out.println("hello");
-	}
+	/**
+	 * Receives a User object from the login page
+	 * Use this for reference if trying to send some json back to the client!!!
+	 * @param newUser
+	 */
+//	@POST
+//	@Produces("application/json")
+//	@Consumes("application/json")
+//	public User login(String json) {
+//		JSONObject input = new JSONObject(json);
+//		User newUser = new User(input.getString("username"),input.getString("password"));
+//		return newUser;
+//	}
+
 
 
 	
