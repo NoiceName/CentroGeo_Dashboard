@@ -1,6 +1,5 @@
 package cookie_manager;
 
-import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.HashMap;
@@ -22,8 +21,8 @@ public class CookieManager {
 		SecureRandom random = new SecureRandom();
 		byte[] token = random.getSeed(20);
 		String stringToken = Base64.getEncoder().encodeToString(token);
-		HashMap<User, String> storage = CookieDAO.instance.getModel();
-		storage.put(user, stringToken);
+		HashMap<String, User> storage = CookieDAO.instance.getModel();
+		storage.put(stringToken, user);
 		return stringToken;
 	}	
 	
@@ -33,13 +32,14 @@ public class CookieManager {
 	 * @param stringToken
 	 * @return
 	 */
-	public static boolean checkCookie(User user, String stringToken) {
-		HashMap<User, String> cookieModel = CookieDAO.instance.getModel();
-		if(stringToken.equals(cookieModel.get(user))) {
+	public static boolean checkCookie(String stringToken) {
+		HashMap<String, User> cookieModel = CookieDAO.instance.getModel();
+		if(cookieModel.containsKey(stringToken)) {
 			return true;
 		}
-		return false;
+		else {return false;}
 	}
+
 	
-	
+
 }
