@@ -12,7 +12,8 @@ import model.User;
 public class CookieManager {
 
 	/**
-	 * Given a user object creates a new token for the user and saves it into a hashmap
+	 * Given a user object creates a new token for the user and saves it into a hashmap.
+	 * In the case a user already has a token update it.
 	 * @param user
 	 * @return
 	 * @throws CannotCreateCookieException
