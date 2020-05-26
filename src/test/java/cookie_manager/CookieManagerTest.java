@@ -14,14 +14,6 @@ class CookieManagerTest {
 
 
 	@Test
-	void assignCookieTest() {
-		User user = new User();
-		CookieManager.assignCookie(user);
-		String result = CookieDAO.instance.getModel().get(user);
-		assertTrue(result instanceof String);
-	}
-	
-	@Test
 	void testIfCookiesExists() {
 		User user1 = new User("max", "amazingPassword");
 		User user2 = new User("sam", "123456");
@@ -36,12 +28,12 @@ class CookieManagerTest {
 		
 		
 		//Assing cookie tokens to users
-		CookieManager.assignCookie(max);
-		CookieManager.assignCookie(sam);
+		String token = CookieManager.assignCookie(max);
+		String token2 = CookieManager.assignCookie(sam);
 		
 		//Test whether the given tokens match
-		assertTrue(CookieManager.checkCookie(max, CookieDAO.instance.getModel().get(max)));
-		assertFalse(CookieManager.checkCookie(sam, CookieDAO.instance.getModel().get(max)));
+		assertTrue(CookieManager.checkCookie(token));
+		assertFalse(CookieManager.checkCookie("fakeToken"));
 	
 	}	
 	
