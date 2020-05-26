@@ -35,3 +35,7 @@ body{
 	height:30px;
 	background-image: linear-gradient(-20deg, #dcb0ed 0%, #99c99c 100%);
 }
+
+.hidden{
+	visibility: hidden;
+}

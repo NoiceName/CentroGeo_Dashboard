@@ -1,3 +1,4 @@
+
 $(function () {
 	$( '#myform' ).submit(function( event ) {
 		event.preventDefault();
@@ -9,9 +10,9 @@ $(function () {
 			'username' : username.val(),
 			'password' : password.val()
 		});
-		
-		console.log(formData);
 
+		//Send the username and password to the server.
+		//Wait for the server response execute successLogin on a successfull request
 		$.ajax({
 			url: '/CentroGeo/Resources/UserResource',
 			data: formData,
@@ -30,7 +31,17 @@ $(function () {
 }); 
 
 function successLogin(resp) {
-	console.log(resp);
-	var response = JSON.parse(resp);
+	console.log(resp.result)
+	if(resp.result=='true'){
+		//Do something
+	}
+	else if (resp.result=='false') {
+		//Empty the username and password fields + display a message.
+		var username = $('#username');
+		var password = $('#userpassword');
+		username.val("");
+		password.val("");
+		$('#failedLogin').removeClass('hidden');	
+	}
 }
 
