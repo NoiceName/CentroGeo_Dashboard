@@ -5,7 +5,6 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.HashMap;
 
-import cookie_manager.exceptions.CannotCreateCookieException;
 import dao.CookieDAO;
 import model.User;
 
@@ -19,7 +18,7 @@ public class CookieManager {
 	 * @return
 	 * @throws CannotCreateCookieException
 	 */
-	public String assignCookie(User user) throws CannotCreateCookieException {
+	public static String assignCookie(User user) {
 		SecureRandom random = new SecureRandom();
 		byte[] token = random.getSeed(20);
 		String stringToken = Base64.getEncoder().encodeToString(token);
@@ -29,14 +28,18 @@ public class CookieManager {
 	}	
 	
 	/**
-	 * Check if a given users token matches
+	 * Check if a given users token exists
 	 * @param user
 	 * @param stringToken
 	 * @return
 	 */
-//	public boolean checkCookie(User user, String stringToken) {
-//		HashMap<User, String> cookieModel = CookieDAO.instance.getModel();
-//	}
+	public static boolean checkCookie(User user, String stringToken) {
+		HashMap<User, String> cookieModel = CookieDAO.instance.getModel();
+		if(stringToken.equals(cookieModel.get(user))) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 }
