@@ -1,9 +1,6 @@
 const zipFile = document.getElementById("zip-file");
 const zipButton = document.getElementById("zip-button");
 const customText = document.getElementById("custom-text");
-const zipSubmit = document.getElementById("zip-submit");
-const submitButton = document.getElementById("submit-button");
-const uploadedzip = document.getElementById("uploadedzip");
 
 zipButton.addEventListener("click", function() {
 	zipFile.click();
@@ -17,12 +14,28 @@ zipFile.addEventListener("change", function() {
 	}
 });
 
-submitButton.addEventListener("click", function() {
-	zipSubmit.click();
-});
+$("#zipform").submit(function (evt) {
+    var formData = new FormData();
+    console.log(zipFile.files[0]);
+    // formData.append('zip', zipFile.files[0]);
+    formData = zipFile.files[0];
 
-zipSubmit.addEventListener("change", function() {
-	
+    $.ajax({
+        url: '/CentroGeo/Resources/UserResource/zip',
+        type: 'POST',
+        data: formData,
+        async: false,
+        cache: false,
+        contentType: 'application/zip',
+        dataType: 'application/zip',
+        title: 'file',
+        enctype: 'application/zip',
+        processData: false,
+        success: function (response) {
+            alert(response);
+        }
+    });
+    return false;
 });
 
 
