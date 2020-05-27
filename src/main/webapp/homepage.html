@@ -21,13 +21,16 @@
 		<a class="login" id="login" href="login/log_in.html" >Log in</a>
 	</div>
 
-	<form id="zipform">
- 	 <input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
- 	 <button type="button" id="zip-button">choose zip file</button>
- 	 <span id="custom-text">no file chosen</span>
-	 <input type="submit" value="Submit">
-	</form>
+	<div class="container" style="position: absolute; left: 10px; bottom: 10px">
+		<form id="zipform">
+ 		 	 <input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
+ 			 <button type="button" id="zip-button" class="btn btn-light">choose zip file</button>
+ 			 <span id="custom-text" style= "color:white">no file chosen</span>
+ 			 <br>
+		 	<input type="submit" value="Submit" class="btn btn-light" style = "margin-top:10px">
+		</form>
 	<script type="text/javascript" src="uploadzip/zip.js"></script>
+	</div>
 
 	<div id="big_box">
 			<select id="chartChoice" onchange="getSelectValue();">
