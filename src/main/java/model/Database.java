@@ -2,6 +2,7 @@ package model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -12,6 +13,7 @@ public class Database {
 	String username = "dab_di19202b_2";
 	String password = "3JvJt7ETzXVak62M";
 	String schemaName = "prpjectSchema";
+	Connection connection;
 
 	/**
 	 * Saves a database with given parameters
@@ -43,10 +45,10 @@ public class Database {
 	}
 	
 	/**
-	 * Connects to the specified database
+	 * Connects to the specified PGSQL database
 	 * @return
 	 */
-	public Connection connect() {
+	public Connection connectPGSQL() {
 		Properties props = new Properties();
 		props.setProperty("user", this.username);
 		props.setProperty("password", this.password);
@@ -56,9 +58,26 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		this.connection = conn;
 		return conn;
 
 	}
+	
+	public Connection getConnection() {
+		return this.connection;
+	}
+	
+	public PreparedStatement prepareStatement(String preparedStatement) {
+		try {
+			return this.connection.prepareStatement(preparedStatement);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
+	public String getSchema() {
+		return this.schemaName;
+	}
 
 }
