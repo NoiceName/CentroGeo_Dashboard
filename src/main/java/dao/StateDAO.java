@@ -1,20 +1,69 @@
 package dao;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import model.Database;
 import model.State;
 
 public enum StateDAO {
 	instance;
-
 	
-	public ArrayList<State> getAllStates(int simulation_id) {
-		return new ArrayList();
+	/**
+	 * Idk wtf is going on here
+	 * @param simulation_id
+	 * @return
+	 */
+	public String getStateDump(int simulation_id) {
+		Database db = new Database();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = null;
+		ArrayList<Document> resultArr = new ArrayList<>();
+		db.connectPGSQL();
+		String statement = ("select s.data from \"projectschema\".snapshot s where s.simulation = ?");
+		PreparedStatement st = db.prepareStatement(statement);
+		String resultString = null;
+		try {
+			st.setInt(1, simulation_id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ResultSet result = null;
+		try {
+			result = st.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			while(result.next()) {
+				String xml = result.getString("data");
+				if (xml == null) {
+					break;
+				}
+				resultString = resultString+xml;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultString;
 	}
+
 	
 	public ArrayList<State> getAllStatesForOneLane(int simulation_id, String lane_id){
 		Database db = new Database();

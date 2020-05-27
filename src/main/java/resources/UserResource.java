@@ -42,7 +42,6 @@ public class UserResource {
 	@Context
 	Response response;
 	
-	
 	/**
 	 * @param servletResponse
 	 * Redirects the user to the login page
