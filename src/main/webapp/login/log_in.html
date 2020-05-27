@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Log in</title>
     <script src="https://kit.fontawesome.com/7a198ceb62.js"></script>
-	<script src="../front-end/libraries/jquery-3.5.1.min.js"></script>
+	<script src="../libraries/jquery-3.5.1.min.js"></script>
 	<script src="log_in.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -27,7 +27,9 @@
 					<input id = "userpassword" name = password type = "password" placeholder="Password">
 				</div>
 			</div>	    	 	
-		    	<input id = "login-button" type  ="submit" value = "Submit" class="btn btn-dark" style="margin-left: 250px"> 	    
+		    	<input id = "login-button" type  ="submit" value = "Submit" class="btn btn-dark" style="margin-left: 250px">
+				<div id="failedLogin" class="hidden">Input information is incorrect please try again</div>
+ 	    
 			</form>
 		</div>
 	</div>

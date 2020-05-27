@@ -855,10 +855,8 @@ function getXML() {
 
 	return xmlDoc;
 
-}
 
-
-// var client = new XMLHttpRequest();
+    // var client = new XMLHttpRequest();
 // client.open('GET', 'file:///C:/Users/samue/Documents/School/Twente%20University/TCS_Year_1/Module_4%20Data%20&%20Information/Project%203.0/centrogeo_interactive_dashboard/src/main/webapp/front-end/Graph%20visualization/state/state_100.00.xml', false);
 // client.onreadystatechange = function() {
 //    var response = client.responseText,
@@ -869,3 +867,7 @@ function getXML() {
 //    //use the xml Doc however you want.
 // }
 // client.send(null);
+
+}
+
+

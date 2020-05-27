@@ -140,8 +140,8 @@
 
   console.log(vLanes.slice(65,70));
 
-  selectEl = document.getElementById("laneSelect");
+  selectEl = document.getElementById("laneSelect"); 
 
-for (var i = 0; i < options.length; i++) {
+for (var i = 1; i < options.length; i++) {
    selectEl.options.add(new Option(vLanes[i][0], vLanes[i][0]));
 }
