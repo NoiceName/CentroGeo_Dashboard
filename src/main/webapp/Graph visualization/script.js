@@ -113,8 +113,8 @@ function genGraph() {
           legend: { position: 'bottom' },
           crosshair: { trigger: 'both' },
           explorer: {axis: 'horizontal'},
-          hAxis: {format:"#", minValue: 0, maxValue: 5},
-          vAxis: {format:"#", minValue: 0, maxValue: 5},
+          hAxis: {format:"#", minValue: 0, maxValue: 5, viewWindow: {min: 0}},
+          vAxis: {format:"#", minValue: 0, maxValue: 5, viewWindow: {min: 0}},
           
         };
 
