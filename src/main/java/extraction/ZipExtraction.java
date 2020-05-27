@@ -36,13 +36,16 @@ public class ZipExtraction {
 					parseNet(zipStream, connection);
 				}
 				if (e.getName().contains("routes.rou.xml")) {
-					parseEmpty(zipStream, connection);
+					parseRoutes(zipStream, connection);
 				}
 				if (e.getName().contains("simulation.sumocfg")) {
 					parseEmpty(zipStream, connection);
 				}
 				if (e.getName().contains("state.zip")) {
-					parseEmpty(zipStream, connection);
+					getZipData(zipStream, connection);
+				}
+				if (e.getName().contains("state_")) {
+					parseState(zipStream, connection);
 				}
 			}
 			zipStream.reallyClose();
@@ -68,6 +71,22 @@ public class ZipExtraction {
 
 	public static void parseNet(InputStream in, Connection connection) throws ParserConfigurationException, IOException, SAXException {
 		DefaultHandler handler = new NetHandler(connection);
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		factory.setValidating(true);
+		SAXParser saxParser = factory.newSAXParser();
+		saxParser.parse(in, handler);
+	}
+
+	public static void parseRoutes(InputStream in, Connection connection) throws ParserConfigurationException, IOException, SAXException {
+		DefaultHandler handler = new RoutesHandler(connection);
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		factory.setValidating(true);
+		SAXParser saxParser = factory.newSAXParser();
+		saxParser.parse(in, handler);
+	}
+
+	public static void parseState(InputStream in, Connection connection) throws ParserConfigurationException, IOException, SAXException {
+		DefaultHandler handler = new StateHandler(connection);
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setValidating(true);
 		SAXParser saxParser = factory.newSAXParser();
@@ -156,6 +175,70 @@ public class ZipExtraction {
 				}
 
 			}
+
+		}
+
+	}
+
+	private static class RoutesHandler extends DefaultHandler{
+		Connection connection;
+
+		public RoutesHandler(Connection connection){
+			this.connection = connection;
+		}
+
+		public void startElement(String uri, String localName,
+								 String qName, Attributes attributes) throws SAXException {
+			if (qName.equals("vehicle")) {
+				String id = attributes.getValue("id");
+				float depart = Float.parseFloat(attributes.getValue("depart"));
+
+				String query = "INSERT INTO projectschema.vehicle (vehicle_id, depart) " +
+						"VALUES (?, ?)";
+
+				try {
+					PreparedStatement statement = connection.prepareStatement(query);
+					statement.setString(1, id);
+					statement.setFloat(2, depart);
+
+					statement.executeUpdate();
+				} catch (SQLException e){
+					e.getStackTrace();
+				}
+
+			}
+
+		}
+
+	}
+
+	private static class StateHandler extends DefaultHandler{
+		Connection connection;
+
+		public StateHandler(Connection connection){
+			this.connection = connection;
+		}
+
+		public void startElement(String uri, String localName,
+								 String qName, Attributes attributes) throws SAXException {
+			// if (qName.equals("vehicle")) {
+			// 	String id = attributes.getValue("id");
+			// 	float depart = Float.parseFloat(attributes.getValue("depart"));
+			//
+			// 	String query = "INSERT INTO projectschema.vehicle (vehicle_id, depart) " +
+			// 			"VALUES (?, ?)";
+			//
+			// 	try {
+			// 		PreparedStatement statement = connection.prepareStatement(query);
+			// 		statement.setString(1, id);
+			// 		statement.setFloat(2, depart);
+			//
+			// 		statement.executeUpdate();
+			// 	} catch (SQLException e){
+			// 		e.getStackTrace();
+			// 	}
+			//
+			// }
 
 		}
 
