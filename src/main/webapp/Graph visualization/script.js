@@ -24,7 +24,7 @@ function genGraph() {
   var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
 
   var result = nodes.iterateNext();
-  var cars = result.getAttribute("value").split(" ").length;
+  var cars = result.getAttribute("value").split("v").length -1;
 
   console.log(cars);
 
@@ -110,7 +110,12 @@ function genGraph() {
         var options = {
           title: title,
           curveType: 'function',
-          legend: { position: 'bottom' }
+          legend: { position: 'bottom' },
+          crosshair: { trigger: 'both' },
+          explorer: {axis: 'horizontal'},
+          hAxis: {format:"#", minValue: 0, maxValue: 5},
+          vAxis: {format:"#", minValue: 0, maxValue: 5},
+          
         };
 
         var chart = new google.visualization.LineChart(document.getElementById("mainChart"));
