@@ -55,6 +55,7 @@ span {
 }*/
 
 
+/*should be a div containing the graph and the selectors*/
 #big_box {
 	margin-top: 50px;
 	margin-left: auto;
@@ -62,14 +63,14 @@ span {
 	text-align: center;
 	width: 900px;
 	height: 600px;
-	/*background-color: blue;*/
 }
 
 
+
+/*styling for the chart*/
 #mainChart {
 	position: relative;
 	margin: auto;
-	/*margin-top: 50px;*/
 	border: 3px solid white;
 	text-align: center;
 	width: 100%; 
@@ -78,28 +79,11 @@ span {
 	z-index: 1;
 }
 
-/*#chartChoice {
-  width: 200px;
-  right: 0px;
-  position: relative;
-  height: 50px;
-  font-size: 100%;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-  background-color: #c0392b;
-  border: none;
-  border-bottom: 2px solid #962d22;
-  color: white;
-  padding: 100px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding: 10px;
-  z-index: 5;
-}*/
 
+
+/*selectors for the graphs*/
 .customSelect {
+  text-align: center;
   width: 200px;
   right: 0px;
   position: relative;
@@ -120,11 +104,26 @@ span {
   z-index: 5;
 }
 
-#chartChoice:hover,
-#chartChoice:focus, 
+
 .customSelect:hover,
 .customSelect:focus {
   color: #c0392b;
   background-color: white;
   border-bottom-color: #DCDCDC;
+}
+
+
+
+
+/*Button specific css */
+#chartGen:hover,
+#chartGen:focus {
+  color: #c0392b;
+  background-color: white;
+  border-bottom-color: #DCDCDC;
+}
+
+#chartGen {
+  width: 150px;
+  right: 0px
 }
