@@ -14,23 +14,28 @@ zipFile.addEventListener("change", function() {
 	}
 });
 
-$("zipform").submit(function(evt){	 
-    evt.preventDefault();
-    var formData = new FormData($(this)[0]);
- $.ajax({
-     url: '/CentroGeo/Resources/UserResource',
-     type: 'POST',
-     data: formData,
-     async: false,
-     cache: false,
-     contentType: false,
-     enctype: 'multipart/form-data',
-     processData: false,
-     success: function (response) {
-       alert(response);
-     }
- });
- return false;
+$("#zipform").submit(function (evt) {
+    var formData = new FormData();
+    console.log(zipFile.files[0]);
+    // formData.append('zip', zipFile.files[0]);
+    formData = zipFile.files[0];
+
+    $.ajax({
+        url: '/CentroGeo/Resources/UserResource/zip',
+        type: 'POST',
+        data: formData,
+        async: false,
+        cache: false,
+        contentType: 'application/zip',
+        dataType: 'application/zip',
+        title: 'file',
+        enctype: 'application/zip',
+        processData: false,
+        success: function (response) {
+            alert(response);
+        }
+    });
+    return false;
 });
 
 

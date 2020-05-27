@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Upload zip file</title>
+	<meta charset="UTF-8">
+	<script src="../libraries/jquery-3.5.1.min.js"></script>
+	<script src="zip.js"></script>
+	<meta charset="ISO-8859-1">
+	<title>Upload zip file</title>
 </head>
 <body>
 	<input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
 	<button type="button" id="zip-button">choose zip file</button>
 	<span id="custom-text">no file chosen</span>
 	<br><br>
-	<form id=zipform action="../zipfiles.html">
+	<form id=zipform>
  	 <input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
  	 <button type="button" id="zip-button">choose zip file</button>
  	 <span id="custom-text">no file chosen</span>

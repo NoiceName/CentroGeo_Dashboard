@@ -13,57 +13,62 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 
 public class ZipExtraction {
-	/**
-	 * Extracts file from zip file to target directory
-	 *
-	 * @param file The project relative path to the .zip file
-	 * @param connection The SQL connection
-	 * @throws IOException If the file does not exist
-	 */
-	public static void extract(String file, Connection connection) throws IOException {
-		ZipFile zipFile = new ZipFile(file);
+	public static void getZipData(InputStream stream, Connection connection) throws EOFException {
+		ZipInputStream zipStream = new ZipInputStream(stream);
 
-		// Generator holding the files
-		Enumeration<? extends ZipEntry> entries = zipFile.entries();
-
-		while (entries.hasMoreElements()) {
-			ZipEntry entry = entries.nextElement();
-
-			// Writes the file to disk
-			InputStream in = zipFile.getInputStream(entry);
-
-			if (entry.getName().contains("metadata.txt")){
-				parseMetadata(in, connection);
-			}
-
-			if (entry.getName().contains("net.net.xml")){
-				try {
-					parseNet(in, connection);
-				} catch (ParserConfigurationException | SAXException e) {
-					e.printStackTrace();
+		try {
+			for (ZipEntry e; (e = zipStream.getNextEntry()) != null; ) {
+				System.out.println(e.getName());
+				if (e.getName().contains("metadata.txt")) {
+					parseMetadata(zipStream, connection);
+					zipStream.closeEntry();
+				}
+				if (e.getName().contains("net.net.xml")) {
+					parseNet(zipStream, connection);
+					zipStream.closeEntry();
+				}
+				if (e.getName().contains("routes.rou.xml")) {
+					parseEmpty(zipStream, connection);
+					zipStream.closeEntry();
+				}
+				if (e.getName().contains("simulation.sumocfg")) {
+					parseEmpty(zipStream, connection);
+					zipStream.closeEntry();
+				}
+				if (e.getName().contains("state.zip")) {
+					parseEmpty(zipStream, connection);
+					zipStream.closeEntry();
 				}
 			}
-
-			if (entry.getName().contains("routes.rou.xml")){
-
-			}
-
-			if (entry.getName().contains("simulation.sumocfg")){
-
-			}
-
-			if (entry.getName().contains("state.zip")){
-				
-			}
+		} catch (IOException | ParserConfigurationException | SAXException e) {
+			e.printStackTrace();
 		}
 	}
+
+	// /**
+	//  * Extracts file from zip file to target directory
+	//  *
+	//  * @param in The project relative path to the .zip file
+	//  * @param connection The SQL connection
+	//  * @throws IOException If the file does not exist
+	//  */
+	// public static void extract(InputStream in, Connection connection) throws IOException, ParserConfigurationException, SAXException {
+	// 	// parseMetadata(getZipData(in, "metadata.txt"), connection);
+	// 	parseNet(getZipData(in, "net.net.xml"), connection);
+	// 	parseEmpty(getZipData(in, "routes.rou.xml"), connection);
+	// 	parseEmpty(getZipData(in, "simulation.sumocfg"), connection);
+	// 	parseEmpty(getZipData(in, "state.zip"), connection);
+	// }
 
 	public static void parseNet(InputStream in, Connection connection) throws ParserConfigurationException, IOException, SAXException {
 		DefaultHandler handler = new NetHandler(connection);
@@ -117,7 +122,7 @@ public class ZipExtraction {
 			statement.setString(3, tags);
 			statement.setString(4, description);
 
-			statement.executeQuery();
+			statement.executeUpdate();
 
 		} catch (IOException | SQLException | ParseException e) {
 			e.printStackTrace();
@@ -151,7 +156,7 @@ public class ZipExtraction {
 					statement.setDouble(3, length);
 					statement.setString(4, shape);
 
-					statement.executeQuery();
+					statement.executeUpdate();
 				} catch (SQLException e){
 					e.getStackTrace();
 				}
@@ -159,6 +164,10 @@ public class ZipExtraction {
 			}
 
 		}
+
+	}
+
+	public static void parseEmpty(InputStream in, Connection connection) {
 
 	}
 
