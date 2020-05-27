@@ -9,10 +9,10 @@ import java.util.Properties;
 public class Database {
 	//Specify the parameters for the database here!
 	//The URL should be of the following format jdbc:postgresql://localhost/test
-	String url = "";
-	String username = "";
-	String password = "";
-	String schemaName = "";
+	String url = "jdbc:postgresql://bronto.ewi.utwente.nl/";
+	String username = "dab_di19202b_2";
+	String password = "3JvJt7ETzXVak62M";
+	String schemaName = "projectschema";
 	Connection connection;
 
 	/**
@@ -84,5 +84,5 @@ public class Database {
 	public Connection getConnection() {
 		return this.connection;
 	}
-
+	
 }
