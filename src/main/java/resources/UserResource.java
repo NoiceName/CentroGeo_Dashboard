@@ -107,8 +107,15 @@ public class UserResource {
 
 	@Path("/zip")
 	@POST
+	@Produces(MediaType.TEXT_XML)
 	@Consumes("application/zip")
-	public void getZip(InputStream stream){
+	public void getZip(InputStream stream, @Context HttpServletResponse servletResponse){
+		
+		try {
+			servletResponse.sendRedirect("../../homepage.html");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		System.out.println("File received");
 		// try {
 		// 	Class.forName("org.postgresql.Driver");
