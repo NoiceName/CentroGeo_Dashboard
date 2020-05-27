@@ -2,28 +2,33 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Log in</title>
     <script src="https://kit.fontawesome.com/7a198ceb62.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
+    	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<link rel = "stylesheet" href = "register.css">
 </head>
 <body>
-	<div id="register-box">
-		<h1>Register</h1>
-		<div class = "form">
-			<div class = "item">
-			<i class="fas fa-user"></i>
-			<input id = "username" type = "text" placeholder="Username">
-			</div>
-			
-			<div class = "item">
-			<i class="fas fa-unlock-alt"></i>
-			<input id = "password" type = "text" placeholder="Password">
-			</div>
+	<div class="container rounded p-3 mb-2 bg-light text-dark w-25" style="margin-top: 200px">
+		<div id="register-box">
+			<h1>Register</h1>
+			<div class = "form">
+				<div class = "item">
+				<i class="fas fa-user"></i>
+				<input id = "username" type = "text" placeholder="Username">
+				</div>
+				
+				<div class = "item">
+				<i class="fas fa-unlock-alt"></i>
+				<input id = "password" type = "text" placeholder="Password">
+				</div>
 
+			</div>
+			<a href = ""> 
+			    <button onclick="register" class="btn btn-dark" style="margin-left: 250px">Submit</button>
+			</a>
 		</div>
-		<a href = ""> 
-		    <button onclick="register">Submit</button>
-		</a>
 	</div>
 	<script>
 	

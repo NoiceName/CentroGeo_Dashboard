@@ -1,3 +1,11 @@
+body {
+  background: url('https://cdn.hipwallpaper.com/i/23/48/tb4qfo.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
 :root {
