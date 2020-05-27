@@ -86,15 +86,20 @@ public class UserResource {
 		JSONObject userJson = new JSONObject(userInformation);
 		String username = userJson.getString("username");
 		String password = userJson.getString("password");
+	
+		/* I have created the method to check if the username is in the database, 
+		 * and if the returned password matches the given password		
+		 * */
 		
-		User user = UserDAO.instance.getModel().get(username);
+ //		User user = UserDAO.instance.getModel().get(username);
+		String returnPassword = UserDAO.instance.getUserPassword(username);
 		JSONObject response = new JSONObject();
-		if (user == null||!password.equals(user.getPassword())) {
+		if (returnPassword == null||!password.equals(returnPassword)){
 			response.put("result", "false");
 		}
 		else {
 			//Generate and save a new token and send it to the user inform of a cookie 
-			String token = CookieManager.assignCookie(user);
+			String token = CookieManager.assignCookie(new User(username,password)); 
 			Cookie authCookie = new Cookie("auth",token);
 			authCookie.setMaxAge(60*60);
 			httpResponse.addCookie(authCookie);
