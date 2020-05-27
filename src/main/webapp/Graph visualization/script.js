@@ -3,7 +3,7 @@
 
  	google.charts.load('current', {'packages':['corechart']});
  	google.charts.load('current', {'packages':['bar']});
-    google.charts.setOnLoadCallback(drawPieChart);
+    // google.charts.setOnLoadCallback(drawPieChart);
     // google.charts.setOnLoadCallback(drawLineChart);
 
 
@@ -64,13 +64,6 @@
       function drawLineChart(dataArray) {
         var data = google.visualization.arrayToDataTable(dataArray);
 
-        //  [
-        //   ['Year', 'Sales', 'Expenses'],
-        //   ['2004',  1000,      400],
-        //   ['2005',  1170,      460],
-        //   ['2006',  660,       1120],
-        //   ['2007',  1030,      540]
-        // ]
 
         var options = {
           title: 'Company Performance',
@@ -110,6 +103,8 @@
       } 
 
 
+
+
       function getXMLarray(xmlFile) {
 
         //Return array containing every vehicle + the speed of that vehicle
@@ -127,3 +122,26 @@
         // console.log(outArray.slice(0, 6));
         return outArray;
       }
+
+
+
+  var xmlFile = getXML();
+  var options = xmlFile.getElementsByTagName('lane'); 
+  // console.log(options);
+  var vLanes = [[]];
+  vLanes[0] = ["Lane id", "vehicles"];
+
+  for (var i = 0; i < options.length; i++) {
+    vLanes[i+1] = [];
+    vLanes[i+1][0] = options[i].getAttribute("id");
+    vLanes[i+1][1] = options[i].getElementsByTagName('vehicles value').value;
+   
+  }
+
+  console.log(vLanes.slice(65,70));
+
+  selectEl = document.getElementById("laneSelect");
+
+for (var i = 0; i < options.length; i++) {
+   selectEl.options.add(new Option(vLanes[i][0], vLanes[i][0]));
+}
