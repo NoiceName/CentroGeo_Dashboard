@@ -30,6 +30,7 @@ public enum StateDAO {
 	public String getStateDump(int simulation_id) {
 		Database db = new Database();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		Database.loadPGSQL();
 		DocumentBuilder builder = null;
 		ArrayList<Document> resultArr = new ArrayList<>();
 		db.connectPGSQL();

@@ -1,6 +1,7 @@
 package resources;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -13,6 +14,12 @@ import dao.StateDAO;
 public class MetadataResource {
 	
 	
+//just a test	
+	@GET
+	public String getSomething() {
+		return "Hello!";
+	}
+	
 	/**
 	 * AJAX
 	 * @param json
@@ -20,13 +27,13 @@ public class MetadataResource {
 	 */
 	@POST
 	@Path("/states")
-	@Consumes("application/json")
 	@Produces("text/xml")
+	@Consumes("application/json")
 	public String getStates(String json) {
+		System.out.println("received request");
 		JSONObject stateRequest = new JSONObject(json);
-		String simulation = stateRequest.getString("simulation");
-		int sim_id = Integer.parseInt(simulation);
-		String xml = StateDAO.instance.getStateDump(sim_id);
+		int simulation = stateRequest.getInt("simulation");
+		String xml = StateDAO.instance.getStateDump(simulation);
 		return xml;
 	}
 }

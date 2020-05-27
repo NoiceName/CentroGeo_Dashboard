@@ -12,6 +12,7 @@ public class Metadata {
 	String description;
 	
 	
+	
 	public void setText(String text) {
 		this.text = text;
 	}
