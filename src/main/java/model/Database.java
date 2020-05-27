@@ -8,9 +8,10 @@ import java.util.Properties;
 public class Database {
 	//Specify the parameters for the database here!
 	//The URL should be of the following format jdbc:postgresql://localhost/test
-	String url = "";
-	String username = ""; 
-	String password = "";
+	String url = "jdbc:postgresql://bronto.ewi.utwente.nl/";
+	String username = "dab_di19202b_2";
+	String password = "3JvJt7ETzXVak62M";
+	String schemaName = "prpjectSchema";
 
 	/**
 	 * Saves a database with given parameters
@@ -18,7 +19,7 @@ public class Database {
 	 * @param username
 	 * @param password
 	 */
-	public Database(String url, String username, String password) {
+	public Database(String url, String username, String password, String schemaName) {
 		this.url = url;
 		this.username = username;
 		this.password = password;
