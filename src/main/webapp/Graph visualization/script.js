@@ -1,4 +1,6 @@
-
+function onload() {
+  populateLaneSelect();
+}
 
 
  	google.charts.load('current', {'packages':['corechart']});
@@ -9,8 +11,56 @@
 
 
 
+// Function getting called whenever the "Generate Graph" button is pressed
+function genGraph() {
 
-    function drawBarChart() {
+  var simulation;
+  var snapshot = getXML();
+  // get the values of the different selects
+  var chartType = document.getElementById('chartChoice').value;
+  var laneChoice = document.getElementById('laneSelect').value;
+
+  var path = "/snapshot/lane[@id=\""+ laneChoice + "\"]/vehicles";
+  var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+
+  var result = nodes.iterateNext();
+  var cars = result.getAttribute("value").split(" ").length;
+
+  console.log(cars);
+
+  
+  
+
+  // determine what grap should be drawn
+  if (chartType == "barC") {
+    drawBarChart();
+
+  }
+  else if (chartType == "pieC") {
+    drawPieChart();
+
+  }
+  else if (chartType == "lineC") {
+    var dataArray = [[]];
+    dataArray[0] = ["Time stamp", "#cars"];
+    dataArray[1] = [1, cars];
+
+    drawLineChart(dataArray, "Number of cars on lane " + laneChoice);
+
+  }
+  else if (chartType == "otherC") {
+    drawPieChart(getXMLarray(snapshot), "Vehicles and their speed");
+
+  }
+
+}
+
+
+
+
+
+
+    function drawBarChart(dataArray, title) {
 
     	var data = google.visualization.arrayToDataTable([
           ['Year', 'Sales', 'Expenses', 'Profit'],
@@ -22,10 +72,10 @@
 
         var options = {
           chart: {
-            title: 'Company Performance',
+            title: 'Mockup graph',
             subtitle: 'Sales, Expenses, and Profit: 2014-2017',
           },
-          bars: 'horizontal' // Required for Material Bar Charts.
+          bars: 'vertical' // Required for Material Bar Charts.
         };
 
         var chart = new google.charts.Bar(document.getElementById('mainChart'));
@@ -40,15 +90,7 @@
 
         var data = google.visualization.arrayToDataTable(dataArray);
 
-        // [
-        //   ['Task', 'Hours per Day'],
-        //   ['Work',     11],
-        //   ['Eat',      2],
-        //   ['Commute',  2],
-        //   ['Watch TV', 2],
-        //   ['Sleep',    7]
-        // ]
-
+        
         var options = {
           title: title
         };
@@ -61,12 +103,12 @@
 
 
 
-      function drawLineChart(dataArray) {
+      function drawLineChart(dataArray, title) {
         var data = google.visualization.arrayToDataTable(dataArray);
 
 
         var options = {
-          title: 'Company Performance',
+          title: title,
           curveType: 'function',
           legend: { position: 'bottom' }
         };
@@ -77,30 +119,6 @@
         chart.draw(data, options);
       }
 
-
-
-
-
-
-
-
-      function getSelectValue() {
-
-      	var selectedValue = document.getElementById("chartChoice").value;
-      	drawChart(selectedValue);
-
-
-      }
-
-
-      function drawChart(chartType) {
-
-      	if (chartType == "pieC") {drawPieChart();}
-      	if (chartType == "lineC") {drawLineChart();}
-      	if (chartType == "barC") { drawBarChart();}
-      	if (chartType == "otherC") { drawPieChart(getXMLarray(getXML()), "Vehicles and their speed");}
-
-      } 
 
 
 
@@ -125,23 +143,24 @@
 
 
 
+
+
+//populate the laneSelect with options
+function populateLaneSelect() {
+
   var xmlFile = getXML();
   var options = xmlFile.getElementsByTagName('lane'); 
-  // console.log(options);
-  var vLanes = [[]];
-  vLanes[0] = ["Lane id", "vehicles"];
+  var vLanes = [];
 
   for (var i = 0; i < options.length; i++) {
-    vLanes[i+1] = [];
-    vLanes[i+1][0] = options[i].getAttribute("id");
-    vLanes[i+1][1] = options[i].getElementsByTagName('vehicles value').value;
-   
+    vLanes[i] = [];
+    vLanes[i] = options[i].getAttribute("id");
   }
-
-  console.log(vLanes.slice(65,70));
 
   selectEl = document.getElementById("laneSelect"); 
 
-for (var i = 1; i < options.length; i++) {
-   selectEl.options.add(new Option(vLanes[i][0], vLanes[i][0]));
+  for (var i = 1; i < options.length; i++) {
+     selectEl.options.add(new Option(vLanes[i], vLanes[i]));
+  }
 }
+
