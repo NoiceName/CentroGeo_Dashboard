@@ -24,32 +24,28 @@ import java.util.zip.ZipInputStream;
 
 public class ZipExtraction {
 	public static void getZipData(InputStream stream, Connection connection) throws EOFException {
-		ZipInputStream zipStream = new ZipInputStream(stream);
+		WontCloseZipInputStream zipStream = new WontCloseZipInputStream(stream);
 
 		try {
 			for (ZipEntry e; (e = zipStream.getNextEntry()) != null; ) {
 				System.out.println(e.getName());
 				if (e.getName().contains("metadata.txt")) {
 					parseMetadata(zipStream, connection);
-					zipStream.closeEntry();
 				}
 				if (e.getName().contains("net.net.xml")) {
 					parseNet(zipStream, connection);
-					zipStream.closeEntry();
 				}
 				if (e.getName().contains("routes.rou.xml")) {
 					parseEmpty(zipStream, connection);
-					zipStream.closeEntry();
 				}
 				if (e.getName().contains("simulation.sumocfg")) {
 					parseEmpty(zipStream, connection);
-					zipStream.closeEntry();
 				}
 				if (e.getName().contains("state.zip")) {
 					parseEmpty(zipStream, connection);
-					zipStream.closeEntry();
 				}
 			}
+			zipStream.reallyClose();
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
@@ -76,7 +72,6 @@ public class ZipExtraction {
 		factory.setValidating(true);
 		SAXParser saxParser = factory.newSAXParser();
 		saxParser.parse(in, handler);
-
 	}
 
 	public static void parseMetadata(InputStream in, Connection connection) {
@@ -139,7 +134,6 @@ public class ZipExtraction {
 		public void startElement(String uri, String localName,
 								 String qName, Attributes attributes) throws SAXException {
 			if (qName.equals("lane")) {
-				System.out.println(attributes.getValue(0));
 				String id = attributes.getValue("id");
 				int index = Integer.parseInt(attributes.getValue("index"));
 				double speed = Double.parseDouble(attributes.getValue("speed"));
@@ -168,7 +162,22 @@ public class ZipExtraction {
 	}
 
 	public static void parseEmpty(InputStream in, Connection connection) {
+		System.out.println("Could do something potentially");
 
+	}
+
+	static class WontCloseZipInputStream extends java.util.zip.ZipInputStream {
+		public WontCloseZipInputStream(InputStream in) {
+			super(in);
+		}
+
+		public void close () {
+			// Do nothing.
+		}
+
+		public void reallyClose() throws IOException {
+			super.close();
+		}
 	}
 
 }

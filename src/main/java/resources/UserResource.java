@@ -109,25 +109,24 @@ public class UserResource {
 	@POST
 	@Consumes("application/zip")
 	public void getZip(InputStream stream){
-		System.out.println("File received");
-		// try {
-		// 	Class.forName("org.postgresql.Driver");
-		// }
-		// catch (ClassNotFoundException cnfe) {
-		// 	System.err.println("Error loading driver: " + cnfe);
-		// }
-		//
-		// String url = "jdbc:postgresql://localhost:5433/centrogeo";
-		// String username = "postgres";
-		// String password = "1YIrISqSsLxYFI8Itig6";
-		//
-		// try {
-		// 	Connection connection = DriverManager.getConnection(url, username, password);
-		// 	System.out.println("Downloaded file");
-		// 	extraction.ZipExtraction.getZipData(stream, connection);
-		// } catch (SQLException | IOException e) {
-		// 	e.printStackTrace();
-		// }
+		try {
+			Class.forName("org.postgresql.Driver");
+		}
+		catch (ClassNotFoundException cnfe) {
+			System.err.println("Error loading driver: " + cnfe);
+		}
+
+		String url = "jdbc:postgresql://localhost:5433/centrogeo";
+		String username = "postgres";
+		String password = "1YIrISqSsLxYFI8Itig6";
+
+		try {
+			Connection connection = DriverManager.getConnection(url, username, password);
+			System.out.println("Downloaded file");
+			extraction.ZipExtraction.getZipData(stream, connection);
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	
