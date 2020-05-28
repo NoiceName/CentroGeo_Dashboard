@@ -182,12 +182,17 @@ $(function () {
 		type: 'POST',
 		dataType: 'json',
 		contentType : 'application/json',
-		success: function (resp) {console.log(resp)},
+		success: function (resp) {success(resp)},
 		error: function(jqXHR, textStatus, errorThrown) {
 			alert('Cannot contact the server!');
 		}
 	});
 	});
 });
+
+function success(resp) {
+	//resp is the data array
+	console.log(resp);
+}
 
 
