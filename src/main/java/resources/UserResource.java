@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import dao.UserDAO;
 import model.User;
+import org.junit.platform.engine.support.descriptor.FileSystemSource;
 import org.xml.sax.SAXException;
 
 @Path("/UserResource")
@@ -124,6 +125,7 @@ public class UserResource {
 			Connection connection = DriverManager.getConnection(url, username, password);
 			System.out.println("Downloaded file");
 			extraction.ZipExtraction.getZipData(stream, connection);
+			System.out.println("File added to database");
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
