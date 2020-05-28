@@ -5,7 +5,7 @@ var XMLloaded = false;
 function onload() {
 
   currentXML = getXML();
-  console.log("page is loaded done");
+  console.log("page is loaded");
 
 }
 
@@ -20,35 +20,23 @@ function onload() {
 
 // Function getting called whenever the "Generate Graph" button is pressed --> called when sucess() is ready
 function genGraph() {
-  console.log("gen the graph XML");
- // console.log(currentXML);
+  console.log("Generating the graph");
 
 
   var simulation;
+  var chartType;
+  var laneChoice;
   // get the values of the different selects
-  var chartType = document.getElementById('chartChoice').value;
-  var laneChoice = document.getElementById('laneSelect').value;
-
-  var cars = [];
-
-
-
-  for (var i = 0; i < currentXML.length; i++) {
-    var snapshot = currentXML[i];
-
-    var path = "/snapshot/lane[@id=\""+ laneChoice + "\"]/vehicles";
-    var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-
-    var result = nodes.iterateNext();
-    cars[i] = result.getAttribute("value").split("v").length -1;
+  try {
+    chartType = document.getElementById('chartChoice').value;
+    laneChoice = document.getElementById('laneSelect').value;
+  } catch(err) {
+    console.log("Missing a chartType or laneChoice");
   }
- 
-  console.log(cars);
-
-  
   
 
   // determine what graph should be drawn
+
   if (chartType == "barC") {
     drawBarChart();
 
@@ -57,7 +45,25 @@ function genGraph() {
     drawPieChart();
 
   }
+
+  //Chart showing #cars per lane
   else if (chartType == "lineC") {
+
+    var cars = [];
+
+
+
+    for (var i = 0; i < currentXML.length; i++) {
+      var snapshot = currentXML[i];
+
+      var path = "/snapshot/lane[@id=\""+ laneChoice + "\"]/vehicles";
+      var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+
+      var result = nodes.iterateNext();
+      cars[i] = result.getAttribute("value").split("v").length -1;
+    }
+
+
     var dataArray = [[]];
     dataArray[0] = ["Time stamp", "#cars"];
 
@@ -68,6 +74,8 @@ function genGraph() {
     drawLineChart(dataArray, "Number of cars on lane " + laneChoice);
 
   }
+
+  //draw a useless graph
   else if (chartType == "otherC") {
     drawPieChart(getXMLarray(snapshot), "Vehicles and their speed");
 
