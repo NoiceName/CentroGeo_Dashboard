@@ -3,6 +3,9 @@ package resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,7 +25,9 @@ import org.json.JSONObject;
 
 import cookie_manager.CookieManager;
 import dao.UserDAO;
+import model.Database;
 import model.User;
+import org.junit.platform.engine.support.descriptor.FileSystemSource;
 import org.xml.sax.SAXException;
 
 @Path("/UserResource")
@@ -120,36 +125,24 @@ public class UserResource {
 	// 	}
 	// }
 
+
+
 	@Path("/zip")
 	@POST
-	@Produces(MediaType.TEXT_XML)
 	@Consumes("application/zip")
-	public void getZip(InputStream stream, @Context HttpServletResponse servletResponse){
-		
+	public void getZip(InputStream stream){
+		Database.loadPGSQL();
+		Database newDb = new Database();
+
 		try {
-			servletResponse.sendRedirect("../../homepage.html");
+			newDb.connectPGSQL();
+			Connection connection = newDb.getConnection();
+			System.out.println("Downloaded file");
+			extraction.ZipExtraction.getZipData(stream, connection);
+			System.out.println("File added to database");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("File received");
-		// try {
-		// 	Class.forName("org.postgresql.Driver");
-		// }
-		// catch (ClassNotFoundException cnfe) {
-		// 	System.err.println("Error loading driver: " + cnfe);
-		// }
-		//
-		// String url = "jdbc:postgresql://localhost:5433/centrogeo";
-		// String username = "postgres";
-		// String password = "1YIrISqSsLxYFI8Itig6";
-		//
-		// try {
-		// 	Connection connection = DriverManager.getConnection(url, username, password);
-		// 	System.out.println("Downloaded file");
-		// 	extraction.ZipExtraction.getZipData(stream, connection);
-		// } catch (SQLException | IOException e) {
-		// 	e.printStackTrace();
-		// }
 	}
 
 }
