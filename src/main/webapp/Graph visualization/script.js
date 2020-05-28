@@ -21,19 +21,28 @@ function onload() {
 // Function getting called whenever the "Generate Graph" button is pressed --> called when sucess() is ready
 function genGraph() {
   console.log("gen the graph XML");
- console.log(currentXML);
+ // console.log(currentXML);
+
+
   var simulation;
-  var snapshot = currentXML;
   // get the values of the different selects
   var chartType = document.getElementById('chartChoice').value;
   var laneChoice = document.getElementById('laneSelect').value;
 
-  var path = "/snapshot/lane[@id=\""+ laneChoice + "\"]/vehicles";
-  var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+  var cars = [];
 
-  var result = nodes.iterateNext();
-  var cars = result.getAttribute("value").split("v").length -1;
 
+
+  for (var i = 0; i < currentXML.length; i++) {
+    var snapshot = currentXML[i];
+
+    var path = "/snapshot/lane[@id=\""+ laneChoice + "\"]/vehicles";
+    var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+
+    var result = nodes.iterateNext();
+    cars[i] = result.getAttribute("value").split("v").length -1;
+  }
+ 
   console.log(cars);
 
   
@@ -51,7 +60,10 @@ function genGraph() {
   else if (chartType == "lineC") {
     var dataArray = [[]];
     dataArray[0] = ["Time stamp", "#cars"];
-    dataArray[1] = [1, cars];
+
+    for (var i = 0; i < cars.length; i++) {
+      dataArray[i+1] = [i, cars[i]];
+    }
 
     drawLineChart(dataArray, "Number of cars on lane " + laneChoice);
 
@@ -206,15 +218,17 @@ function populateLaneSelect() {
         // console.log("yeey");
         // console.log(resp[0].data);
         dataArray = [];
+        var parser = new DOMParser();
 
         for (var i = 0; i < resp.length; i++) {
-            dataArray[i] = resp[i].data;
+            xmlDoc = parser.parseFromString(resp[i].data, "text/xml");
+            dataArray[i] = xmlDoc;
         }
         
-        var parser = new DOMParser();
-        xmlDoc = parser.parseFromString(dataArray[1], "text/xml");
+        
+        
 
-        currentXML = xmlDoc;
+        currentXML = dataArray;
         // console.log("succes XML");
         // console.log(currentXML);
         genGraph();
