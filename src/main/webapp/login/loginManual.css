@@ -2,14 +2,15 @@ body {
   background: url('https://cdn.hipwallpaper.com/i/23/48/tb4qfo.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
-  background-size: cover;
+  background-size: 3000px;
   -o-background-size: cover;
 }
 
-a.help {
+a.backhome {
 	color: white;
-	position: absolute;
-	right: 400px;	
+	position: absolute; 
+	left: 30px;
+	top: 200px; 
 	width: 100px;
 	border-style: solid;
 	border-radius: 25px;

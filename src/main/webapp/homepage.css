@@ -7,14 +7,24 @@ body {
 }
 
 a.login {
+	color: white;
 	position: absolute; 
 	right: 10px;
-	color: white;
 	bottom: 10px; 
 	width: 100px;
 	border-style: solid;
 	border-radius: 25px;
-	padding-left: 25px;
+	padding-left: 20px;
+}
+
+a.help {
+	color: white;
+	position: absolute;
+	right: 10px;	
+	width: 100px;
+	border-style: solid;
+	border-radius: 25px;
+	padding-left: 30px;
 }
 
 
