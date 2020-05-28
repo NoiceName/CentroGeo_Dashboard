@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.json.JSONObject;
+import org.json.XML;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -27,7 +28,7 @@ public enum StateDAO {
 	 * @param simulation_id
 	 * @return
 	 */
-	public ArrayList<State> getStateDump(int simulation_id) {
+	public ArrayList<State> getStateDumpXML(int simulation_id) {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
@@ -63,6 +64,39 @@ public enum StateDAO {
 		return states;
 	}
 
+	public JSONObject getStateDUMPJSON(int simulation_id) {
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = ("select s.snapshot_id, s.data from \"projectschema\".snapshot s where s.simulation = ?");
+		PreparedStatement st = db.prepareStatement(statement);
+		JSONObject resultObject = new JSONObject();
+		try {
+			st.setInt(1, simulation_id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		ResultSet result = null;
+		try {
+			result = st.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			while(result.next()) {
+				State newState = new State();
+				if(result.getString("data")==null) {
+					break;
+				}
+				JSONObject xml = XML.toJSONObject(result.getString("data"));
+				resultObject.append(result.getString("snapshot_id"), xml);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return resultObject;
+	}
 	
 	public ArrayList<State> getAllStatesForOneLane(int simulation_id, String lane_id){
 		Database db = new Database();
