@@ -27,20 +27,16 @@ public enum StateDAO {
 	 * @param simulation_id
 	 * @return
 	 */
-	public String getStateDump(int simulation_id) {
+	public ArrayList<State> getStateDump(int simulation_id) {
 		Database db = new Database();
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		Database.loadPGSQL();
-		DocumentBuilder builder = null;
-		ArrayList<Document> resultArr = new ArrayList<>();
 		db.connectPGSQL();
 		String statement = ("select s.data from \"projectschema\".snapshot s where s.simulation = ?");
 		PreparedStatement st = db.prepareStatement(statement);
-		String resultString = null;
+		ArrayList<State> states = new ArrayList<>();
 		try {
 			st.setInt(1, simulation_id);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ResultSet result = null;
@@ -52,17 +48,19 @@ public enum StateDAO {
 		}
 		try {
 			while(result.next()) {
+				State newState = new State();
 				String xml = result.getString("data");
 				if (xml == null) {
 					break;
 				}
-				resultString = resultString+xml;
+				xml.replaceAll("\\\\n", "");
+				newState.setData(xml);
+				states.add(newState);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return resultString;
+		return states;
 	}
 
 	

@@ -182,17 +182,12 @@ $(function () {
 		type: 'POST',
 		dataType: 'json',
 		contentType : 'application/json',
-		success:function (resp) {successs(resp)},
-		 error: function(jqXHR, textStatus, errorThrown) {
+		success: function (resp) {console.log(resp)},
+		error: function(jqXHR, textStatus, errorThrown) {
 			alert('Cannot contact the server!');
 		}
 	});
-
-	});		
+	});
 });
 
-//this function is executed on successfull response from the server
-//resp is the xml string !!!
-function success(resp){
-	console.log(resp);	
-}
+

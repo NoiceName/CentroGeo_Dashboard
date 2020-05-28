@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,11 +7,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class State {
 	int id;
 	float time;
-	ArrayList<LaneSnapshot> lanes;
+	String data;
 	
-	State() {} 
+	public State() {} 
 	
-	public State(int id, float time) {
+	public State(int id, float time, String data) {
 		this.time = time;
 		this.id = id;
 	}
@@ -33,12 +32,14 @@ public class State {
 		return this.time;
 	}
 	
-	public ArrayList<LaneSnapshot> getLanes(){
-		return this.lanes;
+	public String getData() {
+		return this.data;
 	}
 	
-	public void setLanes() {
-		
+	public void setData(String data) {
+		this.data = data;
 	}
+
+
 }
 
