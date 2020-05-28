@@ -1,5 +1,6 @@
 var currentXML;
 
+
 function onload() {
 
   currentXML = getXML();
@@ -17,10 +18,10 @@ function onload() {
 
 
 
-// Function getting called whenever the "Generate Graph" button is pressed
+// Function getting called whenever the "Generate Graph" button is pressed --> called when sucess() is ready
 function genGraph() {
-  console.log("gen the graph");
-  console.log(currentXML);
+  console.log("gen the graph XML");
+ console.log(currentXML);
   var simulation;
   var snapshot = currentXML;
   // get the values of the different selects
@@ -202,15 +203,22 @@ function populateLaneSelect() {
 
   function success(resp) {
     //resp is the data array
-        console.log("yeey");
-    console.log(resp[0].data);
+        // console.log("yeey");
+        // console.log(resp[0].data);
         dataArray = [];
 
         for (var i = 0; i < resp.length; i++) {
             dataArray[i] = resp[i].data;
         }
+        
+        var parser = new DOMParser();
+        xmlDoc = parser.parseFromString(dataArray[1], "text/xml");
 
-    return dataArray;
+        currentXML = xmlDoc;
+        // console.log("succes XML");
+        // console.log(currentXML);
+        genGraph();
+    return xmlDoc;
   }
     
     }); 
