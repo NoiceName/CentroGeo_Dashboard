@@ -1,5 +1,12 @@
+var currentXML;
+
+
 function onload() {
+
+  currentXML = getXML();
   populateLaneSelect();
+  console.log("page is loaded done");
+
 }
 
 
@@ -11,11 +18,12 @@ function onload() {
 
 
 
-// Function getting called whenever the "Generate Graph" button is pressed
+// Function getting called whenever the "Generate Graph" button is pressed --> called when sucess() is ready
 function genGraph() {
-
+  console.log("gen the graph XML");
+ console.log(currentXML);
   var simulation;
-  var snapshot = getXML();
+  var snapshot = currentXML;
   // get the values of the different selects
   var chartType = document.getElementById('chartChoice').value;
   var laneChoice = document.getElementById('laneSelect').value;
@@ -31,7 +39,7 @@ function genGraph() {
   
   
 
-  // determine what grap should be drawn
+  // determine what graph should be drawn
   if (chartType == "barC") {
     drawBarChart();
 
@@ -153,7 +161,7 @@ function genGraph() {
 //populate the laneSelect with options
 function populateLaneSelect() {
 
-  var xmlFile = getXML();
+  var xmlFile = currentXML;
   var options = xmlFile.getElementsByTagName('lane'); 
   var vLanes = [];
 
@@ -167,32 +175,52 @@ function populateLaneSelect() {
   for (var i = 1; i < options.length; i++) {
      selectEl.options.add(new Option(vLanes[i], vLanes[i]));
   }
+
+  console.log("lanes populated");
 }
 
-$(function () {
-	$('#chartGen').click(function(event) {
-		//Statically set simulation id !!! that is sent to the server
-		var jsonObject = {'simulation':1};
-		var json = JSON.stringify(jsonObject);
 
-	$.ajax({
-		url: '/CentroGeo/Resources/metadata/states',
-		data: json,
-		//try with application/json later
-		type: 'POST',
-		dataType: 'json',
-		contentType : 'application/json',
-		success: function (resp) {success(resp)},
-		error: function(jqXHR, textStatus, errorThrown) {
-			alert('Cannot contact the server!');
-		}
-	});
-	});
-});
 
-function success(resp) {
-	//resp is the data array
-	console.log(resp);
-}
 
+ $(function () {     $('#chartGen').click(function(event) { 
+      //Statically set simulation id !!! that is sent to the server
+      var jsonObject = {'simulation':1};
+      var json = JSON.stringify(jsonObject);
+
+    $.ajax({
+      url: '/CentroGeo/Resources/metadata/states',
+      data: json,
+      //try with application/json later
+      type: 'POST',
+      dataType: 'json',
+      contentType : 'application/json',
+      success: function (resp) {success(resp)},
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert('Cannot contact the server!');
+      }
+    });
+    
+
+  function success(resp) {
+    //resp is the data array
+        // console.log("yeey");
+        // console.log(resp[0].data);
+        dataArray = [];
+
+        for (var i = 0; i < resp.length; i++) {
+            dataArray[i] = resp[i].data;
+        }
+        
+        var parser = new DOMParser();
+        xmlDoc = parser.parseFromString(dataArray[1], "text/xml");
+
+        currentXML = xmlDoc;
+        // console.log("succes XML");
+        // console.log(currentXML);
+        genGraph();
+    return xmlDoc;
+  }
+    
+    }); 
+    });
 
