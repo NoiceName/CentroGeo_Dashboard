@@ -1,4 +1,5 @@
 var currentXML;
+var XMLloaded = false;
 
 
 function onload() {
@@ -193,7 +194,14 @@ function populateLaneSelect(xmlfile2) {
 
 
 
- $(function () {     $('#chartGen').click(function(event) { 
+ $(function () {     $('#chartGen').click(function(event) {
+
+      //check if the XML file has alread been loaded
+      if (XMLloaded) {
+        console.log("No loading twice!");
+        genGraph();
+        return;
+      } 
       //Statically set simulation id !!! that is sent to the server
       var jsonObject = {'simulation':1};
       var json = JSON.stringify(jsonObject);
@@ -214,8 +222,11 @@ function populateLaneSelect(xmlfile2) {
 
   function success(resp) {
     //resp is the data array
-        // console.log("yeey");
-        // console.log(resp[0].data);
+
+        //avoid loading the data multiple times
+        console.log("XML retrieved");
+        XMLloaded = true;
+
         dataArray = [];
         var parser = new DOMParser();
 
@@ -231,6 +242,9 @@ function populateLaneSelect(xmlfile2) {
         // console.log("succes XML");
         // console.log(currentXML);
         genGraph();
+
+       
+
     return xmlDoc;
   }
     
