@@ -4,7 +4,6 @@ var currentXML;
 function onload() {
 
   currentXML = getXML();
-  populateLaneSelect();
   console.log("page is loaded done");
 
 }
@@ -171,9 +170,9 @@ function genGraph() {
 
 
 //populate the laneSelect with options
-function populateLaneSelect() {
+function populateLaneSelect(xmlfile2) {
 
-  var xmlFile = currentXML;
+  var xmlFile = xmlfile2;
   var options = xmlFile.getElementsByTagName('lane'); 
   var vLanes = [];
 
@@ -226,7 +225,7 @@ function populateLaneSelect() {
         }
         
         
-        
+        populateLaneSelect(dataArray[1]);
 
         currentXML = dataArray;
         // console.log("succes XML");

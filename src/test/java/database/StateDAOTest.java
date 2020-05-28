@@ -34,6 +34,6 @@ class StateDAOTest {
 //		} catch (SQLException e) {
 //			e.printStackTrace();
 //		}
-		System.out.println(StateDAO.instance.getStateDump(1));
+// 		System.out.println(StateDAO.instance.getStateDump(1));
 	}	
 }
