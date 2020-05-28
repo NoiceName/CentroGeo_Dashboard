@@ -8,10 +8,10 @@ public enum UserDAO {
 	instance;
 //	private Map<String, User> users = new HashMap<String, User>();
 	
-	private UserDAO() {
+//	private UserDAO() {
 //		User user1 = new User("user1","123456");
 //		users.put("user1", user1);
-	}
+//	}
 	
 //	public Map<String, User> getModel() {
 //		return users;
@@ -23,14 +23,17 @@ public enum UserDAO {
 		Connection conn = null;
 		
 		try {
-			conn = databaseConnection.getConnection();
-			query = conn.prepareStatement("select Password from projectschema.user "+
-			"where UserName = ?; ");
+//			conn = databaseConnection.getConnection();
+			conn = dbConnect.getDataSource().getConnection();
+			String sql = "select password from projectschema.user "+
+			"where username = ? ";
+			query = conn.prepareStatement(sql);
 			query.setString(1, userName);
 			ResultSet rs = query.executeQuery();
 			// check if the user in the table and is with a correct password
 			while(rs.next()) {
-				returnPassword = rs.getString("Password");
+//				returnPassword = rs.getString("password");
+				returnPassword  = rs.getString(2);
 			}
 			query.close();		
 		} 
@@ -64,7 +67,8 @@ public enum UserDAO {
 		Connection conn = null;
 		
 		try {	
-			conn = databaseConnection.getConnection();
+//			conn = databaseConnection.getConnection();
+			conn = dbConnect.getDataSource().getConnection();
 			
 			if(getUserPassword(user.getUserName())!=null) {
 				

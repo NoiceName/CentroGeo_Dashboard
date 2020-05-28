@@ -31,6 +31,4 @@ public class databaseConnection {
 		    }
 		return conn;
 	}
-	
-
 }
