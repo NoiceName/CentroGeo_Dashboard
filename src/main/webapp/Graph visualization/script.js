@@ -77,8 +77,7 @@ function genGraph() {
 
   //draw a useless graph
   else if (chartType == "otherC") {
-    drawPieChart(getXMLarray(snapshot), "Vehicles and their speed");
-
+    drawPieChart(getXMLarray(currentXML[10]), "Vehicles and their speed");
   }
 
 }
