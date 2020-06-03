@@ -10,11 +10,11 @@ import javax.ws.rs.Produces;
 
 import org.json.JSONObject;
 
-import dao.StateDAO;
-import model.State;
+import dao.SnapshotDAO;
+import model.Snapshot;
 
 @Path("/metadata")
-public class MetadataResource {
+public class SimulationsResources {
 	
 	
 //just a test	
@@ -45,11 +45,11 @@ public class MetadataResource {
 	@Path("/states")
 	@Produces("application/json")
 	@Consumes("application/json")
-	public ArrayList<State> getStates(String json) {
+	public ArrayList<Snapshot> getSnapshots(String json) {
 		System.out.println("received request");
 		JSONObject stateRequest = new JSONObject(json);
 		int simulation = stateRequest.getInt("simulation");
-		ArrayList<State> xml = StateDAO.instance.getStateDumpXML(simulation);
+		ArrayList<Snapshot> xml = SnapshotDAO.instance.getSnapshotDumpXML(simulation);
 		return xml;
 	}	
 	

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
 
-import dao.StateDAO;
+import dao.SnapshotDAO;
 import model.Database;
 
 class StateDAOTest {

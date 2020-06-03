@@ -18,9 +18,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import model.Database;
-import model.State;
+import model.Snapshot;
 
-public enum StateDAO {
+public enum SnapshotDAO {
 	instance;
 	
 	/**
@@ -28,13 +28,13 @@ public enum StateDAO {
 	 * @param simulation_id
 	 * @return
 	 */
-	public ArrayList<State> getStateDumpXML(int simulation_id) {
+	public ArrayList<Snapshot> getSnapshotDumpXML(int simulation_id) {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
 		String statement = ("select s.data, s.time, s.snapshot_id from \"projectschema\".snapshot s where s.simulation = ?");
 		PreparedStatement st = db.prepareStatement(statement);
-		ArrayList<State> states = new ArrayList<>();
+		ArrayList<Snapshot> snapshots = new ArrayList<>();
 		try {
 			st.setInt(1, simulation_id);
 		} catch (SQLException e) {
@@ -49,7 +49,7 @@ public enum StateDAO {
 		}
 		try {
 			while(result.next()) {
-				State newState = new State();
+				Snapshot newSnapshot = new Snapshot();
 				String xml = result.getString("data");
 				float time = result.getFloat("time");
 				int id = result.getInt("snapshot_id");
@@ -57,17 +57,22 @@ public enum StateDAO {
 					break;
 				}
 				xml.replaceAll("\\\\n", "");
-				newState.setData(xml);
-				newState.setTime(time);
-				newState.setId(id);
-				states.add(newState);
+				newSnapshot.setData(xml);
+				newSnapshot.setTime(time);
+				newSnapshot.setId(id);
+				snapshots.add(newSnapshot);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return states;
+		return snapshots;
 	}
 
+	/**
+	 * In case we need to use JSON instead for the whole thing but Sam doesnt like it >:0
+	 * @param simulation_id
+	 * @return
+	 */
 	public JSONObject getStateDUMPJSON(int simulation_id) {
 		Database db = new Database();
 		Database.loadPGSQL();
@@ -88,7 +93,7 @@ public enum StateDAO {
 		}
 		try {
 			while(result.next()) {
-				State newState = new State();
+				Snapshot newSnapshot = new Snapshot();
 				if(result.getString("data")==null) {
 					break;
 				}
@@ -101,7 +106,13 @@ public enum StateDAO {
 		return resultObject;
 	}
 	
-	public ArrayList<State> getAllStatesForOneLane(int simulation_id, String lane_id){
+	/**
+	 * Sam doesnt like server processing
+	 * @param simulation_id
+	 * @param lane_id
+	 * @return
+	 */
+	public ArrayList<Snapshot> getAllSnapshotsForOneLane(int simulation_id, String lane_id){
 		Database db = new Database();
 		db.connectPGSQL();
 		String statement = "select s.time, s.snapshot_id, sl.lane, count(sv.snapshot_vehicle_id)" 
@@ -113,7 +124,7 @@ public enum StateDAO {
 				+ "and sv.snapshot_lane = sl.snapshot_lane_id"
 				+ "group by s.time, s.snapshot_id, sl.lane";
 		PreparedStatement st = db.prepareStatement(statement);
-		return new ArrayList<State>();
+		return new ArrayList<Snapshot>();
 	}
 
 }

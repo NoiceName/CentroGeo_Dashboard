@@ -4,24 +4,24 @@ package model;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class State {
-	int id;
+public class Snapshot {
+	int snapshot_id;
 	float time;
 	String data;
 	
-	public State() {} 
+	public Snapshot() {} 
 	
-	public State(int id, float time, String data) {
+	public Snapshot(int id, float time, String data) {
 		this.time = time;
-		this.id = id;
+		this.snapshot_id = id;
 	}
 	
 	public int getId() {
-		return this.id;
+		return this.snapshot_id;
 	}
 	
 	public void setId(int id) {
-		this.id = id;
+		this.snapshot_id = id;
 	}
 	
 	public void setTime(float time) {
