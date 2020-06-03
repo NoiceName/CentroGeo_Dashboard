@@ -5,8 +5,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Snapshot {
+	/**
+	 * ID of the snapshot in the database
+	 */
 	int snapshot_id;
+	
+	/**
+	 * The time of the snapshot
+	 */
 	float time;
+
+	/**
+	 * The full XML of the snapshot
+	 */
 	String data;
 	
 	public Snapshot() {} 

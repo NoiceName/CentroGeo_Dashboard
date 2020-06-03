@@ -24,7 +24,8 @@ public enum SnapshotDAO {
 	instance;
 	
 	/**
-	 * Idk wtf is going on here
+	 * Retrieve all snapshots from the database and put them in an array.
+	 * (JAX-B automatically converts this to an array of xml where each element is a snapshot just study for test 3 you will know what I mean)
 	 * @param simulation_id
 	 * @return
 	 */
