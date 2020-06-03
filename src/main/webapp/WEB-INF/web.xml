@@ -19,14 +19,6 @@
     		<param-value>resources</param-value>
     	</init-param>
     </servlet>
-    <servlet>
-    	<servlet-name>Simulation Resources</servlet-name>
-    	<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-    	<init-param>
-    		<param-name>jersey.config.server.provider.packages</param-name>
-    		<param-value>resources.simulations</param-value>
-    	</init-param>
-    </servlet>
     
 <servlet-mapping>
         <servlet-name>testServlet</servlet-name>
@@ -34,10 +26,6 @@
 </servlet-mapping>
     <servlet-mapping>
     	<servlet-name>Resources</servlet-name>
-    	<url-pattern>/Resources/*</url-pattern>
+    	<url-pattern>/resources/*</url-pattern>
     </servlet-mapping>
-<servlet-mapping>
-        <servlet-name>Simulation Resources</servlet-name>
-        <url-pattern>/simulations/*</url-pattern>
-</servlet-mapping>
 </web-app>

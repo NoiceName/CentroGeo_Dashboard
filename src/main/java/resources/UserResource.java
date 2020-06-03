@@ -30,7 +30,7 @@ import model.User;
 import org.junit.platform.engine.support.descriptor.FileSystemSource;
 import org.xml.sax.SAXException;
 
-@Path("/UserResource")
+@Path("/user_resource")
 public class UserResource {
 	
 	private static final String SUCCESS_RESULT="<result>success</result>";
@@ -48,37 +48,14 @@ public class UserResource {
 	Response response;
 	
 	/**
-	 * @param servletResponse
-	 * Redirects the user to the login page
-	 */
-	@GET
-	@Produces("text/html")
-	public void loginPage(@Context HttpServletResponse servletResponse) {
-		try {
-			System.out.println("Return something");
-			servletResponse.sendRedirect("../login/log_in.html");		
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	@POST
-	@Consumes("application/json")
-	public void login(String userInformation) {
-		JSONObject userJson = new JSONObject(userInformation);
-		System.out.println(userJson);
-	}
-
-	/**
 	 * Processes the user input login information.
 	 * In the case the login is successful a token is generated and is set as a cookie.
-	 * @param userInformation
-	 * @param httpResponse
-	 * @return - A JSON Object which has a single tag of 'result' which is set to true in the case the login succeeds and false otherwise.
+	 * @param userInformation - JSON{username: "String", password:"String"} 
+	 * @param httpResponse  
+	 * @return - A JSON Object which has a single tag of 'result' which is set to true in the case the login succeeds and false otherwise. {result:"boolean"}
 	 */
 	@POST
+	@Path("/login")
 	@Consumes("application/json")
 	@Produces("application/json")
 	public String login(String userInformation, @Context HttpServletResponse httpResponse) {
@@ -103,22 +80,4 @@ public class UserResource {
 		return response.toString();
 	}
 	
-
-	@Path("/zip")
-	@POST
-	@Consumes("application/zip")
-	public void getZip(InputStream stream){
-		Database.loadPGSQL();
-		Database newDb = new Database();
-
-		try {
-			newDb.connectPGSQL();
-			Connection connection = newDb.getConnection();
-			System.out.println("Downloaded file");
-			extraction.ZipExtraction.getZipData(stream, connection);
-			System.out.println("File added to database");
-		} catch (IOException e) {
-			e.printStackTrace(); }
-	}
-
 }

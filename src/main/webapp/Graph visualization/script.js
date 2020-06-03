@@ -213,7 +213,7 @@ function populateLaneSelect(xmlfile2) {
 	  simulation_id = '1';
 
     $.ajax({
-      url: '/CentroGeo/Resources/simulations/'+simulation_id+'/snapshots',
+      url: '/CentroGeo/resources/simulations/'+simulation_id+'/snapshots',
       //try with application/json later
       type: 'GET',
       success: function (resp) {success(resp)},
