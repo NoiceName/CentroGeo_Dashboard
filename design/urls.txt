@@ -1,0 +1,11 @@
+The root of the application is /CentroGeo/
+
+resources/simulations GET - Returns metadata about every simulation
+resources/simulations POST - Submit a zip simulation file to the database
+resources/simulations/{simulation_id} GET - Returns a simulation object with the specified id //Not yet implemented 
+esources/simulations/{simulation_id}/snapshots GET - Returns all snapshots for that simulation
+
+resources/user_resource/login - POST expects a password and username returns a boolean that signifies whether loginl was a success
+
+/login/log_in.html - GET returns a login page
+/homepage.html - GET returns the dashboard
