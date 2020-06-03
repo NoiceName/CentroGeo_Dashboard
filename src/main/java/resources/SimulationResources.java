@@ -14,14 +14,8 @@ import dao.SnapshotDAO;
 import model.Snapshot;
 
 @Path("/metadata")
-public class SimulationsResources {
+public class SimulationResources {
 	
-	
-//just a test	
-	@GET
-	public String getSomething() {
-		return "Hello!";
-	}
 	
 	/**
 	 * JSON implementation 
