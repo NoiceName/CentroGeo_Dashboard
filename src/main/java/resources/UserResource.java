@@ -64,17 +64,6 @@ public class UserResource {
 	}
 	
 	
-//This codes receives json from a post request and creates a user object and returns it back to the client
-//	@POST
-//	@POST
-//	@Produces("application/json")
-//	@Consumes("application/json")
-//	public User login(String json) {
-//		JSONObject input = new JSONObject(json);
-//		User newUser = new User(input.getString("username"),input.getString("password"));
-//		return newUser;
-//	}
-
 	@POST
 	@Consumes("application/json")
 	public void login(String userInformation) {
@@ -114,18 +103,6 @@ public class UserResource {
 		return response.toString();
 	}
 	
-	// @POST
-	// @Produces(MediaType.TEXT_XML)
-	// @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	// public void uploadZip(@FormParam("zip-file") String file, @Context HttpServletResponse servletResponse) {
-	// 	try {
-	// 		servletResponse.sendRedirect("../../homepage.html");
-	// 	} catch (IOException e) {
-	// 		e.printStackTrace();
-	// 	}
-	// }
-
-
 
 	@Path("/zip")
 	@POST
@@ -141,8 +118,7 @@ public class UserResource {
 			extraction.ZipExtraction.getZipData(stream, connection);
 			System.out.println("File added to database");
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			e.printStackTrace(); }
 	}
 
 }

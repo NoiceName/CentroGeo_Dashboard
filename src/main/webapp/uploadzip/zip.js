@@ -21,7 +21,7 @@ $("#zipform").submit(function (evt) {
     formData = zipFile.files[0];
 
     $.ajax({
-        url: '/CentroGeo/Resources/UserResource/zip',
+        url: '/CentroGeo/Resources/simulations',
         type: 'POST',
         data: formData,
         async: false,
