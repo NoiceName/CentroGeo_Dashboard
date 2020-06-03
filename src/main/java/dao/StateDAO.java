@@ -32,7 +32,7 @@ public enum StateDAO {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		String statement = ("select s.data from \"projectschema\".snapshot s where s.simulation = ?");
+		String statement = ("select s.data, s.time, s.snapshot_id from \"projectschema\".snapshot s where s.simulation = ?");
 		PreparedStatement st = db.prepareStatement(statement);
 		ArrayList<State> states = new ArrayList<>();
 		try {
@@ -51,11 +51,15 @@ public enum StateDAO {
 			while(result.next()) {
 				State newState = new State();
 				String xml = result.getString("data");
+				float time = result.getFloat("time");
+				int id = result.getInt("snapshot_id");
 				if (xml == null) {
 					break;
 				}
 				xml.replaceAll("\\\\n", "");
 				newState.setData(xml);
+				newState.setTime(time);
+				newState.setId(id);
 				states.add(newState);
 			}
 		} catch (SQLException e) {
