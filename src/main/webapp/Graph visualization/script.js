@@ -210,16 +210,12 @@ function populateLaneSelect(xmlfile2) {
         return;
       } 
       //Statically set simulation id !!! that is sent to the server
-      var jsonObject = {'simulation':1};
-      var json = JSON.stringify(jsonObject);
+	  simulation_id = '1';
 
     $.ajax({
-      url: '/CentroGeo/Resources/metadata/states',
-      data: json,
+      url: '/CentroGeo/Resources/simulations/'+simulation_id+'/snapshots',
       //try with application/json later
-      type: 'POST',
-      dataType: 'json',
-      contentType : 'application/json',
+      type: 'GET',
       success: function (resp) {success(resp)},
       error: function(jqXHR, textStatus, errorThrown) {
         alert('Cannot contact the server!');

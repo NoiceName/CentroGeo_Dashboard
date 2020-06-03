@@ -13,38 +13,7 @@ import org.json.JSONObject;
 import dao.SnapshotDAO;
 import model.Snapshot;
 
-@Path("/metadata")
+@Path("/simulations")
 public class SimulationResources {
-	
-	
-	/**
-	 * JSON implementation 
-	 * @param json
-	 * @return
-	 */
-//	@POST
-//	@Path("/states")
-//	@Produces("application/json")
-//	@Consumes("application/json")
-//	public String getStates(String json) {
-//		System.out.println("received request");
-//		JSONObject stateRequest = new JSONObject(json);
-//		int simulation = stateRequest.getInt("simulation");
-//		JSONObject jsonResponse = StateDAO.instance.getStateDUMPJSON(simulation);
-//		System.out.println();
-//		return jsonResponse.toString();
-//	}
-	
-	@POST
-	@Path("/states")
-	@Produces("application/json")
-	@Consumes("application/json")
-	public ArrayList<Snapshot> getSnapshots(String json) {
-		System.out.println("received request");
-		JSONObject stateRequest = new JSONObject(json);
-		int simulation = stateRequest.getInt("simulation");
-		ArrayList<Snapshot> xml = SnapshotDAO.instance.getSnapshotDumpXML(simulation);
-		return xml;
-	}	
 	
 }

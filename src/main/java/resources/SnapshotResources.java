@@ -22,8 +22,11 @@ public class SnapshotResources {
 	 */
 	@PathParam("simulation_id") int simulation_id;
 
+	/**
+	 * Retrieves and returns all snapshots of the requested simulation
+	 * @return
+	 */
 	@GET
-	@Path("/states")
 	@Produces("application/json")
 	public ArrayList<Snapshot> getSnapshots() {
 		ArrayList<Snapshot> xml = SnapshotDAO.instance.getSnapshotDumpXML(simulation_id);
