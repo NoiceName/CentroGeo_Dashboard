@@ -210,7 +210,7 @@ function populateLaneSelect(xmlfile2) {
         return;
       } 
       //Statically set simulation id !!! that is sent to the server
-	  simulation_id = '1';
+	  var simulation_id = '1';
 
     $.ajax({
       url: '/CentroGeo/resources/simulations/'+simulation_id+'/snapshots',
