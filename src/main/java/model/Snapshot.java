@@ -51,6 +51,10 @@ public class Snapshot {
 		this.data = data;
 	}
 
-
+	public String toString() {
+		return("{" + "Time: " + this.getTime() + " ID: " + this.getId() + "}");
+	}
+	
+	
 }
 

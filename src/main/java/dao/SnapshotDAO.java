@@ -33,7 +33,7 @@ public enum SnapshotDAO {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		String statement = ("select s.data, s.time, s.snapshot_id from \"projectschema\".snapshot s where s.simulation = ?");
+		String statement = ("select s.data, s.time, s.snapshot_id from \"projectschema\".snapshot s where s.simulation = ? order by s.time");
 		PreparedStatement st = db.prepareStatement(statement);
 		ArrayList<Snapshot> snapshots = new ArrayList<>();
 		try {

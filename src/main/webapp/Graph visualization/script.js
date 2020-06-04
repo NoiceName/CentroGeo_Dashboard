@@ -230,6 +230,8 @@ function populateLaneSelect(xmlfile2) {
         console.log("XML retrieved");
         XMLloaded = true;
 
+        console.log(resp);
+
         dataArray = [];
         var parser = new DOMParser();
 
