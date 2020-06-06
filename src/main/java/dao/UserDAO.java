@@ -23,8 +23,8 @@ public enum UserDAO {
 		Connection conn = null;
 		
 		try {
-//			conn = databaseConnection.getConnection();
-			conn = dbConnect.getDataSource().getConnection();
+			conn = databaseConnection.getConnection();
+
 			String sql = "select password from projectschema.user "+
 			"where username = ? ";
 			query = conn.prepareStatement(sql);
@@ -67,9 +67,7 @@ public enum UserDAO {
 		Connection conn = null;
 		
 		try {	
-//			conn = databaseConnection.getConnection();
-			conn = dbConnect.getDataSource().getConnection();
-			
+			conn = databaseConnection.getConnection();			
 			if(getUserPassword(user.getUserName())!=null) {
 				
 				return 2; // user already exists
