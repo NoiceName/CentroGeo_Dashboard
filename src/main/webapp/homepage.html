@@ -12,6 +12,7 @@
   	<script type="text/javascript" src="Graph visualization/importXML.js"></script>
   	<script src="Graph visualization/script.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	<script src="uploadzip/zip.js"></script>
 	<script src="ui.js"></script>
 <link
 </head>
@@ -29,7 +30,7 @@
 						<a class="nav-link">Generate Report</a>	
 					</li>
 					<li class="nav-item">
-						<a class="nav-link">Upload Simulation</a>	
+						<a class="nav-link" data-toggle="modal" data-target="#uploadSimulationMenu">Upload Simulation</a>	
 					</li>
 				</ul>
 			</div>
@@ -51,17 +52,20 @@
 							<div class="container-fluid">
 								<div class="row">
 									<!-- Chart Select --> 
-									<div class="col-6 list-group">
-										<a class="list-group-item list-group-item-action" id="lineChartSelect" data-toggle="list">Line Chart</a>			
-										<a class="list-group-item list-group-item-action" id="pieChartSelect" data-toggle="list">Pie Chart</a>			
+									<div class="col-6 list-group" id="chartChoice" value=''>
+										<a class="list-group-item list-group-item-action chart-select" id="lineChartSelect" data-toggle="list">Line Chart</a>			
+										<a class="list-group-item list-group-item-action chart-select" id="pieChartSelect" data-toggle="list">Pie Chart</a>			
 									</div>	
 									<!-- Chart Options -->
 									<div class="col-6">
-										<div class="input-group mb-3">
+										<div class="input-group mb-3 d-none chart-options" id="lineChartOptions">
 											<div class="input-group-prepend">
 												<span class="input-group-text">Lane ID</span>
 											</div>
 											<input type="text" class="form-control" placeholder="eg. :e_31">
+										</div>
+										<div class="input-group mb-3 d-none chart-options" id="pieChartOptions">
+											Something to do with piecharts
 										</div>
 									</div>
 								</div>
@@ -74,6 +78,32 @@
 					</div>
 				</div>
 			</div>	
+		</div>
+		<!-- Upload Simulation Menu -->
+		<div>
+			<div class="modal fade" id="uploadSimulationMenu">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Please select a simulation</h5>	
+						</div>	
+						<div class="modal-body">
+							<div class="container">
+								<form>
+									<div class="row">
+										<div class="col-5">
+								 		 	 <input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
+											<button type="button" id="zip-button" class="btn btn-light">Select Simulation Zip</button>
+										</div>
+										<div class="col-7" id="custom-text">no file chosen</div>
+									</div>
+								</form>
+							</div>	
+						</div>
+					</div>
+				</div>	
+			</div>	
+		</div>
 		</div>
 	</div>
 </body>

@@ -43,7 +43,6 @@ function genGraph() {
   }
   else if (chartType == "pieC") {
     drawPieChart();
-
   }
 
   //Chart showing #cars per lane
@@ -108,6 +107,7 @@ function genGraph() {
         var chart = new google.charts.Bar(document.getElementById('mainChart'));
 
         chart.draw(data, google.charts.Bar.convertOptions(options));
+
     }
 
 
