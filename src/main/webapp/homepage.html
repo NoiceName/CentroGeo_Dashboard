@@ -82,20 +82,27 @@
 		<!-- Upload Simulation Menu -->
 		<div>
 			<div class="modal fade" id="uploadSimulationMenu">
-				<div class="modal-dialog">
+				<div class="modal-dialog modal-dialog-centered modal-md">
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 class="modal-title">Please select a simulation</h5>	
 						</div>	
 						<div class="modal-body">
-							<div class="container">
-								<form>
-									<div class="row">
-										<div class="col-5">
+							<div class="container-fluid">
+								<form id="zipform">
+									<div class="form-row">
+										<div class="col-6" align="center">
 								 		 	 <input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
-											<button type="button" id="zip-button" class="btn btn-light">Select Simulation Zip</button>
+											<button type="button" id="zip-button" class="btn btn-primary">Select Simulation Zip</button>
 										</div>
-										<div class="col-7" id="custom-text">no file chosen</div>
+										<div class="col-6">
+											<div id="custom-text">no file chosen</div>	
+										</div>
+									</div>
+									<div class="form-row mt-3">
+										<div class="col-12">
+											<button type="submit" class="btn btn-block btn-success">Upload!</button>	
+										</div>	
 									</div>
 								</form>
 							</div>	
