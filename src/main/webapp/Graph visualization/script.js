@@ -49,6 +49,7 @@ function genGraph() {
   else if (chartType == "lineC") {
 
     var cars = [];
+    var timeStamps = [];
 
 
 
@@ -201,7 +202,28 @@ function populateLaneSelect(xmlfile2) {
 
 
 
+function getLanesId() {
+
+  var snapshot = currentXML[1];
+  var lanesID = [];
+
+  var lanes = xmlFile.getElementsByTagName('lane');
+
+  for (var i = 0; i < lanes.length; i++) {
+    lanesId[i] = [];
+    lanesID[i] = lanes[i].getAttribute("id");
+  }
+
+  return lanesID;
+
+}
+
+
+
+
  $(function () {     $('#chartGen').click(function(event) {
+	 
+	 console.log("button clicked");
 
       //check if the XML file has alread been loaded
       if (XMLloaded) {
