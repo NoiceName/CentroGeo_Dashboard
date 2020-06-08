@@ -7,11 +7,13 @@ var spaceSize = 4;
 
 function getActiveChartType(){
 	chartTypeElements = document.getElementsByClassName('chart-type');
+	let result = null;
 	[].forEach.call(chartTypeElements, function(element){
 		if (element.classList.contains('active')) {
-			return element.getAttribute('value');
+			result = element.getAttribute('value');
 		}
 	});
+	return result;
 }
 
 
@@ -33,3 +35,8 @@ function createChartSpace() {
 	return id;
 }
 
+//$(function() {
+//	$('body').click(function() {
+//		console.log(getActiveChartType());
+//	});
+//});
