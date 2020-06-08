@@ -11,7 +11,6 @@ function getActiveChartType(){
 	[].forEach.call(chartTypeElements, function(element){
 		if (element.classList.contains('active')) {
 			result = element.getAttribute('value');
-		
 		}
 	});
 	return result;
@@ -36,3 +35,8 @@ function createChartSpace() {
 	return id;
 }
 
+//$(function() {
+//	$('body').click(function() {
+//		console.log(getActiveChartType());
+//	});
+//});
