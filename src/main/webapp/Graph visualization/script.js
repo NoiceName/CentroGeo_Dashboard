@@ -37,8 +37,13 @@ function genGraph() {
 
 	// determine what graph should be drawn
 
+<<<<<<< HEAD
 	if (chartType == "barC") {
 		drawBarChart();
+=======
+    var cars = [];
+    var timeStamps = [];
+>>>>>>> c35cac377ed227c3fe06f8569a39ea27477fc694
 
 	}
 	else if (chartType == "pieC") {
@@ -201,7 +206,28 @@ function populateLaneSelect(xmlfile2) {
 
 
 
-$(function () {     $('#chartGen').click(function(event) {
+function getLanesId() {
+
+  var snapshot = currentXML[1];
+  var lanesID = [];
+
+  var lanes = snapshot.getElementsByTagName('lane');
+
+  for (var i = 0; i < lanes.length; i++) {
+    lanesID[i] = [];
+    lanesID[i] = lanes[i].getAttribute("id");
+  }
+
+  return lanesID;
+
+}
+
+
+
+
+ $(function () {     $('#chartGen').click(function(event) {
+	 
+	 console.log("button clicked");
 
       //check if the XML file has alread been loaded
       if (XMLloaded) {
