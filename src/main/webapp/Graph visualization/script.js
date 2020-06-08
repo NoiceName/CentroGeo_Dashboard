@@ -24,7 +24,7 @@ function genGraph() {
 
 
   var simulation;
-  var chartType;
+  var chartType = "";
   var laneChoice;
   // get the values of the different selects
   // try {
@@ -34,21 +34,10 @@ function genGraph() {
   //   console.log("Missing a chartType or laneChoice");
   // }
   
+  chartType = getActiveChartType();
+  console.log("chart: " + chartType);
   chartType = "lineC";
   laneChoice = "e9_0";
-
-  // determine what graph should be drawn
-
-	var simulation;
-	var chartType;
-	var laneChoice;
-	// get the values of the different selects
-	try {
-		chartType = document.getElementById('chartChoice').value;
-		laneChoice = document.getElementById('laneSelect').value;
-	} catch(err) {
-		console.log("Missing a chartType or laneChoice");
-	}
 
 
 	// determine what graph should be drawn
