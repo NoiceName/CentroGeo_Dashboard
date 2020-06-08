@@ -14,7 +14,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 	<script src="uploadzip/zip.js"></script>
 	<script src="ui.js"></script>
-<link
+	<script src="generatingGraphs.js"></script>
 </head>
 
 <body>
@@ -36,7 +36,7 @@
 			</div>
 		</div>
 		<!-- Charts go inside this row !--> 
-		<div class="row">
+		<div class="row" id="charts">
 		</div>
 		<!-- Create Chart menu -->
 		<div>
@@ -62,7 +62,8 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text">Lane ID</span>
 											</div>
-											<input type="text" class="form-control" placeholder="eg. :e_31">
+											<input data-toggle="" type="text" class="form-control" placeholder="eg. :e_31">
+											<div class="collapse">hello</div>
 										</div>
 										<div class="input-group mb-3 d-none chart-options" id="pieChartOptions">
 											Something to do with piecharts
@@ -92,7 +93,7 @@
 								<form id="zipform">
 									<div class="form-row">
 										<div class="col-6" align="center">
-								 		 	 <input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
+											<input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
 											<button type="button" id="zip-button" class="btn btn-primary">Select Simulation Zip</button>
 										</div>
 										<div class="col-6">
@@ -111,7 +112,7 @@
 				</div>	
 			</div>	
 		</div>
-		</div>
+	</div>
 	</div>
 </body>
 
