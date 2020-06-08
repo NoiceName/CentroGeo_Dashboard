@@ -20,8 +20,3 @@ function clearInputFields(){
 		}
 	}
 }
-
-function updateChoiceValue(){
-}
-
-
