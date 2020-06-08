@@ -37,13 +37,8 @@ function genGraph() {
 
 	// determine what graph should be drawn
 
-<<<<<<< HEAD
 	if (chartType == "barC") {
 		drawBarChart();
-=======
-    var cars = [];
-    var timeStamps = [];
->>>>>>> c35cac377ed227c3fe06f8569a39ea27477fc694
 
 	}
 	else if (chartType == "pieC") {
