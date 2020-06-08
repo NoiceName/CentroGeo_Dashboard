@@ -35,8 +35,6 @@ function genGraph() {
   // }
   
   chartType = getActiveChartType();
-  console.log("chart: " + chartType);
-  chartType = "lineC";
   laneChoice = "e9_0";
 
 
@@ -47,7 +45,8 @@ function genGraph() {
 
 	}
 	else if (chartType == "pieC") {
-		drawPieChart();
+//		drawPieChart();
+    drawBarChart("", "", createChartSpace());
 	}
 
 	//Chart showing #cars per lane
@@ -103,7 +102,7 @@ function genGraph() {
 
 
 
-function drawBarChart(dataArray, title) {
+function drawBarChart(dataArray, title, id) {
 
 	var data = google.visualization.arrayToDataTable([
 		['Year', 'Sales', 'Expenses', 'Profit'],
@@ -121,7 +120,7 @@ function drawBarChart(dataArray, title) {
 		bars: 'vertical' // Required for Material Bar Charts.
 	};
 
-	var chart = new google.charts.Bar(document.getElementById('mainChart'));
+	var chart = new google.charts.Bar(document.getElementById(id));
 
 	chart.draw(data, google.charts.Bar.convertOptions(options));
 
@@ -130,7 +129,7 @@ function drawBarChart(dataArray, title) {
 
 
 
-function drawPieChart(dataArray, title) {
+function drawPieChart(dataArray, title, id) {
 
 	var data = google.visualization.arrayToDataTable(dataArray);
 
@@ -139,7 +138,7 @@ function drawPieChart(dataArray, title) {
 		title: title
 	};
 
-	var chart = new google.visualization.PieChart(document.getElementById("mainChart"));
+	var chart = new google.visualization.PieChart(document.getElementById(id));
 
 	chart.draw(data, options);
 }
@@ -147,7 +146,7 @@ function drawPieChart(dataArray, title) {
 
 
 
-function drawLineChart(dataArray, title) {
+function drawLineChart(dataArray, title, id) {
 	var data = google.visualization.arrayToDataTable(dataArray);
 
 
@@ -162,7 +161,7 @@ function drawLineChart(dataArray, title) {
 
 	};
 
-	var chart = new google.visualization.LineChart(document.getElementById("mainChart"));
+	var chart = new google.visualization.LineChart(document.getElementById(id));
 
 
 	chart.draw(data, options);

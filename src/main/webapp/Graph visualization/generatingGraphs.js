@@ -2,7 +2,7 @@
 var maxSpace = 12;
 
 //How much space does each column occupy
-var spaceSize = 4;
+var spaceSize = 6;
 
 
 function getActiveChartType(){
