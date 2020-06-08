@@ -20,8 +20,24 @@ function onload() {
 
 // Function getting called whenever the "Generate Graph" button is pressed --> called when sucess() is ready
 function genGraph() {
-	console.log("Generating the graph");
+  console.log("Generating the graph");
 
+
+  var simulation;
+  var chartType;
+  var laneChoice;
+  // get the values of the different selects
+  // try {
+  //   chartType = document.getElementById('chartChoice').value;
+  //   laneChoice = document.getElementById('laneSelect').value;
+  // } catch(err) {
+  //   console.log("Missing a chartType or laneChoice");
+  // }
+  
+  chartType = "lineC";
+  laneChoice = "e9_0";
+
+  // determine what graph should be drawn
 
 	var simulation;
 	var chartType;
@@ -51,16 +67,28 @@ function genGraph() {
 		var cars = [];
 
 
+    for (var i = 0; i < currentXML.length; i++) {
+      var snapshot = currentXML[i];
 
-		for (var i = 0; i < currentXML.length; i++) {
-			var snapshot = currentXML[i];
+      var path = "/snapshot/lane[@id=\""+ laneChoice + "\"]/vehicles";
+      var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+      
+      var result = nodes.iterateNext();
+      cars[i] = result.getAttribute("value").split("v").length -1;
 
-			var path = "/snapshot/lane[@id=\""+ laneChoice + "\"]/vehicles";
-			var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+//      var timeStamp = snapshot.getElementsByTagName('snapshot'); 
+//      var time = timeStamp[0].getAttribute("time");
+       var path2 = "//@time";
+       var nodes2 = snapshot.evaluate(path2, snapshot, null, XPathResult.ANY_TYPE, null);
 
-			var result = nodes.iterateNext();
-			cars[i] = result.getAttribute("value").split("v").length -1;
-		}
+       var result2 = nodes2.iterateNext();
+       var floatTime = result2.getAttribute("value")
+       timeStamps[i] = parseFloat(floatTime);
+//      timeStamps[i] = parseFloat(time);
+      
+      console.log(timeStamps[i]);
+    }
+    
 
 
 		var dataArray = [[]];
@@ -251,7 +279,8 @@ function getLanesId() {
         console.log("XML retrieved");
         XMLloaded = true;
 
-        console.log(resp);
+//        console.log(resp);
+        
 
         dataArray = [];
         var parser = new DOMParser();
@@ -262,14 +291,11 @@ function getLanesId() {
         }
         
         
-        populateLaneSelect(dataArray[1]);
+//        populateLaneSelect(dataArray[1]);
 
         currentXML = dataArray;
-        // console.log("succes XML");
-        // console.log(currentXML);
-        genGraph();
 
-       
+        console.log(getLanesId());
 
     return xmlDoc;
   }
