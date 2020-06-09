@@ -31,9 +31,10 @@ function genGraph() {
 
 //    GRAPH showing info about chosen vehicle over time
 	if (chartType == "vehInfo") {
+    var timeStamps = [];
 		//select choosen vehicle
     var vehChoice;
-    vehChoice = "v67";
+    vehChoice = "v40";
 
     var routeLengths = [];
     var speeds = [];
@@ -42,23 +43,42 @@ function genGraph() {
     for (var i = 0; i < currentXML.length; i++) {
       var snapshot = currentXML[i];
 
-      
-
+      // get route length, or if not exist: routeLenght = 0
       try {
         var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
         var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
         var result = nodes.iterateNext();
-        routeLengths[i] = result.getAttribute("route");
+        var routeId = result.getAttribute("route");
+
+        path = "/snapshot/route[@id=\""+ routeId + "\"]";
+        nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+        result = nodes.iterateNext();
+        routeLengths[i] = result.getAttribute("edges").split("e").length -1;
 
       } catch(err) {
         routeLengths[i] = 0
      }
 
+     // get timeStamps
+        var timeStamp;
+        var time;
+
+        timeStamp = snapshot.getElementsByTagName('snapshot'); 
+        time = timeStamp[0].getAttribute("time");
       
-
-
+        timeStamps[i] = parseFloat(time);
     }
-    console.log(routeLengths);
+
+  var dataArray = [[]];
+    dataArray[0] = ["Time stamp", "routeLength"];
+
+    for (var i = 0; i < routeLengths.length; i++) {
+      dataArray[i+1] = [timeStamps[i], routeLengths[i]];
+    }
+
+    drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "route length");
+
+
 	}
 
 
@@ -257,8 +277,6 @@ function getLanesId() {
 
 
  $(function () {     $('#chartGen').click(function(event) {
-	 
-	 console.log("button clicked");
 
       //check if the XML file has alread been loaded
       if (XMLloaded) {
