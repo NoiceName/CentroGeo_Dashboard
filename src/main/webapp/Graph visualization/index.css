@@ -1,3 +1,11 @@
+body {
+  background: url('https://cdn.hipwallpaper.com/i/23/48/tb4qfo.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
 :root {
@@ -122,22 +130,55 @@ span {
 }*/
 
 
+#big_box {
+	/*position: absolute;*/
+	margin-top: 50px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	width: 900px;
+	height: 600px;
+	/*background-color: blue;*/
+}
+
+
 #mainChart {
 	position: relative;
 	margin: auto;
-	margin-top: 50px;
+	/*margin-top: 50px;*/
 	border: 3px solid black;
 	text-align: center;
-	width: 900px; 
-	height: 600px;
+	width: 100%; 
+	height: 100%;
 	border-radius: 3px;
 	z-index: 1;
 }
 
-#chartChoice {
+.customSelect {
+	width: 200px;
+  	right: 0px;
+  	position: relative;
+  	height: 50px;
+  	font-size: 100%;
+  	font-weight: bold;
+  	cursor: pointer;
+  	border-radius: 0;
+  	background-color: #c0392b;
+  	border: none;
+  	border-bottom: 2px solid #962d22;
+  	color: white;
+  	padding: 10px;
+  	appearance: none;
+  	-webkit-appearance: none;
+  	-moz-appearance: none;
+  	padding: 10px;
+  	z-index: 5;
+}
+
+/*#chartChoice {
   width: 200px;
   right: 0px;
-  position: absolute;
+  position: relative;
   height: 50px;
   font-size: 100%;
   font-weight: bold;
@@ -153,7 +194,7 @@ span {
   -moz-appearance: none;
   padding: 10px;
   z-index: 5;
-}
+}*/
 
 #chartChoice:hover,
 #chartChoice:focus {

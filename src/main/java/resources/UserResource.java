@@ -1,25 +1,36 @@
 package resources;
 
 
-
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.servlet.http.Cookie;
-import javax.ws.rs.core.*;
 
+import javax.ws.rs.core.*;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
 import cookie_manager.CookieManager;
 import dao.UserDAO;
+import model.Database;
 import model.User;
+import org.junit.platform.engine.support.descriptor.FileSystemSource;
+import org.xml.sax.SAXException;
 
-@Path("/UserResource")
+@Path("/user_resource")
 public class UserResource {
 	
 	private static final String SUCCESS_RESULT="<result>success</result>";
@@ -36,50 +47,15 @@ public class UserResource {
 	@Context
 	Response response;
 	
-	
-	/**
-	 * @param servletResponse
-	 * Redirects the user to the login page
-	 */
-	@GET
-	@Produces("text/html")
-	public void loginPage(@Context HttpServletResponse servletResponse) {
-		try {
-			System.out.println("Return something");
-			servletResponse.sendRedirect("../login/log_in.html");		
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-//This codes receives json from a post request and creates a user object and returns it back to the client
-//	@POST
-//	@POST
-//	@Produces("application/json")
-//	@Consumes("application/json")
-//	public User login(String json) {
-//		JSONObject input = new JSONObject(json);
-//		User newUser = new User(input.getString("username"),input.getString("password"));
-//		return newUser;
-//	}
-
-	@POST
-	@Consumes("application/json")
-	public void login(String userInformation) {
-		JSONObject userJson = new JSONObject(userInformation);
-		System.out.println(userJson);
-	}
-
 	/**
 	 * Processes the user input login information.
 	 * In the case the login is successful a token is generated and is set as a cookie.
-	 * @param userInformation
-	 * @param httpResponse
-	 * @return - A JSON Object which has a single tag of 'result' which is set to true in the case the login succeeds and false otherwise.
+	 * @param userInformation - JSON{username: "String", password:"String"} 
+	 * @param httpResponse  
+	 * @return - A JSON Object which has a single tag of 'result' which is set to true in the case the login succeeds and false otherwise. {result:"boolean"}
 	 */
 	@POST
+	@Path("/login")
 	@Consumes("application/json")
 	@Produces("application/json")
 	public String login(String userInformation, @Context HttpServletResponse httpResponse) {
@@ -104,6 +80,7 @@ public class UserResource {
 			authCookie.setMaxAge(60*60);
 			httpResponse.addCookie(authCookie);
 			response.put("result","true");
+			
 		}
 		return response.toString();
 	}

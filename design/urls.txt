@@ -1,0 +1,18 @@
+The root of the application is /CentroGeo/
+
+resources/simulations GET - Returns metadata about every simulation //Not yet implemented
+resources/simulations POST - Submit a zip simulation file to the database - Note that the mediatype is a "application/zip"
+resources/simulations/{simulation_id} GET - Returns a simulation object with the specified id //Not yet implemented 
+resources/simulations/{simulation_id}/snapshots GET - Returns all snapshots for that simulation
+
+resources/user_resource/login - POST expects a password and username returns a boolean that signifies whether login was a success : Input format : JSON {username : "", password : ""}
+
+/login/log_in.html - GET returns a login page
+/homepage.html - GET returns the dashboard
+
+Technologies that we are using as of now:
+DBMS : PostgreSQL
+Visualisation of charts : Google charts
+DOM manipulation : JavaScript, JQuery 
+DOM visuals : CSS, Bootstrap
+Back-end : Apache Tomcat (Java Jersey)

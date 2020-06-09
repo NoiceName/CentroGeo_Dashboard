@@ -3,13 +3,14 @@ package model;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Metadata {
+public class Simulation {
 	
 	int simulationId;
 	String text;
 	String date;
 	String tags;
 	String description;
+	
 	
 	
 	public void setText(String text) {

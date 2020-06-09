@@ -14,7 +14,7 @@ $(function () {
 		//Send the username and password to the server.
 		//Wait for the server response execute successLogin on a successfull request
 		$.ajax({
-			url: '/CentroGeo/Resources/UserResource',
+			url: '/CentroGeo/resources/user_resource/login',
 			data: formData,
 			//try with application/json later
 			type: 'POST',
@@ -31,9 +31,8 @@ $(function () {
 }); 
 
 function successLogin(resp) {
-	console.log(resp.result)
 	if(resp.result=='true'){
-		//Do something
+		window.location.href = "/CentroGeo/homepage.html";
 	}
 	else if (resp.result=='false') {
 		//Empty the username and password fields + display a message.
