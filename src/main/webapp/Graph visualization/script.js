@@ -58,6 +58,30 @@ function genGraph() {
       } catch(err) {
         routeLengths[i] = 0
      }
+     // get vehicle speed, or if not exist: speed = 0;
+     try {
+        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
+        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+        var result = nodes.iterateNext();
+        var speed = result.getAttribute("speed");
+        speeds[i] = parseFloat(speed);
+
+     } catch(err) {
+        speeds[i] = 0;
+     }
+     // get vehicle speedFactor, or if not exist: speedFactor = 0;
+     try {
+        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
+        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+        var result = nodes.iterateNext();
+        var speedFactor = result.getAttribute("speedFactor");
+        speedFactors[i] = parseFloat(speedFactor);
+
+     } catch(err) {
+        speedFactors[i] = 0;
+     }
+
+
 
      // get timeStamps
         var timeStamp;
@@ -69,14 +93,16 @@ function genGraph() {
         timeStamps[i] = parseFloat(time);
     }
 
+    console.log(speeds);
+
   var dataArray = [[]];
-    dataArray[0] = ["Time stamp", "routeLength"];
+    dataArray[0] = ["Time stamp", "routeLength", "speed", "speedFactor"];
 
     for (var i = 0; i < routeLengths.length; i++) {
-      dataArray[i+1] = [timeStamps[i], routeLengths[i]];
+      dataArray[i+1] = [timeStamps[i], routeLengths[i], speeds[i], speedFactors[i]];
     }
 
-    drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "route length");
+    drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "");
 
 
 	}
