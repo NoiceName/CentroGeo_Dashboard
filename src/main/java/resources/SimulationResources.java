@@ -55,7 +55,7 @@ public class SimulationResources {
 	 * update simulation metadata 
 	 * @throws ParseException */
 	@POST
-	@Path("/title")
+	@Path("/metadata")
 	@Consumes("application/json")
 	@Produces("application/json")
 	public String updateMetadata(String metaData, @Context HttpServletResponse httpResponse) throws ParseException {

@@ -16,19 +16,13 @@ public enum SimulationDAO {
 		return new ArrayList<Simulation>();
 	}
 	
-	private String url= "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di19202b_124";
-	private String dbName ="dab_di19202b_124";
-	private String dbPassword = "qY3D5KASvWJbHQpX";
-	private String schemaName = "projectschema";
-	
-	Database db = new Database(url, dbName, dbPassword, schemaName);
-	
 	public int editMetadata(int title,String editor, Date date, String tag, String description){
 		
 		PreparedStatement query = null;
 		Connection conn = null;
 		int rowsAffected = 0;// failed in updating
-		
+		Database.loadPGSQL();
+	    Database db = new Database();	
 		try {
 			Database.loadPGSQL();
 			conn = db.connectPGSQL();
@@ -39,12 +33,11 @@ public enum SimulationDAO {
 			"WHERE simulation_id = ?; ";
 						
 			query = conn.prepareStatement(sql);
-			query.setInt(1, title);
-			query.setString(2, editor);
-			query.setDate(3, new java.sql.Date(date.getTime()));
-			query.setString(4, tag);
-			query.setString(5, description);
-			
+			query.setString(1, editor);
+			query.setDate(2, new java.sql.Date(date.getTime()));
+			query.setString(3, tag);
+			query.setString(4, description);
+			query.setInt(5, title);
 
 			rowsAffected = query.executeUpdate();// should be 1								
 		} 
