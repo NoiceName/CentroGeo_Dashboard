@@ -5,35 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.Database;
 import model.User;
 
 class UserDAOTest {
-
-	@Test
-	void testDatabaseConnection() {
-		
-		Connection conn = null;	
-		try {
-			
-			conn = databaseConnection.getConnection();
-			assertTrue(conn!=null);
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-	}
 	
 	@Test
 	void testInsertUser() {

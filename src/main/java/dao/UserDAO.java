@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.*;
 
+import model.Database;
 import model.User;
 
 public enum UserDAO {
@@ -16,14 +17,18 @@ public enum UserDAO {
 //	public Map<String, User> getModel() {
 //		return users;
 //	}
-	
+		
 	public String getUserPassword(String userName){
+		
 		PreparedStatement query = null;
 		String returnPassword = null;
 		Connection conn = null;
 		
-		try {
-			conn = databaseConnection.getConnection();
+		Database.loadPGSQL();
+	    Database db = new Database();
+		
+		try {	
+			conn = db.connectPGSQL();
 
 			String sql = "select password from projectschema.user "+
 			"where username = ? ";
@@ -66,8 +71,12 @@ public enum UserDAO {
 		int returnString; // user data entered successfully!;
 		Connection conn = null;
 		
+		Database.loadPGSQL();
+	    Database db = new Database();
+		
 		try {	
-			conn = databaseConnection.getConnection();			
+			Database.loadPGSQL();
+			conn = db.connectPGSQL();
 			if(getUserPassword(user.getUserName())!=null) {
 				
 				return 2; // user already exists
