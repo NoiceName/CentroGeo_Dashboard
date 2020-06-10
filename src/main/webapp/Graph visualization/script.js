@@ -147,13 +147,13 @@ function genGraph() {
     }
 
     var dataArray = [[]];
-    dataArray[0] = ["Time stamp", "edge appearance"];
+    dataArray[0] = ["Time stamp", ("edge " + edgeChoice)];
 
     for (var i = 0; i < timeStamps.length; i++) {
       dataArray[i+1] = [timeStamps[i], appearance[i]];
     }
 
-    drawLineChart(dataArray, "Edge appearance frequency of edge " + edgeChoice, createChartSpace(), "time", "appearances");
+    drawLineChart(dataArray, "Edge appearance frequency", createChartSpace(), "time", "appearances");
 
 
 	}
@@ -191,13 +191,13 @@ function genGraph() {
 
 
 		var dataArray = [[]];
-		dataArray[0] = ["Time stamp", "#cars"];
+		dataArray[0] = ["Time stamp", "lane " + laneChoice];
 
 		for (var i = 0; i < cars.length; i++) {
 			dataArray[i+1] = [timeStamps[i], cars[i]];
 		}
 
-		drawLineChart(dataArray, "Number of cars on lane " + laneChoice, createChartSpace(), "time", "cars");
+		drawLineChart(dataArray, "Number of lane transiting vehicles", createChartSpace(), "time", "cars");
 
 	}
 
