@@ -4,8 +4,9 @@ var XMLloaded = false;
 
 function onload() {
 
-  currentXML = getXML();
+  
   console.log("page is loaded");
+  document.getElementById("chartGen").click();
 
 }
 
@@ -22,37 +23,150 @@ function onload() {
 function genGraph() {
   console.log("Generating the graph");
 
-
-  var simulation;
   var chartType = "";
-  var laneChoice;
-  // get the values of the different selects
-  // try {
-  //   chartType = document.getElementById('chartChoice').value;
-  //   laneChoice = document.getElementById('laneSelect').value;
-  // } catch(err) {
-  //   console.log("Missing a chartType or laneChoice");
-  // }
-  
   chartType = getActiveChartType();
-  laneChoice = "e9_0";
 
 
-	// determine what graph should be drawn
+// determine what graph should be drawn
 
-	if (chartType == "barC") {
-		drawBarChart();
+
+//    GRAPH showing info about chosen vehicle over time
+	if (chartType == "vehInfo") {
+    var timeStamps = [];
+		//select choosen vehicle
+    var vehChoice;
+    vehChoice = "v40";
+
+    var routeLengths = [];
+    var speeds = [];
+    var speedFactors = [];
+
+    for (var i = 0; i < currentXML.length; i++) {
+      var snapshot = currentXML[i];
+
+      // get route length, or if not exist: routeLenght = 0
+      try {
+        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
+        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+        var result = nodes.iterateNext();
+        var routeId = result.getAttribute("route");
+
+        path = "/snapshot/route[@id=\""+ routeId + "\"]";
+        nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+        result = nodes.iterateNext();
+        routeLengths[i] = result.getAttribute("edges").split("e").length -1;
+
+      } catch(err) {
+        routeLengths[i] = 0
+     }
+     // get vehicle speed, or if not exist: speed = 0;
+     try {
+        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
+        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+        var result = nodes.iterateNext();
+        var speed = result.getAttribute("speed");
+        speeds[i] = parseFloat(speed);
+
+     } catch(err) {
+        speeds[i] = 0;
+     }
+     // get vehicle speedFactor, or if not exist: speedFactor = 0;
+     try {
+        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
+        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+        var result = nodes.iterateNext();
+        var speedFactor = result.getAttribute("speedFactor");
+        speedFactors[i] = parseFloat(speedFactor);
+
+     } catch(err) {
+        speedFactors[i] = 0;
+     }
+
+
+
+     // get timeStamps
+        var timeStamp;
+        var time;
+
+        timeStamp = snapshot.getElementsByTagName('snapshot'); 
+        time = timeStamp[0].getAttribute("time");
+      
+        timeStamps[i] = parseFloat(time);
+    }
+
+  var dataArray = [[]];
+    dataArray[0] = ["Time stamp", "routeLength", "speed", "speedFactor"];
+
+    for (var i = 0; i < routeLengths.length; i++) {
+      dataArray[i+1] = [timeStamps[i], routeLengths[i], speeds[i], speedFactors[i]];
+    }
+
+    drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "");
+
 
 	}
-	else if (chartType == "pieC") {
-//		drawPieChart();
-    drawBarChart("", "", createChartSpace());
+
+
+//    GRAPH showing edge appearance frequency 
+	else if (chartType == "edgeFr") {
+    // select chosen edge
+    var edgeChoice;
+    edgeChoice = "e43"
+
+    var appearance = [];
+    var timeStamps = [];
+
+    //iterate over each snapshot
+    for (var i = 0; i < currentXML.length; i++) {
+      snapshot = currentXML[i];
+      //get timeStamp of current snapshot
+      var timeStamp;
+      var time;
+
+      timeStamp = snapshot.getElementsByTagName('snapshot'); 
+      time = timeStamp[0].getAttribute("time");
+    
+      timeStamps[i] = parseFloat(time);
+      
+      var count = 0;
+
+      var path = "//route";
+      var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+
+      //iterate over each route
+      while(node = nodes.iterateNext()) {
+        //split each route into seperate edges
+        var result = node.getAttribute("edges").split(" ");
+
+        //iterae over each edge
+        for (var j = 0; j < result.length; j++) {
+          if(result[j] == edgeChoice) { count++; }
+        }
+      }
+      appearance[i] = count;
+    }
+
+    var dataArray = [[]];
+    dataArray[0] = ["Time stamp", ("edge " + edgeChoice)];
+
+    for (var i = 0; i < timeStamps.length; i++) {
+      dataArray[i+1] = [timeStamps[i], appearance[i]];
+    }
+
+    drawLineChart(dataArray, "Edge appearance frequency", createChartSpace(), "time", "appearances");
+
+
 	}
 
-	//Chart showing #cars per lane
-	else if (chartType == "lineC") {
+
+//    GRAPH showing #cars per lane
+	else if (chartType == "transVeh") {
+    //select choosen lane
+    var laneChoice;
+    laneChoice = "e9_0";
 
 		var cars = [];
+    var timeStamps = [];
 
 
     for (var i = 0; i < currentXML.length; i++) {
@@ -64,35 +178,32 @@ function genGraph() {
       var result = nodes.iterateNext();
       cars[i] = result.getAttribute("value").split("v").length -1;
 
-//      var timeStamp = snapshot.getElementsByTagName('snapshot'); 
-//      var time = timeStamp[0].getAttribute("time");
-       var path2 = "//@time";
-       var nodes2 = snapshot.evaluate(path2, snapshot, null, XPathResult.ANY_TYPE, null);
 
-       var result2 = nodes2.iterateNext();
-       var floatTime = result2.getAttribute("value")
-       timeStamps[i] = parseFloat(floatTime);
-//      timeStamps[i] = parseFloat(time);
-      
-      console.log(timeStamps[i]);
+      var timeStamp;
+      var time;
+
+      timeStamp = snapshot.getElementsByTagName('snapshot'); 
+      time = timeStamp[0].getAttribute("time");
+    
+      timeStamps[i] = parseFloat(time);
     }
     
 
 
 		var dataArray = [[]];
-		dataArray[0] = ["Time stamp", "#cars"];
+		dataArray[0] = ["Time stamp", "lane " + laneChoice];
 
 		for (var i = 0; i < cars.length; i++) {
-			dataArray[i+1] = [i, cars[i]];
+			dataArray[i+1] = [timeStamps[i], cars[i]];
 		}
 
-		drawLineChart(dataArray, "Number of cars on lane " + laneChoice);
+		drawLineChart(dataArray, "Number of lane transiting vehicles", createChartSpace(), "time", "cars");
 
 	}
 
 	//draw a useless graph
 	else if (chartType == "otherC") {
-		drawPieChart(getXMLarray(currentXML[10]), "Vehicles and their speed");
+		drawPieChart(getXMLarray(currentXML[10]), "Vehicles and their speed", createChartSpace());
 	}
 
 }
@@ -130,7 +241,6 @@ function drawBarChart(dataArray, title, id) {
 
 
 function drawPieChart(dataArray, title, id) {
-
 	var data = google.visualization.arrayToDataTable(dataArray);
 
 
@@ -146,19 +256,20 @@ function drawPieChart(dataArray, title, id) {
 
 
 
-function drawLineChart(dataArray, title, id) {
+function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 	var data = google.visualization.arrayToDataTable(dataArray);
 
 
 	var options = {
 		title: title,
-		curveType: 'function',
+		curveType: 'none',
 		legend: { position: 'bottom' },
 		crosshair: { trigger: 'both' },
 		explorer: {axis: 'horizontal'},
-		hAxis: {format:"#", minValue: 0, maxValue: 5, viewWindow: {min: 0}},
-		vAxis: {format:"#", minValue: 0, maxValue: 5, viewWindow: {min: 0}},
-
+		hAxis: {title:hTitle, format:"#", minValue: 0, maxValue: 5, viewWindow: {min: 0}},
+		vAxis: {title:vTitle, format:"#", minValue: 0, maxValue: 5, viewWindow: {min: 0}},
+    // hard coded height, maybe change change this in the generatingGraph.js
+    height: 250,
 	};
 
 	var chart = new google.visualization.LineChart(document.getElementById(id));
@@ -237,12 +348,9 @@ function getLanesId() {
 
 
  $(function () {     $('#chartGen').click(function(event) {
-	 
-	 console.log("button clicked");
 
       //check if the XML file has alread been loaded
       if (XMLloaded) {
-        console.log("No loading twice!");
         genGraph();
         return;
       } 
@@ -265,6 +373,7 @@ function getLanesId() {
 
         //avoid loading the data multiple times
         console.log("XML retrieved");
+        alert("Simulation loaded!");
         XMLloaded = true;
 
 //        console.log(resp);
@@ -282,8 +391,6 @@ function getLanesId() {
 //        populateLaneSelect(dataArray[1]);
 
         currentXML = dataArray;
-
-        console.log(getLanesId());
 
     return xmlDoc;
   }
