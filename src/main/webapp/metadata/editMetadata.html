@@ -12,7 +12,7 @@
   </head>
   <body>
 	<div class="d-flex justify-content-center">
-       <form id="myForm" action="/CentroGeo/Resources/MetaDataResource" method = "post">   
+       <form id="myForm" action="/CentroGeo/resources/simulations/metadata" method = "post">   
 	    <div class="form-group">
 			<label for="tile">Title</label>
 			<input type="text" class="form-control" id="title" name = "title">
@@ -30,20 +30,20 @@
   	    
 		<div class = "form-group">
 		   <div class="form-row">
-		        <div class="col-xs-4">
+		        <div class="col-xs-8">
 					<label for="tag">Tag</label>
 				</div>
 		   </div>
 		   <div class="form-row">
-				<div class="col-xs-4">						
+				<div class="col-xs-8">						
 					<select class="form-control" name = "tag" data-live-search="true" id="tag">
                             <!--option list of tag-->
 					</select>
 				</div>
-				<div class="col-xs-2">
+				<div class="col-xs-4">
 					<button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#add-tag-modal" >Add Tag</button>		 
 				</div>
-				<div class = "col-xs-2">
+				<div class = "col-xs-4">
 					<button type="button" class="btn btn-outline-secondary" id="remove">Remove Tag</button>
 				</div>
 			</div>					
@@ -100,6 +100,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-	<script src = "simulation_edit.js"></script>
+	<script src = "editMetadata.js"></script>
   </body>
 </html>

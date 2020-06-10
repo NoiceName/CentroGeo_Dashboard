@@ -28,10 +28,4 @@
     	<servlet-name>Resources</servlet-name>
     	<url-pattern>/resources/*</url-pattern>
     </servlet-mapping>
-
-<servlet-mapping>
-        <servlet-name>Simulation Resources</servlet-name>
-        <url-pattern>/simulations/*</url-pattern>
-</servlet-mapping>
-
 </web-app>

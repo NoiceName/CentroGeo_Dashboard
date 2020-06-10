@@ -20,9 +20,9 @@ $(function () {
 		});
 
 		//Send the metadata to the server.
-		//Wait for the server response execute successLogin on a successfull request
+		//Wait for the server response execute updating on a successfull request
 		$.ajax({
-			url: '/CentroGeo/Resources/simulations/metadata',
+			url: '/CentroGeo/resources/simulations/metadata',
 			data: formData,
 			//try with application/json later
 			type: 'POST',
