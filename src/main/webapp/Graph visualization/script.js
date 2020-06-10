@@ -4,8 +4,9 @@ var XMLloaded = false;
 
 function onload() {
 
-  currentXML = getXML();
+  
   console.log("page is loaded");
+  document.getElementById("chartGen").click();
 
 }
 
@@ -93,8 +94,6 @@ function genGraph() {
         timeStamps[i] = parseFloat(time);
     }
 
-    console.log(speeds);
-
   var dataArray = [[]];
     dataArray[0] = ["Time stamp", "routeLength", "speed", "speedFactor"];
 
@@ -108,10 +107,57 @@ function genGraph() {
 	}
 
 
-//    GRAPH showing something else
-	else if (chartType == "pieC") {
-    drawBarChart("", "", createChartSpace());
+//    GRAPH showing edge appearance frequency 
+	else if (chartType == "edgeFr") {
+    // select chosen edge
+    var edgeChoice;
+    edgeChoice = "e43"
+
+    var appearance = [];
+    var timeStamps = [];
+
+    //iterate over each snapshot
+    for (var i = 0; i < currentXML.length; i++) {
+      snapshot = currentXML[i];
+      //get timeStamp of current snapshot
+      var timeStamp;
+      var time;
+
+      timeStamp = snapshot.getElementsByTagName('snapshot'); 
+      time = timeStamp[0].getAttribute("time");
+    
+      timeStamps[i] = parseFloat(time);
+      
+      var count = 0;
+
+      var path = "//route";
+      var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+
+      //iterate over each route
+      while(node = nodes.iterateNext()) {
+        //split each route into seperate edges
+        var result = node.getAttribute("edges").split(" ");
+
+        //iterae over each edge
+        for (var j = 0; j < result.length; j++) {
+          if(result[j] == edgeChoice) { count++; }
+        }
+      }
+      appearance[i] = count;
+    }
+
+    var dataArray = [[]];
+    dataArray[0] = ["Time stamp", "edge appearance"];
+
+    for (var i = 0; i < timeStamps.length; i++) {
+      dataArray[i+1] = [timeStamps[i], appearance[i]];
+    }
+
+    drawLineChart(dataArray, "Edge appearance frequency of edge " + edgeChoice, createChartSpace(), "time", "appearances");
+
+
 	}
+
 
 //    GRAPH showing #cars per lane
 	else if (chartType == "transVeh") {
@@ -157,7 +203,7 @@ function genGraph() {
 
 	//draw a useless graph
 	else if (chartType == "otherC") {
-		drawPieChart(getXMLarray(currentXML[10]), "Vehicles and their speed");
+		drawPieChart(getXMLarray(currentXML[10]), "Vehicles and their speed", createChartSpace());
 	}
 
 }
@@ -195,7 +241,6 @@ function drawBarChart(dataArray, title, id) {
 
 
 function drawPieChart(dataArray, title, id) {
-
 	var data = google.visualization.arrayToDataTable(dataArray);
 
 
