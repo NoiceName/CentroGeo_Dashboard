@@ -24,7 +24,7 @@ public enum SimulationDAO {
 		Database.loadPGSQL();
 	    Database db = new Database();	
 		try {
-			Database.loadPGSQL();
+			
 			conn = db.connectPGSQL();
 
 			String sql = 
