@@ -23,9 +23,7 @@
 		<div class="row border-bottom">
 			<div class="col-12">
 				<ul class="nav justify-content-center">
-					<li class="nav-item">
-						<a class="nav-link" data-toggle="modal" data-target="#createChartMenu">Create Chart</a>	
-					</li>
+					<li class="nav-item"> <a class="nav-link" data-toggle="modal" data-target="#createChartMenu">Create Chart</a>	</li>
 					<li class="nav-item">
 						<a class="nav-link">Generate Report</a>	
 					</li>
@@ -41,7 +39,7 @@
 		<!-- Create Chart menu -->
 		<div>
 			<div id="createChartMenu" class="modal fade">
-				<div class="modal-dialog modal-dialog-centered modal-md">
+				<div class="modal-dialog modal-dialog-centered modal-lg">
 					<div class="modal-content">
 						<!-- Menu Header -->
 						<div class="modal-header">
@@ -64,7 +62,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">Lane ID</span>
 												</div>
-												<input data-toggle="" type="text" class="form-control" placeholder="eg. :e_31">
+												<input id="laneIdInput" type="text" class="form-control" placeholder="eg. :e_31">
 											</div>
 											<div class="input-group mb-3 d-none chart-options" id="pieChartOptions">
 												Something to do with piecharts
@@ -72,10 +70,21 @@
 										</div>
 										<!-- Second row of options --> 
 										<div class="row">
-											<div class="card">
-												<div class="card-body">
-													<div>selected id</div>
-												</div>	
+											<!-- Found ID display -->
+											<div class="col-6">
+												<div class="card">
+													<div class="card-body" id="foundIdsContainer">
+														<div class="card-title">Found id's</div>
+													</div>	
+												</div>
+											</div>
+											<!-- Selected ID display --> 
+											<div class="col-6">
+												<div class="card">
+													<div class="card-body" id="selectedIdsContainer">
+														<div class="card-title">Selected ID's</div>
+													</div>	
+												</div>
 											</div>
 										</div>
 									</div>
