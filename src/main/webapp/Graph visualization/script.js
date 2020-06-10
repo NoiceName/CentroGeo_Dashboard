@@ -163,20 +163,26 @@ function genGraph() {
 	else if (chartType == "transVeh") {
     //select choosen lane
     var laneChoice;
-    laneChoice = "e9_0";
+    laneChoice = getSelectedIds();
 
-		var cars = [];
+		var cars = [[]];
     var timeStamps = [];
 
-
+    //itterate over each snapshot
     for (var i = 0; i < currentXML.length; i++) {
       var snapshot = currentXML[i];
+      cars[i] = [];
 
-      var path = "/snapshot/lane[@id=\""+ laneChoice + "\"]/vehicles";
-      var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+      // itterate over each chosen lane
+      for (var j = 0; j < laneChoice.length; j++) {
+
+        var path = "/snapshot/lane[@id=\""+ laneChoice[j] + "\"]/vehicles";
+        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
       
-      var result = nodes.iterateNext();
-      cars[i] = result.getAttribute("value").split("v").length -1;
+        var result = nodes.iterateNext();
+        cars[i][j] = result.getAttribute("value").split("v").length -1;
+
+      }
 
 
       var timeStamp;
@@ -191,11 +197,18 @@ function genGraph() {
 
 
 		var dataArray = [[]];
-		dataArray[0] = ["Time stamp", "lane " + laneChoice];
+    dataArray[0] = ["Time stamps"];
+    for (var i = 0; i < laneChoice.length; i++) {
+      dataArray[0].push("lane " + laneChoice[i]); 
+    }
 
-		for (var i = 0; i < cars.length; i++) {
-			dataArray[i+1] = [timeStamps[i], cars[i]];
+		for (var i = 0; i < timeStamps.length; i++) {
+      dataArray[i+1] = [timeStamps[i]];
+      for (var j = 0; j < laneChoice.length; j++) {
+        dataArray[i+1].push(cars[i][j]);
+      }
 		}
+    
 
 		drawLineChart(dataArray, "Number of lane transiting vehicles", createChartSpace(), "time", "cars");
 
