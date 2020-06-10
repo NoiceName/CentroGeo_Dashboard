@@ -32,7 +32,7 @@ $(function() {
 		var jsLaneIdInput = document.getElementById("laneIdInput");
 		let input = jsLaneIdInput.value;
 		let p = document.getElementById('foundIdsContainer');
-		if(input.length >= 2) {
+		if(input.length >= 3) {
 			let filtered = getFilteredIds(input, ids);
 			filtered.forEach(function(item) {
 				createBadgeAndAdd(item,p);
