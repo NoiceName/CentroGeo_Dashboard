@@ -33,9 +33,16 @@ create table "projectschema".snapshotlane(
                                                  references "projectschema".snapshot (snapshot_id) on delete cascade
 );
 
+--create table "projectschema".user(
+--	user_id serial primary key,
+--	password_hash text
+--);
+
 create table "projectschema".user(
+
                                      user_id serial primary key,
                                      password_hash text
+
 );
 
 

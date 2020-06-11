@@ -3,19 +3,15 @@ package resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.util.ArrayList;
+
+
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 
-import org.json.JSONObject;
-
-import dao.SnapshotDAO;
 import model.Database;
-import model.Snapshot;
 
 @Path("/simulations")
 public class SimulationResources {
@@ -38,6 +34,8 @@ public class SimulationResources {
 			System.out.println("File added to database");
 		} catch (IOException e) {
 			e.printStackTrace(); }
-	}	
+	}
+	
+	
 	
 }

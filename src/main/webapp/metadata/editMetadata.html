@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <title>Simulation edit</title>
+  </head>
+  <body>
+	<div class="d-flex justify-content-center">
+       <form id="myForm" action="/CentroGeo/resources/simulations/metadata" method = "post">   
+	    <div class="form-group">
+			<label for="tile">Title</label>
+			<input type="text" class="form-control" id="title" name = "title">
+		</div>
+		
+		<div class="form-group">
+			<label for="editor">Editor</label>
+			<input type="text" class="form-control" id="editor" name = "editor">
+		</div>
+	   
+		<div class="form-group">
+			<label for="date">Date</label>
+			<input type="date" class="form-control" id="date" name = "date">
+		</div>
+  	    
+		<div class = "form-group">
+		   <div class="form-row">
+		        <div class="col-xs-8">
+					<label for="tag">Tag</label>
+				</div>
+		   </div>
+		   <div class="form-row">
+				<div class="col-xs-8">						
+					<select class="form-control" name = "tag" data-live-search="true" id="tag">
+                            <!--option list of tag-->
+					</select>
+				</div>
+				<div class="col-xs-4">
+					<button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#add-tag-modal" >Add Tag</button>		 
+				</div>
+				<div class = "col-xs-4">
+					<button type="button" class="btn btn-outline-secondary" id="remove">Remove Tag</button>
+				</div>
+			</div>					
+		  </div>
+		<div class="form-group">
+			<label for="description">Desciption</label>
+			<textarea class="form-control" id="description" name ="description" rows="3" placeholder = "Additonal info..."></textarea>
+		</div>
+		
+		<div class="form-group">
+		    <div class = "form-row">
+			<div class="col-xs-3">
+			<input type="submit" value = "Submit" class="btn btn-info" >
+			</div>
+			<div class = "form-row">
+			<div class="col-xs-3">
+			<button type="button" class="btn btn-secondary" >Cancel</button>
+			</div>
+			</div>
+		    </div>	
+		</div>
+	</form>
+  </div>
+  
+  
+  <!-- Modal -->
+<div id="add-tag-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h5 class="modal-title">Add new tag</h5>
+      </div>
+      <div class="modal-body">
+	    <form id = "tag-form">
+		   <label for = "new-tag" >New tag</label>
+		   <input type = "text" id = "newTag" name= "newTag" placeholder = "Tag name...">
+		   <button type = "button" id= "add-new-tag"  class ="btn btn-outline-success btn-sm">Add</button>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+		
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	<script src = "editMetadata.js"></script>
+  </body>
+</html>
