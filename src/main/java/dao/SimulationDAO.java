@@ -24,16 +24,16 @@ public enum SimulationDAO {
 		Database.loadPGSQL();
 	    Database db = new Database();	
 		try {
-			Database.loadPGSQL();
+			
 			conn = db.connectPGSQL();
 
 			String sql = 
 			"UPDATE projectschema.simulation "+
-			"SET name = ?, date = ?, tags = ?,descripton = ? " +
+			"SET name = ?, date = ?, tags = ?, description = ? " +
 			"WHERE simulation_id = ?; ";
 						
 			query = conn.prepareStatement(sql);
-			query.setString(1, editor);
+			query.setString(1, editor);			
 			query.setDate(2, new java.sql.Date(date.getTime()));
 			query.setString(3, tag);
 			query.setString(4, description);

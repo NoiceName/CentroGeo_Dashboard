@@ -39,12 +39,12 @@ public class Metadata {
 	   */
 		int updateResult = SimulationDAO.instance.editMetadata(simulationId, name, date, tag, description);
 		JSONObject response = new JSONObject();
-		if (updateResult == 0){
-			response.put("result", "false");
+		if (updateResult == 1){
+			response.put("result", "true");
 		}
-		else if(updateResult == 1){
+		else {
 			
-			response.put("result","true");
+			response.put("result","false");
 			
 		}
 		return response.toString();
