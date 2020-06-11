@@ -26,7 +26,7 @@ $(function() {
 	var laneIdInput = $("#laneIdInput");
 
 	laneIdInput.keyup(function() {
-		var ids = getLanesId();
+		var ids = ["id1", "id2", "id3"];
 		var jsLaneIdInput = document.getElementById("laneIdInput");
 		let input = jsLaneIdInput.value;
 		let p = document.getElementById('foundIdsContainer');
@@ -41,8 +41,7 @@ $(function() {
 		else if (input.length <= 2) {
 
 		}
-	});
-
+	}); 
 });
  
 //Removes badges from display
@@ -58,17 +57,31 @@ function createBadgeAndAdd(id, container) {
 	newBadge.classList.add('badge', 'badge-primary', 'badge-pill', 'foundId');
 	newBadge.setAttribute('href','#');
 	newBadge.innerText = id;
-	newBadge.addEventListener('mousedown', function () {selectBadge(newBadge, container)});
+	newBadge.addEventListener('mousedown', function () {selectBadge(newBadge, container);});
 	container.appendChild(newBadge);
 }
 
 //Transfer the id from Found IDs to Selected Ids container
 function selectBadge(Badge, parentElem) {
 	var transferContainer = document.getElementById('selectedIdsContainer');
-	Badge.removeEventListener('mousedown', arguments.callee);
-	transferContainer.appendChild(Badge);
+	var cloneBadge = Badge.cloneNode(true);
+	if (parentElem.contains(Badge)){
+		console.log('hello');
+		parentElem.removeChild(Badge);
+	}
+	cloneBadge.addEventListener('mousedown', function() {makeSelectedBadge.bind(this)();})
+	transferContainer.appendChild(cloneBadge);
 }
 
+function makeSelectedBadge() {
+	console.log(this);
+	let foundIds = document.getElementById('foundIdsContainer');
+	let par = this.parentNode;
+	par.removeChild(this);
+	let clone = this.cloneNode(true);
+	foundIds.appendChild(clone);
+	clone.addEventListener('mousedown', function () {selectBadge(clone, foundIds);});
+}
 
 //Returns an array of string ids of lanes that have been selected by the user.
 function getSelectedIds(){
