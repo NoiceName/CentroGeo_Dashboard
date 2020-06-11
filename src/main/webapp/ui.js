@@ -47,7 +47,20 @@ $(function() {
 //Removes badges from display
 //Not used
 function removeBadges(container){
-	var c = conainter.childNodes;	
+	var c = container.children;	
+	var removed = false;
+	do {
+		for(var i = 0; i<c.length; i++){
+			let child = c[i];
+			if(child.classList.contains('foundId')){
+				console.log('removed');
+				container.removeChild(child);
+				removed = true;
+				break;
+			} else {removed = false}
+		} 
+		c = container.children;
+	} while(removed);
 }
 
 //Id is a string of a lane;
@@ -66,7 +79,6 @@ function selectBadge(Badge, parentElem) {
 	var transferContainer = document.getElementById('selectedIdsContainer');
 	var cloneBadge = Badge.cloneNode(true);
 	if (parentElem.contains(Badge)){
-		console.log('hello');
 		parentElem.removeChild(Badge);
 	}
 	cloneBadge.addEventListener('mousedown', function() {makeSelectedBadge.bind(this)();})
@@ -74,7 +86,6 @@ function selectBadge(Badge, parentElem) {
 }
 
 function makeSelectedBadge() {
-	console.log(this);
 	let foundIds = document.getElementById('foundIdsContainer');
 	let par = this.parentNode;
 	par.removeChild(this);
@@ -84,6 +95,7 @@ function makeSelectedBadge() {
 }
 
 //Returns an array of string ids of lanes that have been selected by the user.
+
 function getSelectedIds(){
 	var transferContainer = document.getElementById('selectedIdsContainer');
 	let children = transferContainer.children;
@@ -108,3 +120,23 @@ function getFilteredIds(inputString, ids) {
 		let filtered = ids.filter(function(str) {return str.includes(inputString)});
 		return filtered;
 }
+
+//Removes all ids from both containers
+function clearSelectedAndFound() {
+	let foundContainer = document.getElementById('foundIdsContainer');
+	let selectedContainer = document.getElementById('selectedIdsContainer');
+	removeBadges(foundContainer);
+	removeBadges(selectedContainer);
+}
+
+
+//Behaviour when the user clicks away from the modal
+$(function() {
+	$('#createChartMenu').on('hidden.bs.modal', function(e) {
+		clearSelectedAndFound();
+	});
+});
+
+
+
+
