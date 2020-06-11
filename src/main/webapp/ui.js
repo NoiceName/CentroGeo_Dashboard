@@ -44,8 +44,7 @@ $(function() {
 	}); 
 });
  
-//Removes badges from display
-//Not used
+//Removes all badges from a specified container
 function removeBadges(container){
 	var c = container.children;	
 	var removed = false;
@@ -53,7 +52,6 @@ function removeBadges(container){
 		for(var i = 0; i<c.length; i++){
 			let child = c[i];
 			if(child.classList.contains('foundId')){
-				console.log('removed');
 				container.removeChild(child);
 				removed = true;
 				break;
@@ -136,7 +134,3 @@ $(function() {
 		clearSelectedAndFound();
 	});
 });
-
-
-
-
