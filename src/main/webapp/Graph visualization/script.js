@@ -353,15 +353,15 @@ function getLanesId() {
 }
 
 
+$(function () {     $('#chartGen').click(function(event) {
+  genGraph();
+
+ });
+ });
 
 
- $(function () {     $('#chartGen').click(function(event) {
+ $(function () {     $(document).ready(function() {
 
-      //check if the XML file has alread been loaded
-      if (XMLloaded) {
-        genGraph();
-        return;
-      } 
       //Statically set simulation id !!! that is sent to the server
 	  var simulation_id = '1';
 
