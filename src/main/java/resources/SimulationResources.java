@@ -26,12 +26,14 @@ public class SimulationResources {
 	 * @param stream
 	 */
 	@POST
+	@Secured
 	@Consumes("application/zip")
 	public void addSimulation(InputStream stream){
 		SimulationDAO.instance.addSimulation(stream);
 	}
 
 	@DELETE
+	@Secured
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public void deleteSimulation(@FormParam("id") String name){
 		System.out.println(name);
