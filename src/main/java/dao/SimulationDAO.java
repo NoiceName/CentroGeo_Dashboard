@@ -29,7 +29,7 @@ public enum SimulationDAO {
 
 			String sql = 
 			"UPDATE projectschema.simulation "+
-			"SET name = ?, date = ?, tags = ?,descripton = ? " +
+			"SET name = ?, date = ?, tags = ?, description = ? " +
 			"WHERE simulation_id = ?; ";
 						
 			query = conn.prepareStatement(sql);
