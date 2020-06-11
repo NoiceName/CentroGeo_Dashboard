@@ -363,13 +363,13 @@ function getLanesId() {
 
 //should return all the veh id's as an array
 function getVehId() {
-  vehIds = ["v10", "v25", "v40", "v61", "v978"];
+  vehIds = ["v10", "v25", "v40", "v61", "v135", "v254", "v316", "v479", "v524", "v698", "v702", "v866", "v978"];
   return vehIds;
 }
 
 //should return all the edge id's
 function getEdgeId() {
-  edgeIds = ["e2", "e25", "e31", "e43"];
+  edgeIds = ["e2", "e14", "e15", "e25", "e26", "e27", "e33", "e38", "e31", "e43"];
   return edgeIds;
 }
 
