@@ -26,7 +26,7 @@ $(function() {
 	var laneIdInput = $("#laneIdInput");
 
 	laneIdInput.keyup(function() {
-		var ids = ["id1", "id2", "id3"];
+		var ids = getLanesId();
 		var jsLaneIdInput = document.getElementById("laneIdInput");
 		let input = jsLaneIdInput.value;
 		let p = document.getElementById('foundIdsContainer');
@@ -131,6 +131,8 @@ function clearSelectedAndFound() {
 //Behaviour when the user clicks away from the modal
 $(function() {
 	$('#createChartMenu').on('hidden.bs.modal', function(e) {
+		let input = document.getElementById('laneIdInput');
+		input.value = '';
 		clearSelectedAndFound();
 	});
 });
