@@ -16,16 +16,22 @@
     	<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
     	<init-param>
     		<param-name>jersey.config.server.provider.packages</param-name>
-    		<param-value>resources</param-value>
+    		<param-value>resources;cookie_manager</param-value>
     	</init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>cookie_manager.AuthenticationFilter</param-value>
+        </init-param>
+
     </servlet>
     
-<servlet-mapping>
-        <servlet-name>testServlet</servlet-name>
-        <url-pattern>/test/*</url-pattern>
-</servlet-mapping>
+    <servlet-mapping>
+            <servlet-name>testServlet</servlet-name>
+            <url-pattern>/test/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
     	<servlet-name>Resources</servlet-name>
     	<url-pattern>/resources/*</url-pattern>
     </servlet-mapping>
+
 </web-app>

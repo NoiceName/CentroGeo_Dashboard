@@ -48,5 +48,6 @@ public class Simulation {
 	public int getSimulationId() {
 		return this.simulationId;
 	}
+
 	
 }

@@ -72,9 +72,10 @@ public class UserResource {
 			//Generate and save a new token and send it to the user inform of a cookie 
 			String token = CookieManager.assignCookie(user);
 			Cookie authCookie = new Cookie("auth",token);
-			authCookie.setMaxAge(60*60);
+			authCookie.setMaxAge(60*60*24);
 			httpResponse.addCookie(authCookie);
 			response.put("result","true");
+			response.put("token", token);
 			
 		}
 		return response.toString();
