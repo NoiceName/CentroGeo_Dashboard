@@ -16,7 +16,6 @@ public class CookieManager {
 	 * In the case a user already has a token update it.
 	 * @param user
 	 * @return
-	 * @throws CannotCreateCookieException
 	 */
 	public static String assignCookie(User user) {
 		BiMap<String, User> storage = CookieDAO.instance.getModel();
@@ -26,6 +25,7 @@ public class CookieManager {
 		} else {
 			storage.put(stringToken, user);
 		}
+		System.out.println(stringToken);
 		return stringToken;
 	}
 
@@ -34,10 +34,8 @@ public class CookieManager {
 	 * @return
 	 */
 	private static String generateToken() {
-		SecureRandom random = new SecureRandom();
-		byte[] token = random.getSeed(20);
-		String stringToken = Base64.getEncoder().encodeToString(token);
-		return stringToken;
+		byte[] token = SecureRandom.getSeed(20);
+		return Base64.getEncoder().encodeToString(token);
 	}	
 	
 	/**
@@ -48,10 +46,7 @@ public class CookieManager {
 	 */
 	public static boolean checkCookie(String stringToken) {
 		BiMap<String, User> cookieModel = CookieDAO.instance.getModel();
-		if(cookieModel.containsKey(stringToken)) {
-			return true;
-		}
-		else {return false;}
+		return cookieModel.containsKey(stringToken);
 	}
 	
 	

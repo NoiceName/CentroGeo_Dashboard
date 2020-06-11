@@ -11,6 +11,16 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.xml.crypto.Data;
+
+import cookie_manager.Secured;
+import dao.SimulationDAO;
+import model.Simulation;
+import org.json.JSONObject;
+
+import dao.SnapshotDAO;
 import model.Database;
 
 @Path("/simulations")
@@ -22,20 +32,17 @@ public class SimulationResources {
 	 */
 	@POST
 	@Consumes("application/zip")
-	public void getZip(InputStream stream){
-		Database.loadPGSQL();
-		Database newDb = new Database();
-
-		try {
-			newDb.connectPGSQL();
-			Connection connection = newDb.getConnection();
-			System.out.println("Downloaded file");
-			extraction.ZipExtraction.getZipData(stream, connection);
-			System.out.println("File added to database");
-		} catch (IOException e) {
-			e.printStackTrace(); }
+	public void addSimulation(InputStream stream){
+		SimulationDAO.instance.addSimulation(stream);
 	}
+
 	
 	
+	@DELETE
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void deleteSimulation(@FormParam("id") String name){
+		System.out.println(name);
+		SimulationDAO.instance.deleteSimulation(name);
+	}
 	
 }

@@ -20,6 +20,8 @@ create table "projectschema".snapshot(
 
 create table "projectschema".lane(
                                      lane_id text primary key,
+                                     simulation integer not null
+                                         references "projectschema".simulation (simulation_id) on delete cascade,
                                      index integer,
                                      length real,
                                      shape text

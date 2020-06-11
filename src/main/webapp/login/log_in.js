@@ -32,6 +32,9 @@ $(function () {
 
 function successLogin(resp) {
 	if(resp.result=='true'){
+		console.log(resp.token);
+		sessionStorage.setItem("token", resp.token);
+
 		window.location.href = "/CentroGeo/homepage.html";
 	}
 	else if (resp.result=='false') {

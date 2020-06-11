@@ -68,7 +68,7 @@ public class UserResource {
 		 * */
 		
  //		User user = UserDAO.instance.getModel().get(username);
-		String returnPassword = UserDAO.instance.getUserPassword(username);
+		String returnPassword = UserDAO.instance.getModel().get(username).getPassword();
 		JSONObject response = new JSONObject();
 		if (returnPassword == null||!returnPassword.equals(password)){
 			response.put("result", "false");
@@ -77,9 +77,10 @@ public class UserResource {
 			//Generate and save a new token and send it to the user inform of a cookie 
 			String token = CookieManager.assignCookie(new User(username,returnPassword)); 
 			Cookie authCookie = new Cookie("auth",token);
-			authCookie.setMaxAge(60*60);
+			authCookie.setMaxAge(60*60*24);
 			httpResponse.addCookie(authCookie);
 			response.put("result","true");
+			response.put("token", token);
 			
 		}
 		return response.toString();
