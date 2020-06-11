@@ -1,6 +1,9 @@
 var currentXML;
 var XMLloaded = false;
 
+var vehIds;
+var edgeIds
+
 
 function onload() {
   console.log("page is loaded");
@@ -28,7 +31,7 @@ function genGraph() {
     var timeStamps = [];
 		//select choosen vehicle
     var vehChoice = getSelectedIds()[0];
-    vehChoice = "v40";
+    if (getSelectedIds().length < 1) {return}
 
     var routeLengths = [];
     var speeds = [];
@@ -104,7 +107,8 @@ function genGraph() {
 	else if (chartType == "edgeFr") {
     // select chosen edge
     var edgeChoice;
-    edgeChoice = "e43"
+    edgeChoice = getSelectedIds()[0];
+    if (getSelectedIds().length < 1) {return}
 
     var appearance = [];
     var timeStamps = [];
@@ -157,6 +161,11 @@ function genGraph() {
     //select choosen lane
     var laneChoice;
     laneChoice = getSelectedIds();
+
+    //check that user input has been given
+    if (laneChoice.length < 1) {
+      return
+    }
 
 		var cars = [[]];
     var timeStamps = [];
@@ -352,16 +361,30 @@ function getLanesId() {
 
 }
 
+//should return all the veh id's as an array
+function getVehId() {
+  vehIds = ["v10", "v25", "v40", "v61", "v135", "v254", "v316", "v479", "v524", "v698", "v702", "v866", "v978"];
+  return vehIds;
+}
+
+//should return all the edge id's
+function getEdgeId() {
+  edgeIds = ["e2", "e14", "e15", "e25", "e26", "e27", "e33", "e38", "e31", "e43"];
+  return edgeIds;
+}
 
 
 
- $(function () {     $('#chartGen').click(function(event) {
+$(function () {     $('#chartGen').click(function(event) {
+  genGraph();
 
-      //check if the XML file has alread been loaded
-      if (XMLloaded) {
-        genGraph();
-        return;
-      } 
+ });
+ });
+
+
+
+ $(function () {     $(document).ready(function() {
+
       //Statically set simulation id !!! that is sent to the server
 	  var simulation_id = '1';
 
@@ -405,4 +428,53 @@ function getLanesId() {
     
     }); 
     });
+
+
+
+
+ //Load the vehicle id's
+//  $(function () {     $('#vehicleChartSelect').click(function(event) {
+//       alert("select vehId's");
+//       //Statically set simulation id !!! that is sent to the server
+//     var simulation_id = '1';
+
+//     $.ajax({
+//       url: '/CentroGeo/resources/simulations/'+simulation_id+'/snapshots',
+//       //try with application/json later
+//       type: 'GET',
+//       success: function (resp) {success(resp)},
+//       error: function(jqXHR, textStatus, errorThrown) {
+//         alert('Cannot contact the server!');
+//       }
+//     });
+    
+
+//   function success(resp) {
+//     //resp is the data array
+
+//         //avoid loading the data multiple times
+//         console.log("vehicle id's loaded");
+//         XMLloaded = true;
+
+// //        console.log(resp);
+        
+
+//         dataArray = [];
+//         var parser = new DOMParser();
+
+//         for (var i = 0; i < resp.length; i++) {
+//             xmlDoc = parser.parseFromString(resp[i].data, "text/xml");
+//             dataArray[i] = xmlDoc;
+//         }
+        
+        
+// //        populateLaneSelect(dataArray[1]);
+
+//         vehIds = dataArray;
+
+//     return xmlDoc;
+//   }
+    
+//     }); 
+//     });
 
