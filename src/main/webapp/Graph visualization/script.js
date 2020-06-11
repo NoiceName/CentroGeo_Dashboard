@@ -3,19 +3,12 @@ var XMLloaded = false;
 
 
 function onload() {
-
-  
   console.log("page is loaded");
-  document.getElementById("chartGen").click();
-
 }
 
 
  	google.charts.load('current', {'packages':['corechart']});
  	google.charts.load('current', {'packages':['bar']});
-    // google.charts.setOnLoadCallback(drawPieChart);
-    // google.charts.setOnLoadCallback(drawLineChart);
-
 
 
 
@@ -27,14 +20,14 @@ function genGraph() {
   chartType = getActiveChartType();
 
 
-// determine what graph should be drawn
+  // determine what graph should be drawn
 
 
-//    GRAPH showing info about chosen vehicle over time
+  //    GRAPH showing info about chosen vehicle over time
 	if (chartType == "vehInfo") {
     var timeStamps = [];
 		//select choosen vehicle
-    var vehChoice;
+    var vehChoice = getSelectedIds()[0];
     vehChoice = "v40";
 
     var routeLengths = [];
@@ -107,7 +100,7 @@ function genGraph() {
 	}
 
 
-//    GRAPH showing edge appearance frequency 
+  //    GRAPH showing edge appearance frequency 
 	else if (chartType == "edgeFr") {
     // select chosen edge
     var edgeChoice;
@@ -159,24 +152,30 @@ function genGraph() {
 	}
 
 
-//    GRAPH showing #cars per lane
+  //    GRAPH showing #cars per lane
 	else if (chartType == "transVeh") {
     //select choosen lane
     var laneChoice;
-    laneChoice = "e9_0";
+    laneChoice = getSelectedIds();
 
-		var cars = [];
+		var cars = [[]];
     var timeStamps = [];
 
-
+    //itterate over each snapshot
     for (var i = 0; i < currentXML.length; i++) {
       var snapshot = currentXML[i];
+      cars[i] = [];
 
-      var path = "/snapshot/lane[@id=\""+ laneChoice + "\"]/vehicles";
-      var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
+      // itterate over each chosen lane
+      for (var j = 0; j < laneChoice.length; j++) {
+
+        var path = "/snapshot/lane[@id=\""+ laneChoice[j] + "\"]/vehicles";
+        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
       
-      var result = nodes.iterateNext();
-      cars[i] = result.getAttribute("value").split("v").length -1;
+        var result = nodes.iterateNext();
+        cars[i][j] = result.getAttribute("value").split("v").length -1;
+
+      }
 
 
       var timeStamp;
@@ -191,11 +190,18 @@ function genGraph() {
 
 
 		var dataArray = [[]];
-		dataArray[0] = ["Time stamp", "lane " + laneChoice];
+    dataArray[0] = ["Time stamps"];
+    for (var i = 0; i < laneChoice.length; i++) {
+      dataArray[0].push("lane " + laneChoice[i]); 
+    }
 
-		for (var i = 0; i < cars.length; i++) {
-			dataArray[i+1] = [timeStamps[i], cars[i]];
+		for (var i = 0; i < timeStamps.length; i++) {
+      dataArray[i+1] = [timeStamps[i]];
+      for (var j = 0; j < laneChoice.length; j++) {
+        dataArray[i+1].push(cars[i][j]);
+      }
 		}
+    
 
 		drawLineChart(dataArray, "Number of lane transiting vehicles", createChartSpace(), "time", "cars");
 
@@ -227,6 +233,7 @@ function drawBarChart(dataArray, title, id) {
 		chart: {
 			title: 'Mockup graph',
 			subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+      height: 350,
 		},
 		bars: 'vertical' // Required for Material Bar Charts.
 	};
@@ -245,7 +252,8 @@ function drawPieChart(dataArray, title, id) {
 
 
 	var options = {
-		title: title
+		title: title,
+    height: 350,
 	};
 
 	var chart = new google.visualization.PieChart(document.getElementById(id));
@@ -269,7 +277,7 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 		hAxis: {title:hTitle, format:"#", minValue: 0, maxValue: 5, viewWindow: {min: 0}},
 		vAxis: {title:vTitle, format:"#", minValue: 0, maxValue: 5, viewWindow: {min: 0}},
     // hard coded height, maybe change change this in the generatingGraph.js
-    height: 250,
+    height: 350,
 	};
 
 	var chart = new google.visualization.LineChart(document.getElementById(id));
