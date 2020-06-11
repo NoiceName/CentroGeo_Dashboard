@@ -103,7 +103,9 @@
 				dataType: 'json',
 				contentType : 'application/json',
 				success:function (resp) {
-					     console.log(resp.result);
+					
+					     console.log(resp.result); // no result!???
+					     
 							if(resp.result =='true'){
 								//close the page modal and pop up alert!
 								alert("success!");

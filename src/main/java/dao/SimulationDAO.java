@@ -33,7 +33,7 @@ public enum SimulationDAO {
 			"WHERE simulation_id = ?; ";
 						
 			query = conn.prepareStatement(sql);
-			query.setString(1, editor);
+			query.setString(1, editor);			
 			query.setDate(2, new java.sql.Date(date.getTime()));
 			query.setString(3, tag);
 			query.setString(4, description);
