@@ -47,35 +47,35 @@ class CookieManagerTest {
 	
 	@Test
 	void testIfCookiesExists() {
-		User user1 = new User("max", "amazingPassword");
-		User user2 = new User("sam", "123456");
-		
-		//insert new users into database
-		
-		try {
-			
-			UserDAO.instance.insertUser(user1);
-			UserDAO.instance.insertUser(user2);
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	
-		String password1 = UserDAO.instance.getUserPassword("max");
-		String password2 = UserDAO.instance.getUserPassword("sam");
-		
-		User max = new User("max",password1);
-		User sam = new User("sam",password2);
-		
-		//Assing cookie tokens to users
-		String token = CookieManager.assignCookie(max);
-		String token2 = CookieManager.assignCookie(sam);
-		
-		//Test whether the given tokens match
-		assertTrue(CookieManager.checkCookie(token));
-		assertFalse(CookieManager.checkCookie("fakeToken"));
+//		User user1 = new User("max", "amazingPassword");
+//		User user2 = new User("sam", "123456");
+//		
+//		//insert new users into database
+//		
+//		try {
+//			
+//			UserDAO.instance.insertUser(user1);
+//			UserDAO.instance.insertUser(user2);
+//			
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	
+//		String password1 = UserDAO.instance.getUserPassword("max");
+//		String password2 = UserDAO.instance.getUserPassword("sam");
+//		
+//		User max = new User("max",password1);
+//		User sam = new User("sam",password2);
+//		
+//		//Assing cookie tokens to users
+//		String token = CookieManager.assignCookie(max);
+//		String token2 = CookieManager.assignCookie(sam);
+//		
+//		//Test whether the given tokens match
+//		assertTrue(CookieManager.checkCookie(token));
+//		assertFalse(CookieManager.checkCookie("fakeToken"));
 	
 	}	
 	
