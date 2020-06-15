@@ -209,3 +209,9 @@ $(function() {
 		clearSelectedAndFound();
 	});
 });
+
+function generateReport() {
+	document.getElementById('reportDiv').innerHTML = "Report";
+	window.print();	
+	document.getElementById('reportDiv').innerHTML = "";
+}

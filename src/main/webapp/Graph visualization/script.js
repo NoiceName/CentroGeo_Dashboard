@@ -377,10 +377,20 @@ function getEdgeId() {
 
 $(function () {     $('#chartGen').click(function(event) {
   genGraph();
+  var btn = document.createElement("BUTTON");
+  btn.setAttribute("id", "removeChart");
+  btn.innerHTML = "DELETE";
+  document.getElementById('charts').appendChild(btn);
 
  });
  });
 
+$(function () {     $('#removeChart').click(function(event) {
+  var graph = document.getELementById('createChartMenu');
+  graph.remove();
+  	
+	 });
+	 });
 
 
  $(function () {     $(document).ready(function() {
