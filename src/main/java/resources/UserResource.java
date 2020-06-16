@@ -57,10 +57,13 @@ public class UserResource {
 	@POST
 	@Path("/login")
 	@Consumes("application/json")
+	@Produces("application/json")
 	public Response login(String userInformation) {
 		JSONObject userJson = new JSONObject(userInformation);
 		String username = userJson.getString("username");
 		String password = userJson.getString("password");
+
+		JSONObject response = new JSONObject();
 	
 		/* I have created the method to check if the username is in the database, 
 		 * and if the returned password matches the given password		
@@ -69,14 +72,16 @@ public class UserResource {
  //		User user = UserDAO.instance.getModel().get(username);
 		String returnPassword = UserDAO.instance.getModel().get(username).getPassword();
 		if (returnPassword == null||!returnPassword.equals(password)){
-			return Response.serverError().build();
+			response.put("result", "false");
+			return Response.serverError().entity(response.toString()).build();
 		}
 		else {
 			//Generate and save a new token and send it to the user inform of a cookie 
 			String token = CookieManager.assignCookie(new User(username, returnPassword));
 			NewCookie authCookie = new NewCookie(HttpHeaders.AUTHORIZATION, token, "/",
 					null, null, 60*60*24, false, true);
-			return Response.ok().cookie(authCookie).build();
+			response.put("result", "true");
+			return Response.ok().entity(response.toString()).cookie(authCookie).build();
 			
 		}
 	}

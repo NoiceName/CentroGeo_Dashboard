@@ -25,12 +25,16 @@ public class ZipExtraction {
 		// Stops the stream from being closed by other methods
 		WontCloseZipInputStream zipStream = new WontCloseZipInputStream(stream);
 
+		boolean containsMetadata = false;
+
 		try {
 			for (ZipEntry e; (e = zipStream.getNextEntry()) != null; ) {
 				if (e.getName().contains("state_")) {
 					parseState(zipStream, connection);
+					containsMetadata = true;
 				} else if (e.getName().contains("metadata.txt")) {
 					parseMetadata(zipStream, connection);
+					containsMetadata = true;
 				} else if (e.getName().contains("net.net.xml")) {
 					parseNet(zipStream, connection);
 				} else if (e.getName().contains("routes.rou.xml")) {
@@ -45,11 +49,12 @@ public class ZipExtraction {
 			}
 			// Manually close stream, because the default was overwritten
 			zipStream.reallyClose();
+			if (!containsMetadata){throw new Exception("Invalid zip file");}
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 			throw new Exception("Invalid zip file");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new Exception("SQL Database Error");
 		}
 	}

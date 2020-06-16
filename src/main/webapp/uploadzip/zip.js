@@ -37,7 +37,10 @@ $("#zipform").submit(function (evt) {
         enctype: 'application/zip',
         processData: false,
         success: function (response) {
-            alert(response);
+            alert("Successfully uploaded zip file");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseText)
         }
     });
     return false;

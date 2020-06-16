@@ -39,9 +39,9 @@ public class SimulationResources {
 	public Response addSimulation(InputStream stream){
 		try {
 			SimulationDAO.instance.addSimulation(stream);
-			return Response.ok().build();
+			return Response.ok().entity("").build();
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
 		}
 	}
