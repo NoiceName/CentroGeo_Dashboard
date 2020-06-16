@@ -208,11 +208,4 @@ $(function() {
 		input.value = '';
 		clearSelectedAndFound();
 	});
-});
-
-//Generates a report when 'generate report' button is pressed.
-function generateReport() {
-	document.getElementById('reportDiv').innerHTML = "Report";
-	window.print();	
-	document.getElementById('reportDiv').innerHTML = "";
-}
+})
