@@ -4,6 +4,7 @@ var maxSpace = 12;
 //How much space does each column occupy
 var spaceSize = 6;
 
+var lis;
 
 function getActiveChartType(){
 	chartTypeElements = document.getElementsByClassName('chart-type');
@@ -31,9 +32,18 @@ function createChartSpace() {
 	newDiv.id = id;
 	let colWidth = 'col-'+spaceSize;
 	newDiv.classList.add(colWidth);
+
+	lis = document.getElementById("charts");
+	newDiv.addEventListener("click", remove, false);
+	
 	chartRow.appendChild(newDiv);
 	return id;
 }
+
+function remove() {
+	lis.removeChild(lis.childNodes[i]);
+}
+
 
 //$(function() {
 //	$('body').click(function() {

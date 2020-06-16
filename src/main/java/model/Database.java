@@ -14,8 +14,9 @@ public class Database {
 	String username = "";
 	//The password of the database user
 	String password = "";
-	//Do not change this variable 
+	//Do not change this variable
 	String schemaName = "projectschema";
+
 	Connection connection;
 
 	/**
@@ -29,13 +30,13 @@ public class Database {
 		this.username = username;
 		this.password = password;
 	}
-	
+
 	/**
 	 * Instantiates a database with default parameters
 	 */
 	public Database() {
 	}
-	
+
 	/**
 	 * Loads the driver for a pgsql database.
 	 */
@@ -46,7 +47,7 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Connects to the specified PGSQL database
 	 * @return
@@ -65,7 +66,7 @@ public class Database {
 		return conn;
 
 	}
-	
+
 	/**
 	 * Creates a prepared statement from the connected database
 	 * @param preparedStatement
@@ -87,5 +88,5 @@ public class Database {
 	public Connection getConnection() {
 		return this.connection;
 	}
-	
+
 }

@@ -208,4 +208,4 @@ $(function() {
 		input.value = '';
 		clearSelectedAndFound();
 	});
-});
+})
