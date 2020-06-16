@@ -11,10 +11,10 @@ public class Database {
 	//The URL of the database (Note: the url string should begin with 'jdbc::postgresq:' "
 	String url = "jdbc:postgresql://localhost:5432/";
 	//The username of the database user
-	String username = "";
+	String username = "postgres";
 	//The password of the database user
-	String password = "";
-	//Do not change this variable 
+	String password = "password";
+	//Do not change this variable
 	String schemaName = "projectschema";
 	Connection connection;
 
