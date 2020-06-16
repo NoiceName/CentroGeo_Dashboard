@@ -12,6 +12,7 @@ Installation Instructions:
 The main page of the Dashboard can be accessed through root/CentroGeo/homepage.html 
 
 A simulation file has to be uploaded before any chart can be generated (use the following steps):
+
 	1) Download a SUMO simulation zip file from google drive (as zip) : https://drive.google.com/drive/u/1/folders/1TTkGniZty5Rb5uhOJCs3LPG3mMrI7lGm
 	2) Run the server and got to the homepage. Then go to : Upload Simulation -> Select Simulaiton Zip -> Upload.
 	3) After the file is uploaded a message will be displayed, refresh the page, the create chart function can be used.
