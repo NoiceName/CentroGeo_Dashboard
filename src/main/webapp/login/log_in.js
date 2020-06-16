@@ -20,9 +20,10 @@ $(function () {
 			type: 'POST',
 			dataType: 'json',
 			contentType : 'application/json',
-			success:function (resp) {successLogin(resp)},
-             error: function(jqXHR, textStatus, errorThrown) {
+			success: function (resp) {successLogin(resp)},
+             error: function(resp) {
                 alert('Cannot contact the server!');
+                failedLogin(resp);
             }
 		});
 		console.log("Request sent!");
@@ -31,19 +32,18 @@ $(function () {
 }); 
 
 function successLogin(resp) {
-	if(resp.result=='true'){
-		console.log(resp.token);
-		sessionStorage.setItem("token", resp.token);
+	console.log(resp.token);
+	sessionStorage.setItem("token", resp.token);
 
-		window.location.href = "/CentroGeo/homepage.html";
-	}
-	else if (resp.result=='false') {
-		//Empty the username and password fields + display a message.
-		var username = $('#username');
-		var password = $('#userpassword');
-		username.val("");
-		password.val("");
-		$('#failedLogin').removeClass('hidden');	
-	}
+	window.location.href = "/CentroGeo/homepage.html";
+}
+
+function failedLogin(resp) {
+	//Empty the username and password fields + display a message.
+	var username = $('#username');
+	var password = $('#userpassword');
+	username.val("");
+	password.val("");
+	$('#failedLogin').removeClass('hidden');
 }
 

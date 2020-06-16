@@ -1,9 +1,7 @@
 package extraction;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.ReaderInputStream;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -20,55 +18,41 @@ import static org.apache.commons.io.IOUtils.toInputStream;
 
 
 public class ZipExtraction {
+	// Keeps track of which simulation is currently being added
 	private static int simulationID;
 
-	public static void getZipData(InputStream stream, Connection connection) throws EOFException {
+	public static void getZipData(InputStream stream, Connection connection) throws Exception {
+		// Stops the stream from being closed by other methods
 		WontCloseZipInputStream zipStream = new WontCloseZipInputStream(stream);
 
 		try {
 			for (ZipEntry e; (e = zipStream.getNextEntry()) != null; ) {
-				// System.out.println(e.getName());
-				if (e.getName().contains("metadata.txt")) {
+				if (e.getName().contains("state_")) {
+					parseState(zipStream, connection);
+				} else if (e.getName().contains("metadata.txt")) {
 					parseMetadata(zipStream, connection);
-				}
-				if (e.getName().contains("net.net.xml")) {
+				} else if (e.getName().contains("net.net.xml")) {
 					parseNet(zipStream, connection);
-				}
-				if (e.getName().contains("routes.rou.xml")) {
+				} else if (e.getName().contains("routes.rou.xml")) {
 					parseRoutes(zipStream, connection);
-				}
-				if (e.getName().contains("simulation.sumocfg")) {
+				} else if (e.getName().contains("simulation.sumocfg")) {
 					parseEmpty(zipStream, connection);
-				}
-				if (e.getName().contains("state.zip")) {
+				} else if (e.getName().contains("state.zip")) {
 					System.out.println("Opening state.zip");
 					getZipData(zipStream, connection);
 					System.out.println("Closing state.zip");
 				}
-				if (e.getName().contains("state_")) {
-					parseState(zipStream, connection);
-				}
 			}
+			// Manually close stream, because the default was overwritten
 			zipStream.reallyClose();
-		} catch (IOException | ParserConfigurationException | SAXException | SQLException e) {
+		} catch (IOException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
+			throw new Exception("Invalid zip file");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Exception("SQL Database Error");
 		}
 	}
-
-	// /**
-	//  * Extracts file from zip file to target directory
-	//  *
-	//  * @param in The project relative path to the .zip file
-	//  * @param connection The SQL connection
-	//  * @throws IOException If the file does not exist
-	//  */
-	// public static void extract(InputStream in, Connection connection) throws IOException, ParserConfigurationException, SAXException {
-	// 	// parseMetadata(getZipData(in, "metadata.txt"), connection);
-	// 	parseNet(getZipData(in, "net.net.xml"), connection);
-	// 	parseEmpty(getZipData(in, "routes.rou.xml"), connection);
-	// 	parseEmpty(getZipData(in, "simulation.sumocfg"), connection);
-	// 	parseEmpty(getZipData(in, "state.zip"), connection);
-	// }
 
 	public static void parseNet(InputStream in, Connection connection) throws ParserConfigurationException, IOException, SAXException {
 		DefaultHandler handler = new NetHandler(connection, simulationID);
@@ -100,6 +84,7 @@ public class ZipExtraction {
 		saxParser.parse(toInputStream(writer.toString(), "UTF-8"), handler);
 	}
 
+	// Metadata is a text file
 	public static void parseMetadata(InputStream in, Connection connection) {
 		try {
 			// Turns InputStream into a readable string
@@ -172,16 +157,15 @@ public class ZipExtraction {
 				double length = Double.parseDouble(attributes.getValue("length"));
 				String shape = attributes.getValue("shape");
 
-				String query = "INSERT INTO projectschema.lane (lane_id, simulation, index, length, shape) " +
-						"VALUES (?, ?, ?, ?, ?)";
+				String query = "INSERT INTO projectschema.lane (lane_id, index, length, shape) " +
+						"VALUES (?, ?, ?, ?)";
 
 				try {
 					PreparedStatement statement = connection.prepareStatement(query);
 					statement.setString(1, id);
-					statement.setInt(2, simulationID);
-					statement.setInt(3, index);
-					statement.setDouble(4, length);
-					statement.setString(5, shape);
+					statement.setInt(2, index);
+					statement.setDouble(3, length);
+					statement.setString(4, shape);
 
 					statement.executeUpdate();
 				} catch (SQLException e){

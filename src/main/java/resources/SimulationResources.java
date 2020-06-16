@@ -12,7 +12,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.crypto.Data;
 
 import cookie_manager.Secured;
@@ -31,9 +34,16 @@ public class SimulationResources {
 	 * @param stream
 	 */
 	@POST
+	@Secured
 	@Consumes("application/zip")
-	public void addSimulation(InputStream stream){
-		SimulationDAO.instance.addSimulation(stream);
+	public Response addSimulation(InputStream stream){
+		try {
+			SimulationDAO.instance.addSimulation(stream);
+			return Response.ok().build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+		}
 	}
 
 	

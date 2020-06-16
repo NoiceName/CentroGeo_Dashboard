@@ -20,6 +20,7 @@ import javax.servlet.http.Cookie;
 import javax.ws.rs.core.*;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.google.common.net.HttpHeaders;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
@@ -50,15 +51,13 @@ public class UserResource {
 	/**
 	 * Processes the user input login information.
 	 * In the case the login is successful a token is generated and is set as a cookie.
-	 * @param userInformation - JSON{username: "String", password:"String"} 
-	 * @param httpResponse  
+	 * @param userInformation - JSON{username: "String", password:"String"}
 	 * @return - A JSON Object which has a single tag of 'result' which is set to true in the case the login succeeds and false otherwise. {result:"boolean"}
 	 */
 	@POST
 	@Path("/login")
 	@Consumes("application/json")
-	@Produces("application/json")
-	public String login(String userInformation, @Context HttpServletResponse httpResponse) {
+	public Response login(String userInformation) {
 		JSONObject userJson = new JSONObject(userInformation);
 		String username = userJson.getString("username");
 		String password = userJson.getString("password");
@@ -69,21 +68,17 @@ public class UserResource {
 		
  //		User user = UserDAO.instance.getModel().get(username);
 		String returnPassword = UserDAO.instance.getModel().get(username).getPassword();
-		JSONObject response = new JSONObject();
 		if (returnPassword == null||!returnPassword.equals(password)){
-			response.put("result", "false");
+			return Response.serverError().build();
 		}
 		else {
 			//Generate and save a new token and send it to the user inform of a cookie 
-			String token = CookieManager.assignCookie(new User(username,returnPassword)); 
-			Cookie authCookie = new Cookie("auth",token);
-			authCookie.setMaxAge(60*60*24);
-			httpResponse.addCookie(authCookie);
-			response.put("result","true");
-			response.put("token", token);
+			String token = CookieManager.assignCookie(new User(username, returnPassword));
+			NewCookie authCookie = new NewCookie(HttpHeaders.AUTHORIZATION, token, "/",
+					null, null, 60*60*24, false, true);
+			return Response.ok().cookie(authCookie).build();
 			
 		}
-		return response.toString();
 	}
 	
 }

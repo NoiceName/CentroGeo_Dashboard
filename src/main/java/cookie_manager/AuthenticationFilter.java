@@ -21,20 +21,15 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		System.out.println("Authentication");
-		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+		String token = requestContext.getCookies().get(HttpHeaders.AUTHORIZATION).getValue();
+		System.out.println("Token: " + token);
 
-		if (!(authorizationHeader != null && authorizationHeader.toLowerCase().startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " "))) {
-			if (authorizationHeader != null){
-				System.out.println(authorizationHeader.toLowerCase());
-			}
+
+		if (token == null) {
 			abort(requestContext);
 			System.out.println("Invalid token");
 			return;
 		}
-
-		String token = authorizationHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
-		System.out.println("Token: " + token);
 
 		try {
 			// Validate the token

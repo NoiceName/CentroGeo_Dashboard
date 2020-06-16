@@ -75,17 +75,15 @@ public enum SimulationDAO {
 		}
 	}
 
-	public void addSimulation(InputStream stream){
+	public void addSimulation(InputStream stream) throws Exception {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		try{
-			Connection connection = db.getConnection();
-			System.out.println("Downloaded file");
-			extraction.ZipExtraction.getZipData(stream, connection);
-			System.out.println("File added to database");
-		} catch (IOException e) {
-			e.printStackTrace(); }
+
+		Connection connection = db.getConnection();
+		System.out.println("Downloaded file");
+		extraction.ZipExtraction.getZipData(stream, connection);
+		System.out.println("File added to database");
 	}
 
 }

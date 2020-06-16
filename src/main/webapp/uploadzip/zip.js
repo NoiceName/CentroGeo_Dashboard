@@ -24,7 +24,6 @@ $("#zipform").submit(function (evt) {
     console.log(zipFile.files[0]);
     // formData.append('zip', zipFile.files[0]);
     formData = zipFile.files[0];
-    var token = sessionStorage.getItem("token");
 
     $.ajax({
         url: '/CentroGeo/resources/simulations',
@@ -34,7 +33,6 @@ $("#zipform").submit(function (evt) {
         cache: false,
         contentType: 'application/zip',
         dataType: 'application/zip',
-        headers: {"Authorization": `Bearer ${token}`},
         title: 'file',
         enctype: 'application/zip',
         processData: false,
