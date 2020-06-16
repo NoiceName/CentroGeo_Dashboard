@@ -387,10 +387,9 @@ $(function () {     $('#chartGen').click(function(event) {
  });
  });
 
-$(function () {     $('#removeChart').click(function(event) {
+function removeChart() {
 	alert("delete");
-});
-});
+}
 
  $(function () {     $(document).ready(function() {
 
