@@ -7,6 +7,7 @@ import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
@@ -21,20 +22,23 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		System.out.println("Authentication");
-		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+		Cookie cookie = requestContext.getCookies().get(HttpHeaders.AUTHORIZATION);
 
-		if (!(authorizationHeader != null && authorizationHeader.toLowerCase().startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " "))) {
-			if (authorizationHeader != null){
-				System.out.println(authorizationHeader.toLowerCase());
-			}
+		if (cookie == null) {
 			abort(requestContext);
 			System.out.println("Invalid token");
 			return;
 		}
 
-		String token = authorizationHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
+		String token = cookie.getValue();
 		System.out.println("Token: " + token);
+
+
+		if (token == null) {
+			abort(requestContext);
+			System.out.println("Invalid token");
+			return;
+		}
 
 		try {
 			// Validate the token
