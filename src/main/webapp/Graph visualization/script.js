@@ -376,25 +376,25 @@ function getEdgeId() {
 
 
 $(function () {     $('#chartGen').click(function(event) {
-  var button = document.createElement("BUTTON");
-  var text = document.createTextNode("Delete");
-  button.setAttribute("type", "button");
-  button.setAttribute("id", "removeChart");
-  button.appendChild(text);
-  document.body.appendChild(button);
+//  var button = document.createElement("BUTTON");
+//  var text = document.createTextNode("Delete");
+//  button.setAttribute("type", "button");
+//  button.setAttribute("id", "removeChart");
+//  button.appendChild(text);
+//  document.body.appendChild(button);
   genGraph();
 
  });
  });
 
-$(function () {     $('#removeChart').click(function(event) {
-	  
-	  var graph = document.getElementById("charts");
-	  while (graph.hasChildNodes()) {
-	    graph.removeChild(graph.firstChild);
-	  }
-	 });
-	 });
+//$(function () {     $('#removeChart').click(function(event) {
+//	  
+//	  var graph = document.getElementById("charts");
+//	  while (graph.hasChildNodes()) {
+//	    graph.removeChild(graph.firstChild);
+//	  }
+//	 });
+//	 });
 
  $(function () {     $(document).ready(function() {
 

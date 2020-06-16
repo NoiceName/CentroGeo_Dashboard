@@ -210,6 +210,7 @@ $(function() {
 	});
 });
 
+//Generates a report when 'generate report' button is pressed.
 function generateReport() {
 	document.getElementById('reportDiv').innerHTML = "Report";
 	window.print();	
