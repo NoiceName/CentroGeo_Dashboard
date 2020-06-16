@@ -14,7 +14,7 @@ public class Database {
 	String username = "postgres";
 	//The password of the database user
 	String password = "password";
-	//Do not change this variable 
+	//Do not change this variable
 	String schemaName = "projectschema";
 	Connection connection;
 
