@@ -68,7 +68,8 @@ public class UserResource {
 		 * */
 		
  //		User user = UserDAO.instance.getModel().get(username);
-		String returnPassword = UserDAO.instance.getModel().get(username).getPassword();
+//		String returnPassword = UserDAO.instance.getModel().get(username).getPassword();
+		String returnPassword = UserDAO.instance.getUserPassword(username);
 		JSONObject response = new JSONObject();
 		if (returnPassword == null||!returnPassword.equals(password)){
 			response.put("result", "false");

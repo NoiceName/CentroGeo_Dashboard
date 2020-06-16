@@ -9,59 +9,59 @@ import model.User;
 
 public enum UserDAO {
 	instance;
-	private Map<String, User> users = new HashMap<String, User>();
-	
-	private UserDAO() {
-		User user1 = new User("user1","123456");
-		users.put("user1", user1);
-	}
-	
-	public Map<String, User> getModel() {
-		return users;
-	}
-		
-//	public String getUserPassword(String userName){
-//		
-//		PreparedStatement query = null;
-//		String returnPassword = null;
-//		Connection conn = null;
-//		
-//		Database.loadPGSQL();
-//	    Database db = new Database();
-//		
-//		try {	
-//			conn = db.connectPGSQL();
-//
-//			String sql = "select password from projectschema.user "+
-//			"where username = ? ";
-//			query = conn.prepareStatement(sql);
-//			query.setString(1, userName);
-//			ResultSet rs = query.executeQuery();
-//			// check if the user in the table and is with a correct password
-//			while(rs.next()) {
-////				returnPassword = rs.getString("password");
-//				returnPassword  = rs.getString(2);
-//			}
-//			query.close();		
-//		} 
-//		catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		finally {
-//			
-//			if(conn!=null){
-//			   try {
-//				 
-//				   conn.close();
-//				
-//			   } catch (SQLException e) {
-//				e.printStackTrace();
-//			   }
-//			}
-//		}	    
-//		return returnPassword;
+//	private Map<String, User> users = new HashMap<String, User>();
+//	
+//	private UserDAO() {
+//		User user1 = new User("user1","123456");
+//		users.put("user1", user1);
 //	}
 //	
+//	public Map<String, User> getModel() {
+//		return users;
+//	}
+		
+	public String getUserPassword(String userName){
+		
+		PreparedStatement query = null;
+		String returnPassword = null;
+		Connection conn = null;
+		
+		Database.loadPGSQL();
+	    Database db = new Database();
+		
+		try {	
+			conn = db.connectPGSQL();
+
+			String sql = "select password_hash from projectschema.user "+
+			"where username = ? ";
+			query = conn.prepareStatement(sql);
+			query.setString(1, userName);
+			ResultSet rs = query.executeQuery();
+			// check if the user in the table and is with a correct password
+			while(rs.next()) {
+//				returnPassword = rs.getString("password");
+				returnPassword  = rs.getString("password_hash");
+			}
+			query.close();		
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			
+			if(conn!=null){
+			   try {
+				 
+				   conn.close();
+				
+			   } catch (SQLException e) {
+				e.printStackTrace();
+			   }
+			}
+		}	    
+		return returnPassword;
+	}
+	
 //	public int insertUser(User user)throws Exception {
 //		/**
 //		 * return number
