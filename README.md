@@ -4,6 +4,7 @@ The CSS/HTML interface can be found in : src/main/webapp/ directory, the main pa
 
 Installation Instructions:
 
+	0) Install a POSTgresql database locally (or use a hosting) and run schema.sql located in the design/ directory in your DBMS.
 	1) Open the database.java class located in src/main/java/model/ and change the database specification in the url, username and password variables. The database has to use a postgresql DBMS.
 	2) Run Maven Install on the project.
 	3) Add the server to a Tomcat 8.5 server and run the server.
