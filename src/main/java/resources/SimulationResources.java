@@ -48,7 +48,7 @@ public class SimulationResources {
 	@GET
 	@Produces("application/json")
 	public ArrayList<Simulation> getSimulations(){
-		ArrayList<Simulation> sims = new ArrayList<>();
+		ArrayList<Simulation> sims = SimulationDAO.instance.getSimulations();
 		return sims;
 	}
 	
