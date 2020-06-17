@@ -16,9 +16,26 @@
         </init-param>
 
     </servlet>
+    <servlet>
+        <servlet-name>Redirect</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>redirect;cookie_manager</param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>cookie_manager.AuthenticationFilter</param-value>
+        </init-param>
+
+    </servlet>
     <servlet-mapping>
     	<servlet-name>Resources</servlet-name>
     	<url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Redirect</servlet-name>
+        <url-pattern></url-pattern>
     </servlet-mapping>
 
 </web-app>

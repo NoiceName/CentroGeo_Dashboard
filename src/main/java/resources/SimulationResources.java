@@ -53,6 +53,7 @@ public class SimulationResources {
 	}
 	
 	@DELETE
+	@Secured
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public void deleteSimulation(@FormParam("id") String name){
 		System.out.println(name);

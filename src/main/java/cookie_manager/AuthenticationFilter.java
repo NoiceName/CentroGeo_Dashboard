@@ -7,10 +7,13 @@ import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.net.URI;
 
 import static cookie_manager.CookieManager.checkCookie;
 
@@ -18,7 +21,8 @@ import static cookie_manager.CookieManager.checkCookie;
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
-	private static final String AUTHENTICATION_SCHEME = "Bearer";
+	@Context
+	private UriInfo uriInfo;
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -57,6 +61,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	}
 
 	public void abort(ContainerRequestContext requestContext){
-		requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+		URI uri = uriInfo.getBaseUriBuilder().path("login/log_in.html").build();
+		requestContext.abortWith(Response.temporaryRedirect(uri).build());
 	}
 }
