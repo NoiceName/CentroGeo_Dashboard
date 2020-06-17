@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import model.EdgeAppearance;
-import model.EdgeAppearancePoint;
+import model.Chart;
+import model.ChartPoint;
 import model.Database;
 
 public enum ChartDAO {
@@ -37,7 +37,7 @@ public enum ChartDAO {
 	 * @param edgeId - Id of the specified edge for which the chart should be generated.
 	 * @return chart object
 	 */
-	public EdgeAppearance getEdgeAppereance(int simulationId, String edgeId) {
+	public Chart getEdgeAppereance(int simulationId, String edgeId) {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
@@ -51,7 +51,7 @@ public enum ChartDAO {
 				"group by ct.time\r\n" + 
 				"order by ct.time;";
 		PreparedStatement ps = db.prepareStatement(statement);	
-		ArrayList<EdgeAppearancePoint> points = new ArrayList<>();
+		ArrayList<ChartPoint> points = new ArrayList<>();
 		try {
 			ps.setInt(1, simulationId);
 			ps.setString(2, edgeId);
@@ -62,7 +62,7 @@ public enum ChartDAO {
 				int count = result.getInt("counter");
 				double time = result.getFloat("time");
 				//Creating points on an EdgeAppearanceChart.
-				EdgeAppearancePoint point = new EdgeAppearancePoint(time, count);
+				ChartPoint point = new ChartPoint(time, count);
 				points.add(point);
 			}
 		} catch (SQLException e) {
@@ -70,7 +70,7 @@ public enum ChartDAO {
 			e.printStackTrace();
 		}
 		//Create a chart with the given points.
-		EdgeAppearance chart = new EdgeAppearance(points, edgeId);
+		Chart chart = new Chart(points, edgeId);
 		return chart; 
 	}
 	
