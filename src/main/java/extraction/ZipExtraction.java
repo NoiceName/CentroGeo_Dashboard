@@ -162,15 +162,16 @@ public class ZipExtraction {
 				double length = Double.parseDouble(attributes.getValue("length"));
 				String shape = attributes.getValue("shape");
 
-				String query = "INSERT INTO projectschema.lane (lane_id, index, length, shape) " +
-						"VALUES (?, ?, ?, ?)";
+				String query = "INSERT INTO projectschema.lane (lane_id, simulation, index, length, shape) " +
+						"VALUES (?, ?, ?, ?, ?)";
 
 				try {
 					PreparedStatement statement = connection.prepareStatement(query);
 					statement.setString(1, id);
-					statement.setInt(2, index);
-					statement.setDouble(3, length);
-					statement.setString(4, shape);
+					statement.setInt(2, simulationID);
+					statement.setInt(3, index);
+					statement.setDouble(4, length);
+					statement.setString(5, shape);
 
 					statement.executeUpdate();
 				} catch (SQLException e){
