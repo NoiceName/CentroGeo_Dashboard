@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import model.EdgeAppearance;
+import model.EdgeAppearancePoint;
 import model.Database;
 
 public enum ChartDAO {
@@ -50,7 +51,7 @@ public enum ChartDAO {
 				"group by ct.time\r\n" + 
 				"order by ct.time;";
 		PreparedStatement ps = db.prepareStatement(statement);	
-		ArrayList<JSONObject> res = new ArrayList<>();
+		ArrayList<EdgeAppearancePoint> points = new ArrayList<>();
 		try {
 			ps.setInt(1, simulationId);
 			ps.setString(2, edgeId);
@@ -59,17 +60,16 @@ public enum ChartDAO {
 			ResultSet result = ps.executeQuery();
 			while(result.next()) {
 				int count = result.getInt("counter");
-				String time = String.valueOf(result.getInt("time"));
-				JSONObject json = new JSONObject();
-				json.put(time, count);
-				res.add(json);
+				double time = result.getFloat("time");
+				EdgeAppearancePoint point = new EdgeAppearancePoint(time, count);
+				points.add(point);
 			}
-			System.out.println(res);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		EdgeAppearance chart = new EdgeAppearance(res, edgeId);
+		EdgeAppearance chart = new EdgeAppearance(points, edgeId);
+		System.out.println(chart.toString());
 		return chart; 
 	}
 	
