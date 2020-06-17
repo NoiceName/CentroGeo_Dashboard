@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+<<<<<<< Updated upstream
 import javax.ws.rs.QueryParam;
 
 import org.json.JSONObject;
@@ -15,17 +16,25 @@ import dao.ChartDAO;
 import model.EdgeAppearance;
 
 
+=======
+>>>>>>> Stashed changes
 
 import org.json.JSONObject;
+
+import dao.ChartDAO;
 
 @Path("/simulations/{simulation_id}/charts")
 public class ChartResources {
 	
 	@PathParam("simulation_id") int simulation_id;
 	
+	
 	@GET
+	@Produces("application/json")
 	@Path("/transiting_vehicles")
 	public JSONObject getTransiting_vehicles() {
+		JSONObject transiting_vehicles = ChartDAO.instance.getTransitingVehicles(simulation_id);
+		
 		return new JSONObject();
 	}
 
