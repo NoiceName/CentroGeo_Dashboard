@@ -61,9 +61,30 @@ public enum ChartDAO {
 	}
 	
 	public Chart getSpeedByTimeChart(int simulation_id, String vehicle_id) {
-		return new Chart();
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "select time, speed\r\n" + 
+				"from (select s.time, unnest(xpath('//vehicle/@speed', s.data))::text as speed, unnest(xpath('//vehicle/@id', s.data))::text as veh_id\r\n" + 
+				"from projectschema.snapshot s\r\n" + 
+				"where s.simulation = ?\r\n" + 
+				"order by s.time) as vehicles\r\n" + 
+				"where veh_id = ?;";
+		PreparedStatement ps = db.prepareStatement(statement);	
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulation_id);
+			ps.setString(2, vehicle_id);
+			ResultSet result = ps.executeQuery();
+			chart = new Chart(getChartPoints(result), vehicle_id);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println(chart);
+		return chart;
 	}
-	
+
 	public Chart getSpeedFactorByTimeChart(int simulation_id, String vehicle_id) {
 		return new Chart();
 	}
@@ -71,4 +92,17 @@ public enum ChartDAO {
 	public Chart getRouteLengthByTimeChart(int simulation_id, String vehicle_id) {
 		return new Chart();
 	}
+	
+	
+	private ArrayList<ChartPoint> getChartPoints(ResultSet result) throws SQLException {
+		ArrayList<ChartPoint> points = new ArrayList<>();
+		while(result.next()) {
+			double y = Double.parseDouble(result.getString("speed"));
+			double x = result.getFloat("time");
+			ChartPoint point = new ChartPoint(x, y);
+			points.add(point);
+		}
+		return points;
+	}
+
 }
