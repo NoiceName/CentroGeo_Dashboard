@@ -38,10 +38,9 @@ public class ChartResources {
 	}
 
 	/**
-	 * Not working as of now, issue with JSON object conversion
-	 * @param edgeIds
-	 * @return
-	 */
+	 * @param edgeIds - An array of desired ID's
+	 * @return An array of Edge Appearance Frequency charts for each edge id.
+	 * */
 	@GET
 	@Path("/edge_appearance")
 	@Produces("application/json")

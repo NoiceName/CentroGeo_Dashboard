@@ -7,14 +7,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.JSONObject;
 
 /**
- * An Edge appearance frequency chart
+ * Edge Appearance Frequency Chart
  * @author Maksym
  */
 @XmlRootElement
 public class EdgeAppearance {
 	
 	/**
-	 * Data used to generate the chart
+	 * Points on the chart
 	 */
 	private ArrayList<EdgeAppearancePoint> data;
 	

@@ -32,9 +32,9 @@ public enum ChartDAO {
 //	order by s.time) as vehicle);
 	
 	/**
-	 * Generates a JSONObject
+	 * Generates specified EdgeAppearanceFrequency chart.
 	 * @param simulationId - ID of a simulation
-	 * @param edgeId - Id of the specified edge 
+	 * @param edgeId - Id of the specified edge for which the chart should be generated.
 	 * @return chart object
 	 */
 	public EdgeAppearance getEdgeAppereance(int simulationId, String edgeId) {
@@ -61,6 +61,7 @@ public enum ChartDAO {
 			while(result.next()) {
 				int count = result.getInt("counter");
 				double time = result.getFloat("time");
+				//Creating points on an EdgeAppearanceChart.
 				EdgeAppearancePoint point = new EdgeAppearancePoint(time, count);
 				points.add(point);
 			}
@@ -68,8 +69,8 @@ public enum ChartDAO {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		//Create a chart with the given points.
 		EdgeAppearance chart = new EdgeAppearance(points, edgeId);
-		System.out.println(chart.toString());
 		return chart; 
 	}
 	
