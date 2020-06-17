@@ -15,6 +15,13 @@
 	<script src="uploadzip/zip.js"></script>
 	<script src="ui.js"></script>
 	<script src="Graph visualization/generatingGraphs.js"></script>
+	<style>
+	  @media print {
+        #createChartButton, #genReportButton, #uploadSimButton{
+           display: none;
+        }
+      }
+    </style>
 </head>
 
 <body>
@@ -23,16 +30,17 @@
 		<div class="row border-bottom">
 			<div class="col-12">
 				<ul class="nav justify-content-center">
-					<li class="nav-item"> <a class="nav-link" data-toggle="modal" data-target="#createChartMenu">Create Chart</a>	</li>
+					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#createChartMenu">Create Chart</a>	</li>
 					<li class="nav-item">
-						<a class="nav-link">Generate Report</a>	
+						<a class="nav-link" id="genReportButton" onclick="generateReport()">Generate Report</a>	
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-toggle="modal" data-target="#uploadSimulationMenu">Upload Simulation</a>	
+						<a class="nav-link" id="uploadSimButton" data-toggle="modal" data-target="#uploadSimulationMenu">Upload Simulation</a>	
 					</li>
 				</ul>
 			</div>
 		</div>
+		<div id="reportDiv" style="text-align:center; font-size:30px"></div>
 		<!-- Charts go inside this row !--> 
 		<div class="row" id="charts">
 		</div>

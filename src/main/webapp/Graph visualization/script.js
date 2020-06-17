@@ -376,12 +376,29 @@ function getEdgeId() {
 
 
 $(function () {     $('#chartGen').click(function(event) {
+//  var div = document.createElement("DIV");
+//  div.setAttribute("class", "row");
+//  div.setAttribute("id","charts");
+//  document.body.appendChild(div);
+//  var button = document.createElement("BUTTON");
+//  var text = document.createTextNode("Delete");
+//  button.setAttribute("type", "button");
+//  button.setAttribute("id", "removeChart");
+//  button.setAttribute("onclick", "removeChart()");
+//  button.appendChild(text);
+//  document.body.appendChild(button);
   genGraph();
 
  });
  });
 
-
+//function removeChart() {
+//	document.getElementById("charts").innerHTML = "";
+//	var chart = document.getElementById("charts");
+//    charts.parentNode.removeChild(charts);
+//	var elem = document.getElementById("removeChart");
+//    elem.parentNode.removeChild(elem);
+//}
 
  $(function () {     $(document).ready(function() {
 
@@ -429,6 +446,12 @@ $(function () {     $('#chartGen').click(function(event) {
     }); 
     });
 
+//Generates a report when 'generate report' button is pressed.
+ function generateReport() {
+ 	document.getElementById('reportDiv').innerHTML = "Report";
+ 	window.print();	
+ 	document.getElementById('reportDiv').innerHTML = "";
+ }
 
 
 
