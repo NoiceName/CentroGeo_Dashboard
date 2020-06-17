@@ -3,8 +3,7 @@ package resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-
-
+import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 
@@ -46,7 +45,12 @@ public class SimulationResources {
 		}
 	}
 
-	
+	@GET
+	@Produces("application/json")
+	public ArrayList<Simulation> getSimulations(){
+		ArrayList<Simulation> sims = new ArrayList<>();
+		return sims;
+	}
 	
 	@DELETE
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
