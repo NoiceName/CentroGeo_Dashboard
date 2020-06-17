@@ -45,13 +45,12 @@ public class ChartResources {
 	@GET
 	@Path("/edge_appearance")
 	@Produces("application/json")
-	public ArrayList<JSONObject> getEdgeAppearance(@QueryParam("edge_ids") List<String> edgeIds){
-		ArrayList<JSONObject> res = new ArrayList<>();
-		for(String elem : edgeIds) {
-			EdgeAppearance chart = ChartDAO.instance.getEdgeAppereance(simulation_id, elem);
-			System.out.println(chart.toJSON());
-			res.add(chart.toJSON());
+	public ArrayList<EdgeAppearance> getEdgeAppearance(@QueryParam("edge_ids") List<String> edgeIds){
+		ArrayList<EdgeAppearance> charts = new ArrayList<>();
+		for(String edge : edgeIds) {
+			EdgeAppearance chart = ChartDAO.instance.getEdgeAppereance(simulation_id, edge);
+			charts.add(chart);
 		}
-		return res;
+		return charts;
 	}
 }

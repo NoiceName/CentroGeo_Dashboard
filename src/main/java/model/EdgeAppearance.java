@@ -16,7 +16,7 @@ public class EdgeAppearance {
 	/**
 	 * Data used to generate the chart
 	 */
-	private ArrayList<JSONObject> data;
+	private ArrayList<EdgeAppearancePoint> data;
 	
 	/**
 	 * ID of the edge
@@ -25,16 +25,16 @@ public class EdgeAppearance {
 	
 	public EdgeAppearance() {}
 	
-	public EdgeAppearance(ArrayList<JSONObject> data, String id) {
+	public EdgeAppearance(ArrayList<EdgeAppearancePoint> data, String id) {
 		this.data = data;
 		this.id = id;
 	}
 
-	public ArrayList<JSONObject> getData() {
+	public ArrayList<EdgeAppearancePoint> getData() {
 		return this.data;
 	}
 	
-	public void setData(ArrayList<JSONObject> data) {
+	public void setData(ArrayList<EdgeAppearancePoint> data) {
 		this.data = data;
 	}
 	
@@ -47,15 +47,7 @@ public class EdgeAppearance {
 	}
 	
 	public String toString() {
-		return new String("ID: " + this.id + "\n" + "Data: " + this.data + "\n");
+		return new String("ID: " + this.id + "\n" + "Data: " + this.data.toString() + "\n");
 	}
 
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-		json.put("id", this.id);
-		json.put("data", this.data);
-		return json;
-	}
-
-	
 }
