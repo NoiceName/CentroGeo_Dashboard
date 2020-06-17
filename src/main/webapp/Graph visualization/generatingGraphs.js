@@ -4,7 +4,7 @@ var maxSpace = 12;
 //How much space does each column occupy
 var spaceSize = 6;
 
-var lis;
+var id;
 
 function getActiveChartType(){
 	chartTypeElements = document.getElementsByClassName('chart-type');
@@ -17,6 +17,20 @@ function getActiveChartType(){
 	return result;
 }
 
+function getId() {
+	return id;
+}
+
+function getChild() {
+	let chartRow = document.getElementById('charts');
+	let result = chartRow.childNodes[1];
+	for(var i=0; i < chartRow.childNodes.length; i++) {
+		if(chartRow.childNodes[i] == document.getElementById(getId())){
+			result = chartRow.childNodes[i];
+		}
+	}
+	return result;
+}
 
 function generateRandomID() {
 	let r = Math.random().toString(36).substring(7);
@@ -32,16 +46,16 @@ function createChartSpace() {
 	newDiv.id = id;
 	let colWidth = 'col-'+spaceSize;
 	newDiv.classList.add(colWidth);
-
-	lis = document.getElementById("charts");
-	newDiv.addEventListener("click", remove, false);
-	
 	chartRow.appendChild(newDiv);
 	return id;
 }
 
-function remove() {
-	lis.removeChild(lis.childNodes[i]);
+
+function undo() {
+	let chartRow = document.getElementById('charts');
+	chartRow.removeChild(getChild());
+	//let button = document.getElementById("deleteButton");
+	//button.remove();
 }
 
 
