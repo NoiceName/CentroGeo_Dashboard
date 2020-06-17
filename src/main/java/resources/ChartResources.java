@@ -25,7 +25,7 @@ public class ChartResources {
 	
 	@GET
 	@Path("/vehicle_information")
-	public JSONObject getVehicleInformation() {
+	public JSONObject getVehicleInformation(@QueryParam("vehicle_id") String vehicle_id) {
 		return new JSONObject();
 	}
 

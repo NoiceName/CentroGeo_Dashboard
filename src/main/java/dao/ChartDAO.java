@@ -17,20 +17,6 @@ public enum ChartDAO {
 	
 	
 	
-//	public JSONObject getVehicleOverTime(int simulation_id, int vehicle_id) {
-//		Database db = new Database();
-//		Database.loadPGSQL();
-//		db.connectPGSQL();
-//		String statement = "";
-//		PreparedStatement ps = db.prepareStatement();
-//	}
-
-//Unfinished code finish debeloping end point when net.net has been uploaded
-//select s.time as time, xpath('//vehicle[@id="v0"]/@speed', s.data) as speed, xpath('//vehicle[@id="v0"]/@speedFactor', s.data) as speedFactor, 
-//	from projectschema.snapshot s
-//	where s.simulation = 1
-//	order by s.time) as vehicle);
-	
 	/**
 	 * Generates specified EdgeAppearanceFrequency chart.
 	 * @param simulationId - ID of a simulation
@@ -74,4 +60,15 @@ public enum ChartDAO {
 		return chart; 
 	}
 	
+	public Chart getSpeedByTimeChart(int simulation_id, String vehicle_id) {
+		return new Chart();
+	}
+	
+	public Chart getSpeedFactorByTimeChart(int simulation_id, String vehicle_id) {
+		return new Chart();
+	}
+
+	public Chart getRouteLengthByTimeChart(int simulation_id, String vehicle_id) {
+		return new Chart();
+	}
 }
