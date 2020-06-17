@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,9 +15,35 @@ import model.Simulation;
 public enum SimulationDAO {
 	instance;
 	
+	/**
+	 * Retrieves an array of all simulations stored in the database.
+	 * @return - An array containing all simulations.
+	 */
 	public ArrayList<Simulation> getSimulations() {
-		return new ArrayList<Simulation>();
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String query = "select * from projectschema.simulation s";
+		PreparedStatement st = db.prepareStatement(query);
+		ArrayList<Simulation> arr = new ArrayList<>();
+		try {
+			ResultSet res = st.executeQuery();
+			while(res.next()) {
+				int id = res.getInt("simulation_id");
+				String description = res.getString("description");
+				String name = res.getString("name");
+				String date = res.getString("date");
+				String tags = res.getString("tags");
+				Simulation sim = new Simulation(id, name, date, tags, description);
+				arr.add(sim);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return arr;
 	}
+	
 	
 	public int editMetadata(int title,String editor, Date date, String tag, String description){
 		
@@ -61,7 +88,7 @@ public enum SimulationDAO {
 	}
 
 	public void deleteSimulation(String name){
-		Database db = new Database();
+Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
 		String query = "DELETE FROM projectschema.simulation WHERE name LIKE ?";

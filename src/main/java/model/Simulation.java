@@ -6,15 +6,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Simulation {
 	
 	int simulationId;
-	String text;
+	String name;
 	String date;
 	String tags;
 	String description;
 	
 	
+	public Simulation() {}
 	
-	public void setText(String text) {
-		this.text = text;
+	public Simulation(int simulationId, String name, String date, String tags, String description) {
+		this.name = name;
+		this.simulationId = simulationId;
+		this.date = date;
+		this.tags = tags;
+		this.description = description;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public void setDate(String date) {
@@ -41,13 +50,16 @@ public class Simulation {
 		return this.date;
 	}
 	
-	public String getText() {
-		return this.text;
+	public String getName() {
+		return this.name;
 	}
 
 	public int getSimulationId() {
 		return this.simulationId;
 	}
 
+	public String toString() {
+		return String.format("(%d, %s, %s, %s, %s)", simulationId, name, date, tags, description);
+	}
 	
 }
