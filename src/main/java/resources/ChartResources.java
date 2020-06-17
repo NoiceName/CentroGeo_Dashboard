@@ -26,7 +26,7 @@ public class ChartResources {
 	public ArrayList<Chart> getTransiting_vehicles(@QueryParam("lanes_ids") List<String> laneIds) {
 		ArrayList<Chart> charts = new ArrayList<>();
 		for(String lane : laneIds) {
-			Chart chart = ChartDAO.instance.getTransiting_vehicles(simulation_id, laneIds);
+			Chart chart = ChartDAO.instance.getTransiting_vehicles(simulation_id, lane);
 			charts.add(chart);
 		}
 		

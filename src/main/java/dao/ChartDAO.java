@@ -83,34 +83,37 @@ public enum ChartDAO {
 	 * @param edgeId - Id of the specified edge for which the chart should be generated.
 	 * @return chart object
 	 */
-	public Chart getTransiting_vehicles(int simulationId, List<String> laneIds) {
+	public Chart getTransiting_vehicles(int simulationId, String laneId) {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		String statement = "SELECT s.time as time, unnest(xpath('//lane[@id=\"?\"]/vehicles/@value', s.data))::text as vehicles\r\n" + 
-				"FROM projectschema.snapshot s\r\n" + 
-				"WHERE s.simulation = ?\r\n" + 
-				"ORDER BY time ASC\r\n";
+		String statement = "SELECT ct.time, ct.vehicles\r\n" + 
+				"FROM (SELECT s.time as time, unnest(xpath('//lane/@id', s.data))::text as laneId, unnest(xpath('//lane/vehicles/@value', s.data))::text as vehicles\r\n" + 
+				"	FROM projectschema.snapshot s\r\n" + 
+				"	WHERE s.simulation = ?) as ct\r\n" + 
+				"WHERE laneId = ?\r\n" + 
+				"ORDER BY ct.time ASC";
 		PreparedStatement ps = db.prepareStatement(statement);
-		
 		ArrayList<ChartPoint> points = new ArrayList<>();
 		try {
-			ps.setString(1, laneIds.get(1));
-			ps.setInt(2, simulationId);
+			ps.setInt(1, simulationId);
+			ps.setString(2, laneId);
 			ResultSet result = ps.executeQuery();
 			while(result.next()) {
-				int count = result.getInt("counter");
+				String[] cars = result.getString("vehicles").split("v");
+				int count = cars.length -1;
 				double time = result.getFloat("time");
 				//Creating points on an EdgeAppearanceChart.
 				ChartPoint point = new ChartPoint(time, count);
 				points.add(point);
 			}
+			System.out.println("all points added for " + laneId);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 		//Create a chart with the given points.
-		Chart chart = new Chart(points, laneIds.get(1));
+		Chart chart = new Chart(points, laneId);
 		return chart; 
 		
 	}
