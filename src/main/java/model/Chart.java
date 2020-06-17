@@ -11,30 +11,30 @@ import org.json.JSONObject;
  * @author Maksym
  */
 @XmlRootElement
-public class EdgeAppearance {
+public class Chart {
 	
 	/**
 	 * Points on the chart
 	 */
-	private ArrayList<EdgeAppearancePoint> data;
+	private ArrayList<ChartPoint> data;
 	
 	/**
-	 * ID of the edge
-	 */
+	 * ID of the option 
+	 * */
 	private String id;
 	
-	public EdgeAppearance() {}
+	public Chart() {}
 	
-	public EdgeAppearance(ArrayList<EdgeAppearancePoint> data, String id) {
+	public Chart(ArrayList<ChartPoint> data, String id) {
 		this.data = data;
 		this.id = id;
 	}
 
-	public ArrayList<EdgeAppearancePoint> getData() {
+	public ArrayList<ChartPoint> getData() {
 		return this.data;
 	}
 	
-	public void setData(ArrayList<EdgeAppearancePoint> data) {
+	public void setData(ArrayList<ChartPoint> data) {
 		this.data = data;
 	}
 	

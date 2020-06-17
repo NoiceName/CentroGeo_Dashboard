@@ -13,7 +13,7 @@ import javax.ws.rs.QueryParam;
 import org.json.JSONObject;
 
 import dao.ChartDAO;
-import model.EdgeAppearance;
+import model.Chart;
 
 
 =======
@@ -53,10 +53,10 @@ public class ChartResources {
 	@GET
 	@Path("/edge_appearance")
 	@Produces("application/json")
-	public ArrayList<EdgeAppearance> getEdgeAppearance(@QueryParam("edge_ids") List<String> edgeIds){
-		ArrayList<EdgeAppearance> charts = new ArrayList<>();
+	public ArrayList<Chart> getEdgeAppearance(@QueryParam("edge_ids") List<String> edgeIds){
+		ArrayList<Chart> charts = new ArrayList<>();
 		for(String edge : edgeIds) {
-			EdgeAppearance chart = ChartDAO.instance.getEdgeAppereance(simulation_id, edge);
+			Chart chart = ChartDAO.instance.getEdgeAppereance(simulation_id, edge);
 			charts.add(chart);
 		}
 		return charts;
