@@ -16,35 +16,35 @@ public class ChartPoint {
 	double x;
 	
 	/**
-	 * Number of times a node has occured given the x.
+	 * Y-axis
 	 */
 	double y;
 
 	public ChartPoint() {}
 
-	public ChartPoint(double time, int count) {
-		this.x = time;
-		this.y = count;
+	public ChartPoint(double x, double y) {
+		this.x = x;
+		this.y = y;
 	}
 	
-	public double getTime() {
+	public double getX() {
 		return this.x;
 	}
 	
-	public double getCount() {
+	public double getY() {
 		return this.y;
 	}
 	
-	public void setTime(double time) {
-		this.x = time;
+	public void setX(double x) {
+		this.x = x;
 	}
 	
-	public void setCount(int count) {
-		this.y = count;
+	public void setY(double y) {
+		this.y = y;
 	}
 	
 	public String toString() {
-		return String.format("(%f,%d)", x, y);
+		return String.format("(%f,%f)", x, y);
 	}
 
 }

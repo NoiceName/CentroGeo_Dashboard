@@ -47,7 +47,7 @@ public class Chart {
 	}
 	
 	public String toString() {
-		return new String("ID: " + this.id + "\n" + "Data: " + this.data.toString() + "\n");
+		return new String("ID: " + this.id + "" + "Data: " + this.data.toString() + "\n");
 	}
 
 }
