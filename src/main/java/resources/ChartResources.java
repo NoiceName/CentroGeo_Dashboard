@@ -14,12 +14,24 @@ import org.json.JSONObject;
 import dao.ChartDAO;
 import model.Chart;
 
-
-
 @Path("/simulations/{simulation_id}/charts")
 public class ChartResources {
 	
 	@PathParam("simulation_id") int simulation_id;
+	
+	
+	@GET
+	@Produces("application/json")
+	@Path("/transiting_vehicles")
+	public ArrayList<Chart> getTransiting_vehicles(@QueryParam("lanes_ids") List<String> laneIds) {
+		ArrayList<Chart> charts = new ArrayList<>();
+		for(String lane : laneIds) {
+			Chart chart = ChartDAO.instance.getTransiting_vehicles(simulation_id, lane);
+			charts.add(chart);
+		}
+		
+		return charts;
+	}
 
 	
 	
