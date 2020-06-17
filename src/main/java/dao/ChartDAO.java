@@ -5,11 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
-
-import model.EdgeAppearance;
-import model.EdgeAppearancePoint;
 
 import model.Chart;
 import model.ChartPoint;
@@ -85,7 +83,7 @@ public enum ChartDAO {
 	 * @param edgeId - Id of the specified edge for which the chart should be generated.
 	 * @return chart object
 	 */
-	public EdgeAppearance getTransiting_vehicles(int simulationId, String laneId) {
+	public Chart getTransiting_vehicles(int simulationId, List<String> laneIds) {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
@@ -95,16 +93,16 @@ public enum ChartDAO {
 				"ORDER BY time ASC\r\n";
 		PreparedStatement ps = db.prepareStatement(statement);
 		
-		ArrayList<EdgeAppearancePoint> points = new ArrayList<>();
+		ArrayList<ChartPoint> points = new ArrayList<>();
 		try {
-			ps.setString(1, laneId);
+			ps.setString(1, laneIds.get(1));
 			ps.setInt(2, simulationId);
 			ResultSet result = ps.executeQuery();
 			while(result.next()) {
 				int count = result.getInt("counter");
 				double time = result.getFloat("time");
 				//Creating points on an EdgeAppearanceChart.
-				EdgeAppearancePoint point = new EdgeAppearancePoint(time, count);
+				ChartPoint point = new ChartPoint(time, count);
 				points.add(point);
 			}
 		} catch (SQLException e) {
@@ -112,7 +110,7 @@ public enum ChartDAO {
 			e.printStackTrace();
 		}
 		//Create a chart with the given points.
-		EdgeAppearance chart = new EdgeAppearance(points, edgeId);
+		Chart chart = new Chart(points, laneIds.get(1));
 		return chart; 
 		
 	}

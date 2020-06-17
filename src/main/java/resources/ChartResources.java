@@ -7,21 +7,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-<<<<<<< Updated upstream
 import javax.ws.rs.QueryParam;
 
 import org.json.JSONObject;
 
 import dao.ChartDAO;
 import model.Chart;
-
-
-=======
->>>>>>> Stashed changes
-
-import org.json.JSONObject;
-
-import dao.ChartDAO;
 
 @Path("/simulations/{simulation_id}/charts")
 public class ChartResources {
@@ -32,10 +23,14 @@ public class ChartResources {
 	@GET
 	@Produces("application/json")
 	@Path("/transiting_vehicles")
-	public JSONObject getTransiting_vehicles() {
-		JSONObject transiting_vehicles = ChartDAO.instance.getTransitingVehicles(simulation_id);
+	public ArrayList<Chart> getTransiting_vehicles(@QueryParam("lanes_ids") List<String> laneIds) {
+		ArrayList<Chart> charts = new ArrayList<>();
+		for(String lane : laneIds) {
+			Chart chart = ChartDAO.instance.getTransiting_vehicles(simulation_id, laneIds);
+			charts.add(chart);
+		}
 		
-		return new JSONObject();
+		return charts;
 	}
 
 	
