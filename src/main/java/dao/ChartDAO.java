@@ -78,8 +78,12 @@ public enum ChartDAO {
 			ps.setString(2, vehicle_id);
 			ResultSet result = ps.executeQuery();
 			chart = new Chart(getChartPoints(result), vehicle_id);
-				System.out.println(chart);
-		return chart;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return chart; 
+		
 	}
 
 	public Chart getSpeedFactorByTimeChart(int simulation_id, String vehicle_id) {
@@ -143,4 +147,4 @@ public enum ChartDAO {
 		return chart; 
 		
 	}
-	
+}
