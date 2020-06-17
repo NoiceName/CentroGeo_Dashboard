@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import cookie_manager.Secured;
 import org.json.JSONObject;
 
 import dao.SnapshotDAO;
@@ -27,6 +28,7 @@ public class SnapshotResources {
 	 * @return
 	 */
 	@GET
+	@Secured
 	@Produces("application/json")
 	public ArrayList<Snapshot> getSnapshots() {
 		ArrayList<Snapshot> xml = SnapshotDAO.instance.getSnapshotDumpXML(simulation_id);
