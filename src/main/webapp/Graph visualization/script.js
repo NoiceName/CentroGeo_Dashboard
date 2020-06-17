@@ -376,32 +376,12 @@ function getEdgeId() {
 
 
 $(function () {     $('#chartGen').click(function(event) {
-//  var div = document.createElement("DIV");
-//  div.setAttribute("class", "row");
-//  div.setAttribute("id","charts");
-//  document.body.appendChild(div);
-//  var button = document.createElement("BUTTON");
-//  var text = document.createTextNode("Delete");
-//  button.setAttribute("type", "button");
-//  button.setAttribute("id", "removeChart");
-//  button.setAttribute("onclick", "removeChart()");
-//  button.appendChild(text);
-//  document.body.appendChild(button);
   genGraph();
 
  });
  });
 
-//function removeChart() {
-//	document.getElementById("charts").innerHTML = "";
-//	var chart = document.getElementById("charts");
-//    charts.parentNode.removeChild(charts);
-//	var elem = document.getElementById("removeChart");
-//    elem.parentNode.removeChild(elem);
-//}
-
  $(function () {     $(document).ready(function() {
-
       //Statically set simulation id !!! that is sent to the server
 	  var simulation_id = '1';
 
@@ -453,6 +433,10 @@ $(function () {     $('#chartGen').click(function(event) {
  	document.getElementById('reportDiv').innerHTML = "";
  }
 
+// function updateBar() {
+//	 document.getElementById('progressBar').style.width = "25%";
+//	 document.getElementById('progressBar').setAttribute("aria-valuenow", "25");
+// }
 
 
  //Load the vehicle id's

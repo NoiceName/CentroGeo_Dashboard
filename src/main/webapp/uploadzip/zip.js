@@ -18,18 +18,42 @@ zipButton.addEventListener("click", function() {
 	zipFile.click();
 });
 
+
 /*Sends the zip-file to the server.*/
 $("#zipform").submit(function (evt) {
     var formData = new FormData();
     console.log(zipFile.files[0]);
     // formData.append('zip', zipFile.files[0]);
     formData = zipFile.files[0];
-
+    
+    var percent = 25;
+    $('#progressBar').attr('aria-valuenow', percent).css('width', percent + '%').text(percent + '%');
     $.ajax({
+    	xhr : function() {
+			var xhr = new window.XMLHttpRequest();
+
+			xhr.upload.addEventListener('progress', function(e) {
+
+				if (e.lengthComputable) {
+
+					console.log('Bytes Loaded: ' + e.loaded);
+					console.log('Total Size: ' + e.total);
+					console.log('Percentage Uploaded: ' + (e.loaded / e.total))
+
+					var percent = Math.round((e.loaded / e.total) * 100);
+
+					$('#progressBar').attr('aria-valuenow', percent).css('width', percent + '%').text(percent + '%');
+
+				}
+
+			});
+
+			return xhr;
+		},
         url: '/CentroGeo/resources/simulations',
         type: 'POST',
         data: formData,
-        async: false,
+        async: true,
         cache: false,
         contentType: 'application/zip',
         dataType: 'application/zip',
@@ -42,6 +66,7 @@ $("#zipform").submit(function (evt) {
         error: function (jqXHR, textStatus, errorThrown) {
             alert(jqXHR.responseText)
         }
+        
     });
     return false;
 });
