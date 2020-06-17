@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * A single point on a EdgeAppereanceChart
- * @author Eigenaar
+ * @author Maksym 
  *
  */
 @XmlRootElement
