@@ -30,7 +30,8 @@
 		<div class="row border-bottom">
 			<div class="col-12">
 				<ul class="nav justify-content-center">
-					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#createChartMenu">Create Chart</a>	</li>
+					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#selectSimulationMenu">Select Simulation</a></li>
+					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#createChartMenu">Create Chart</a></li>
 					<li class="nav-item">
 						<a class="nav-link" id="genReportButton" onclick="generateReport()">Generate Report</a>	
 					</li>
@@ -58,7 +59,7 @@
 							<div class="container-fluid">
 								<div class="row">
 									<!-- Chart Select --> 
-									<div class="col-6 list-group" id="chartChoice" value=''>
+<div class="col-6 list-group" id="chartChoice" value=''>
 										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Lane transiting vehicles</a>		
 										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle info</a>
 										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">edge appearance frequency </a>
@@ -154,7 +155,41 @@
     									0%
   									</div>
 								</div>
-</div>
+							</div>
+							</div>	
+						</div>
+					</div>
+				</div>	
+			</div>	
+			<!-- Select Simulation Menu -->
+		<div>
+			<div class="modal fade" id="selectSimulationMenu">
+				<div class="modal-dialog modal-dialog-centered modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Please select a simulation</h5>	
+						</div>	
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-12">
+										<div class="row">
+											<div class="input-group mb-3">
+											  <input type="text" class="form-control" placeholder="Simulation Name or Tag">
+											</div>	
+										</div> 
+										<div class="row">
+											<div class="scroll-spy w-100">
+												<div class="list-group w-100">
+													 <!-- List of simulations -->
+												     <a class="list-group-item list-group-item-action w-100" data-toggle="list">Simulation 1</a>
+												     <a class="list-group-item list-group-item-action w-100" data-toggle="list">Simulation 1</a>
+												</div>	
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 							</div>	
 						</div>
 					</div>
