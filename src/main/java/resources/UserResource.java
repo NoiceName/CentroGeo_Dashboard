@@ -1,43 +1,30 @@
 package resources;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
 import javax.servlet.http.HttpServletResponse;
-
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.servlet.http.Cookie;
-
 import javax.ws.rs.core.*;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.google.common.net.HttpHeaders;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
-
 import cookie_manager.CookieManager;
 import dao.UserDAO;
-import model.Database;
 import model.User;
-import org.junit.platform.engine.support.descriptor.FileSystemSource;
-import org.xml.sax.SAXException;
+
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+import de.mkammerer.argon2.Argon2Factory.Argon2Types;
+
 
 @Path("/user_resource")
 public class UserResource {
-	
-	private static final String SUCCESS_RESULT="<result>success</result>";
-	private static final String FAILURE_RESULT_PASSWORD="<result>failurePassword</result>";	
-	private static final String FAILURE_RESULT_NAME="<result>failureName</result>";	
-	
+		
 
 	@Context
 	UriInfo uriInfo;
@@ -64,26 +51,27 @@ public class UserResource {
 		String password = userJson.getString("password");
 
 		JSONObject response = new JSONObject();
-	
-		/* I have created the method to check if the username is in the database, 
-		 * and if the returned password matches the given password		
-		 * */
 		
- //		User user = UserDAO.instance.getModel().get(username);
-		String returnPassword = UserDAO.instance.getModel().get(username).getPassword();
-		if (returnPassword == null||!returnPassword.equals(password)){
+		//verify hash_password
+		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
+		String returnPasswordHash = UserDAO.instance.getUserPassword(username); 
+		boolean match = argon2.verify(returnPasswordHash, password);
+		
+			
+		if (returnPasswordHash == null||!match){
 			response.put("result", "false");
 			return Response.serverError().entity(response.toString()).build();
-		}
+			}
 		else {
 			//Generate and save a new token and send it to the user inform of a cookie 
-			String token = CookieManager.assignCookie(new User(username, returnPassword));
+			String token = CookieManager.assignCookie(new User(username,returnPasswordHash)); 
 			NewCookie authCookie = new NewCookie(HttpHeaders.AUTHORIZATION, token, "/",
 					null, null, 60*60*24, false, true);
 			response.put("result", "true");
 			return Response.ok().entity(response.toString()).cookie(authCookie).build();
 			
-		}
+		    }
+		
 	}
 	
 }
