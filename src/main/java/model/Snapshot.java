@@ -3,6 +3,8 @@ package model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONObject;
+
 @XmlRootElement
 public class Snapshot {
 	/**
@@ -54,7 +56,6 @@ public class Snapshot {
 	public String toString() {
 		return("{" + "Time: " + this.getTime() + " ID: " + this.getId() + "}");
 	}
-	
 	
 }
 
