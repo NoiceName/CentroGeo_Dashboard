@@ -61,6 +61,7 @@ public enum ChartDAO {
 		return chart; 
 	}
 	
+	
 	public Chart getSpeedByTimeChart(int simulation_id, String vehicle_id) {
 		Database db = new Database();
 		Database.loadPGSQL();
@@ -87,7 +88,27 @@ public enum ChartDAO {
 	}
 
 	public Chart getSpeedFactorByTimeChart(int simulation_id, String vehicle_id) {
-		return new Chart();
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "select time, speedFactor\r\n" + 
+				"from (select s.time, unnest(xpath('//vehicle/@speedFactor', s.data))::text as speed, unnest(xpath('//vehicle/@id', s.data))::text as veh_id\r\n" + 
+				"from projectschema.snapshot s\r\n" + 
+				"where s.simulation = ?\r\n" + 
+				"order by s.time) as vehicles\r\n" + 
+				"where veh_id = ?;";
+		PreparedStatement ps = db.prepareStatement(statement);	
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulation_id);
+			ps.setString(2, vehicle_id);
+			ResultSet result = ps.executeQuery();
+			chart = new Chart(getChartPoints(result), vehicle_id);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return chart; 
 	}
 
 	public Chart getRouteLengthByTimeChart(int simulation_id, String vehicle_id) {
