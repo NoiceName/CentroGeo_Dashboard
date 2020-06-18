@@ -42,6 +42,7 @@ function genGraph() {
   chartType = getActiveChartType();
 
   var serverResponse = [];
+  var dataArray = [[]];
 
 
 
@@ -125,53 +126,34 @@ function genGraph() {
 
   //    GRAPH showing edge appearance frequency 
 	else if (chartType == "edgeFr") {
-    // select chosen edge
-    var edgeChoice;
-    edgeChoice = getSelectedIds()[0];
-    if (getSelectedIds().length < 1) {return}
 
-    var appearance = [];
-    var timeStamps = [];
+    //Rest function
+    //get the Data using RESTful services
+      for (var j = 0; j < userOptions.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/edge_appearance?edge_ids=' + userOptions[j], function(data) {
+          serverResponse.push(data[0]);
 
-    //iterate over each snapshot
-    for (var i = 0; i < currentXML.length; i++) {
-      snapshot = currentXML[i];
-      //get timeStamp of current snapshot
-      var timeStamp;
-      var time;
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (userOptions.length)) {
+            dataArray = [[]];
+            dataArray[0] = ["time"];
 
-      timeStamp = snapshot.getElementsByTagName('snapshot'); 
-      time = timeStamp[0].getAttribute("time");
-    
-      timeStamps[i] = parseFloat(time);
-      
-      var count = 0;
+            for (var k = 0; k < serverResponse.length; k++) {
+              dataArray[0].push(serverResponse[k].id); 
+            }
 
-      var path = "//route";
-      var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-
-      //iterate over each route
-      while(node = nodes.iterateNext()) {
-        //split each route into seperate edges
-        var result = node.getAttribute("edges").split(" ");
-
-        //iterae over each edge
-        for (var j = 0; j < result.length; j++) {
-          if(result[j] == edgeChoice) { count++; }
+            for (var k = 0; k < serverResponse[0].data.length; k++) {
+              // dataArray[k + 1] = [];
+              dataArray[k + 1] = [serverResponse[0].data[k].x];
+              for (var l = 0; l < serverResponse.length; l++) {
+                dataArray[k + 1].push(serverResponse[l].data[k].y);
+              }
+            }
+            drawLineChart(dataArray, "Edge appearance frequency (Simulation " + simulation_id + ")", createChartSpace(), "time", "appearances");
         }
+        })
       }
-      appearance[i] = count;
-    }
-
-    var dataArray = [[]];
-    dataArray[0] = ["Time stamp", ("edge " + edgeChoice)];
-
-    for (var i = 0; i < timeStamps.length; i++) {
-      dataArray[i+1] = [timeStamps[i], appearance[i]];
-    }
-
-    drawLineChart(dataArray, "Edge appearance frequency", createChartSpace(), "time", "appearances");
-	}
+  } 
 
 
   //    GRAPH showing #cars per lane
@@ -187,7 +169,7 @@ function genGraph() {
 
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (laneChoice.length)) {
-            var dataArray = [[]];
+            dataArray = [[]];
             dataArray[0] = ["time"];
 
             for (var k = 0; k < serverResponse.length; k++) {
