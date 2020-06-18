@@ -235,7 +235,6 @@ function getSelectedSimulation(){}
 
 //Creating simulation div
 function createSimulationDiv(simulation){
-	console.log(simulation);
 	//col-4 to contain the badges of an id and tags
 	let tagsAndId = createCol4Div();
 	//col-4 div to contain the date of a simulation + inner div
