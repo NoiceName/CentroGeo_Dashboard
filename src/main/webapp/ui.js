@@ -321,9 +321,15 @@ function deselectSimulation(simulation){
 	selectedSimulation = null;
 }
 
-//Returns the simulation that has been selected by the user.
+//Returns the simulation that has been selected by the user. returns -1 if no simulation was selected.
 function getSelectedSimulationID(){
-	let id = selectedSimulation.getElementsByClassName('simulation-id')[0].innerText;
+	var id;
+	try {
+		id = selectedSimulation.getElementsByClassName('simulation-id')[0].innerText;
+	} catch(err) {
+		id = -1;
+	}
+	
 	return id;
 }
 

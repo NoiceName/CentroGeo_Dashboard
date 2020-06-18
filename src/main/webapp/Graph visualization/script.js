@@ -20,14 +20,33 @@ function onload() {
 function genGraph() {
   console.log("Generating the graph");
 
-  var simulation_id = getSelectedSimulationID();
+  var simulation_id;
 
+  //get selected simulation
+  if (getSelectedSimulationID() == -1) {
+    alert("Please select a Simulation");
+    return
+  } else {
+    simulation_id = getSelectedSimulationID();
+  }
+
+  //check that user has given id options
+  var userOptions;
+  if (getSelectedIds().length < 1) {
+    return
+  } else {
+    userOptions = getSelectedIds();
+  }
+  
   var chartType = "";
   chartType = getActiveChartType();
 
+  var serverResponse = [];
+
+
+
 
   // determine what graph should be drawn
-
 
   //    GRAPH showing info about chosen vehicle over time
 	if (chartType == "vehInfo") {
@@ -159,14 +178,7 @@ function genGraph() {
 	else if (chartType == "transVeh") {
     //select choosen lane
     var laneChoice;
-    laneChoice = getSelectedIds();
-
-    var serverResponse = [];
-
-    //check that user input has been given
-    if (laneChoice.length < 1) {
-      return
-    }
+    laneChoice = userOptions;
 
       //get the Data using RESTful services
       for (var j = 0; j < laneChoice.length; j++) {
@@ -175,9 +187,6 @@ function genGraph() {
 
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (laneChoice.length)) {
-            // console.log("done loading");
-            // console.log(serverResponse[0].id);
-
             var dataArray = [[]];
             dataArray[0] = ["time"];
 
