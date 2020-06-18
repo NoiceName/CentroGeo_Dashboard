@@ -19,6 +19,9 @@ function onload() {
 function genGraph() {
   console.log("Generating the graph");
 
+//will have to be flexible
+  var simulation_id = 1;
+
   var chartType = "";
   chartType = getActiveChartType();
 
@@ -90,16 +93,14 @@ function genGraph() {
         timeStamps[i] = parseFloat(time);
     }
 
-  var dataArray = [[]];
-    dataArray[0] = ["Time stamp", "routeLength", "speed", "speedFactor"];
+    var dataArray = [[]];
+      dataArray[0] = ["Time stamp", "routeLength", "speed", "speedFactor"];
 
-    for (var i = 0; i < routeLengths.length; i++) {
-      dataArray[i+1] = [timeStamps[i], routeLengths[i], speeds[i], speedFactors[i]];
-    }
+      for (var i = 0; i < routeLengths.length; i++) {
+        dataArray[i+1] = [timeStamps[i], routeLengths[i], speeds[i], speedFactors[i]];
+      }
 
-    drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "");
-
-
+      drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "");
 	}
 
 
@@ -151,8 +152,6 @@ function genGraph() {
     }
 
     drawLineChart(dataArray, "Edge appearance frequency", createChartSpace(), "time", "appearances");
-
-
 	}
 
 
@@ -162,57 +161,43 @@ function genGraph() {
     var laneChoice;
     laneChoice = getSelectedIds();
 
+    var serverResponse = [];
+
     //check that user input has been given
     if (laneChoice.length < 1) {
       return
     }
 
-		var cars = [[]];
-    var timeStamps = [];
-
-    //itterate over each snapshot
-    for (var i = 0; i < currentXML.length; i++) {
-      var snapshot = currentXML[i];
-      cars[i] = [];
-
-      // itterate over each chosen lane
+      //get the Data using RESTful services
       for (var j = 0; j < laneChoice.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/transiting_vehicles?lanes_ids=' + laneChoice[j], function(data) {
+          serverResponse.push(data[0]);
 
-        var path = "/snapshot/lane[@id=\""+ laneChoice[j] + "\"]/vehicles";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-      
-        var result = nodes.iterateNext();
-        cars[i][j] = result.getAttribute("value").split("v").length -1;
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (laneChoice.length)) {
+            // console.log("done loading");
+            // console.log(serverResponse[0].id);
 
+            var dataArray = [[]];
+            dataArray[0] = ["time"];
+
+            for (var k = 0; k < serverResponse.length; k++) {
+              dataArray[0].push(serverResponse[k].id); 
+            }
+
+            for (var k = 0; k < serverResponse[0].data.length; k++) {
+              // dataArray[k + 1] = [];
+              dataArray[k + 1] = [serverResponse[0].data[k].x];
+              for (var l = 0; l < serverResponse.length; l++) {
+                dataArray[k + 1].push(serverResponse[l].data[k].y);
+              }
+            }
+            // console.log(dataArray);
+            drawLineChart(dataArray, "Number of lane transiting vehicles", createChartSpace(), "time", "cars");
+
+          }
+        })
       }
-
-
-      var timeStamp;
-      var time;
-
-      timeStamp = snapshot.getElementsByTagName('snapshot'); 
-      time = timeStamp[0].getAttribute("time");
-    
-      timeStamps[i] = parseFloat(time);
-    }
-    
-
-
-		var dataArray = [[]];
-    dataArray[0] = ["Time stamps"];
-    for (var i = 0; i < laneChoice.length; i++) {
-      dataArray[0].push("lane " + laneChoice[i]); 
-    }
-
-		for (var i = 0; i < timeStamps.length; i++) {
-      dataArray[i+1] = [timeStamps[i]];
-      for (var j = 0; j < laneChoice.length; j++) {
-        dataArray[i+1].push(cars[i][j]);
-      }
-		}
-    
-
-		drawLineChart(dataArray, "Number of lane transiting vehicles", createChartSpace(), "time", "cars");
 
 	}
 
@@ -375,6 +360,7 @@ function getEdgeId() {
 
 
 
+
 $(function () {     $('#chartGen').click(function(event) {
   genGraph();
 
@@ -433,55 +419,4 @@ $(function () {     $('#chartGen').click(function(event) {
  	document.getElementById('reportDiv').innerHTML = "";
  }
 
-// function updateBar() {
-//	 document.getElementById('progressBar').style.width = "25%";
-//	 document.getElementById('progressBar').setAttribute("aria-valuenow", "25");
-// }
-
-
- //Load the vehicle id's
-//  $(function () {     $('#vehicleChartSelect').click(function(event) {
-//       alert("select vehId's");
-//       //Statically set simulation id !!! that is sent to the server
-//     var simulation_id = '1';
-
-//     $.ajax({
-//       url: '/CentroGeo/resources/simulations/'+simulation_id+'/snapshots',
-//       //try with application/json later
-//       type: 'GET',
-//       success: function (resp) {success(resp)},
-//       error: function(jqXHR, textStatus, errorThrown) {
-//         alert('Cannot contact the server!');
-//       }
-//     });
-    
-
-//   function success(resp) {
-//     //resp is the data array
-
-//         //avoid loading the data multiple times
-//         console.log("vehicle id's loaded");
-//         XMLloaded = true;
-
-// //        console.log(resp);
-        
-
-//         dataArray = [];
-//         var parser = new DOMParser();
-
-//         for (var i = 0; i < resp.length; i++) {
-//             xmlDoc = parser.parseFromString(resp[i].data, "text/xml");
-//             dataArray[i] = xmlDoc;
-//         }
-        
-        
-// //        populateLaneSelect(dataArray[1]);
-
-//         vehIds = dataArray;
-
-//     return xmlDoc;
-//   }
-    
-//     }); 
-//     });
 
