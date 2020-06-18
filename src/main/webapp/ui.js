@@ -1,3 +1,4 @@
+var selectedSimulation = null;
 
 $(function () {
 	$("#lineChartSelect").click(function () {
@@ -220,6 +221,7 @@ function loadSimulations(simulations){
 	var container = document.getElementById('simulation-container');
 	for(var i = 0; i!=simulations.length; i++){
 		let simulation = createSimulationDiv(simulations[i]);
+		simulation.addEventListener('click', function() {selectSimulation.bind(this)()});
 		container.appendChild(simulation);
 	}
 }
@@ -242,14 +244,17 @@ function createSimulationDiv(simulation){
 	//col-4 div to contain the description of a simulation + inner div
 	let descriptionContainer = createCol4Div();
 	let descriptionDiv = document.createElement('div');
+	descriptionDiv.classList.add('simulation-description');
 	//col-4 div to contain the name of the simulation
 	let nameDiv = document.createElement('div');
 	nameDiv.classList.add('card-title');
 	nameDiv.classList.add('w-50');
+	nameDiv.classList.add('simulation-name');
 	nameDiv.innerText = simulation.name;
 	tagsArr = simulation.tags.split(";");
 	populateTagsAndIds(tagsArr, simulation.simulationId, tagsAndId);
 	dateDiv.innerText = simulation.date;
+	dateDiv.classList.add('simulation-date');
 	dateContainer.appendChild(dateDiv);
 	descriptionDiv.innerText = simulation.description;
 	descriptionContainer.appendChild(descriptionDiv);
@@ -279,6 +284,7 @@ function createSimulationDiv(simulation){
 	return div1;
 }
 
+//Creates  a div with a column width of 4
 function createCol4Div() {
 	var div = document.createElement('div');
 	div.classList.add('col-4');
@@ -296,35 +302,44 @@ function populateTagsAndIds(tags, id, divContainer){
 	return divContainer;
 }
 
+//Call-back for selecting a simulation
+function selectSimulation(){
+	if(selectedSimulation!=null){
+		deselectSimulation(selectedSimulation);
+	}
+	selectedSimulation = this;
+	this.classList.add('bg-dark');
+	this.classList.add('text-white');
+	this.classList.add('selected');
+	getSelectedSimulationID();
+}
+
+//Deselect a particular simulation
+function deselectSimulation(simulation){
+	simulation.classList.remove('bg-dark');
+	simulation.classList.remove('text-white');
+	simulation.classList.remove('selected');
+	selectedSimulation = null;
+}
+
+//Returns the simulation that has been selected by the user.
+function getSelectedSimulationID(){
+	let id = selectedSimulation.getElementsByClassName('simulation-id')[0].innerText;
+	return id;
+}
+
+//Creates a div of a badge that is needed for the id and the tag of a simulation
 function createSimulationBadge(type, data) {
 	let span = document.createElement('span');
 	if (type=='tag'){
 		span.classList.add('badge-info');
+		span.classList.add('simulation-tag');
 	} else if (type=="id"){
 		span.classList.add('badge-dark');
+		span.classList.add('simulation-id');
 	}
 	span.classList.add('badge');
 	span.classList.add('badge-pill');
 	span.innerText = data;
 	return span;
 }
-
-//<div class="card border-dark w-100 simulation">
-//<div class="card-body">
-//<div class="card-title w-50">Simulation Name</div>	
-//<div class="row">
-//	<div class="col-4">
-//		<div>Description</div>
-//	</div>	
-//	<div class="col-4">
-//		<div>Date</div>
-//	</div>
-//	<div class="col-4">
-//		<span class="badge badge-pill badge-dark">ID</span>
-//		<span class="badge badge-pill badge-info">Tag</span>
-//		<span class="badge badge-pill badge-info">Tag</span>
-//		<span class="badge badge-pill badge-info">Tag</span>
-//	</div>
-//</div>
-//</div>
-//</div>
