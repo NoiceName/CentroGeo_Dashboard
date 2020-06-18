@@ -209,3 +209,122 @@ $(function() {
 		clearSelectedAndFound();
 	});
 })
+
+//Pulls the simulations from the API
+function refreshSimulations(){
+	$.get("/CentroGeo/resources/simulations", function (resp) {loadSimulations(resp);});
+}
+
+//Given an array of simulation objects updates loads them into SelectSimulationMenu modal
+function loadSimulations(simulations){
+	var container = document.getElementById('simulation-container');
+	for(var i = 0; i!=simulations.length; i++){
+		let simulation = createSimulationDiv(simulations[i]);
+		container.appendChild(simulation);
+	}
+}
+
+//For testing
+$(function(){ 
+	refreshSimulations(); 
+});
+
+function getSelectedSimulation(){}
+
+//Creating simulation div
+function createSimulationDiv(simulation){
+	console.log(simulation);
+	//col-4 to contain the badges of an id and tags
+	let tagsAndId = createCol4Div();
+	//col-4 div to contain the date of a simulation + inner div
+	let dateContainer = createCol4Div();
+	let dateDiv = document.createElement('div');
+	//col-4 div to contain the description of a simulation + inner div
+	let descriptionContainer = createCol4Div();
+	let descriptionDiv = document.createElement('div');
+	//col-4 div to contain the name of the simulation
+	let nameDiv = document.createElement('div');
+	nameDiv.classList.add('card-title');
+	nameDiv.classList.add('w-50');
+	nameDiv.innerText = simulation.name;
+	tagsArr = simulation.tags.split(";");
+	populateTagsAndIds(tagsArr, simulation.simulationId, tagsAndId);
+	dateDiv.innerText = simulation.date;
+	dateContainer.appendChild(dateDiv);
+	descriptionDiv.innerText = simulation.description;
+	descriptionContainer.appendChild(descriptionDiv);
+	dateContainer.appendChild(dateDiv);
+	//Putting the simulation together
+	//Setting up the most outer element
+	let div1 = document.createElement('div');
+	div1.classList.add('card');
+	div1.classList.add('border-dark');
+	div1.classList.add('w-100');
+	div1.classList.add('simulation');
+	//Next Inner element
+	let div2 = document.createElement('div');
+	div2.classList.add('card-body');
+	div1.appendChild(div2);
+	//Add name
+	div2.appendChild(nameDiv);
+	row = document.createElement('div');
+	row.classList.add('row');
+	div2.appendChild(row);
+	//Add description
+	row.appendChild(descriptionContainer);
+	//Add date
+	row.appendChild(dateContainer)
+	//Add tags
+	row.appendChild(tagsAndId);
+	return div1;
+}
+
+function createCol4Div() {
+	var div = document.createElement('div');
+	div.classList.add('col-4');
+	return div;
+}
+
+//Given an array of tags, and ID and a DIV populates that div with badges of tags and ids given
+function populateTagsAndIds(tags, id, divContainer){
+	for( let i = 0; i!=tags.length; i++){
+		badge = createSimulationBadge('tag', tags[i]);
+		divContainer.appendChild(badge);
+	}
+	idBadge = createSimulationBadge('id', id);
+	divContainer.appendChild(idBadge);
+	return divContainer;
+}
+
+function createSimulationBadge(type, data) {
+	let span = document.createElement('span');
+	if (type=='tag'){
+		span.classList.add('badge-info');
+	} else if (type=="id"){
+		span.classList.add('badge-dark');
+	}
+	span.classList.add('badge');
+	span.classList.add('badge-pill');
+	span.innerText = data;
+	return span;
+}
+
+//<div class="card border-dark w-100 simulation">
+//<div class="card-body">
+//<div class="card-title w-50">Simulation Name</div>	
+//<div class="row">
+//	<div class="col-4">
+//		<div>Description</div>
+//	</div>	
+//	<div class="col-4">
+//		<div>Date</div>
+//	</div>
+//	<div class="col-4">
+//		<span class="badge badge-pill badge-dark">ID</span>
+//		<span class="badge badge-pill badge-info">Tag</span>
+//		<span class="badge badge-pill badge-info">Tag</span>
+//		<span class="badge badge-pill badge-info">Tag</span>
+//	</div>
+//</div>
+//</div>
+//</div>

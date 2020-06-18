@@ -38,7 +38,7 @@ public class Simulation {
 		this.simulationId = simulationId;
 	}
 	
-	public String getDescripition() {
+	public String getDescription() {
 		return this.description;
 	}
 	
