@@ -45,8 +45,6 @@ function genGraph() {
   var dataArray = [[]];
 
 
-
-
   // determine what graph should be drawn
 
   //    GRAPH showing info about chosen vehicle over time
@@ -123,11 +121,9 @@ function genGraph() {
       drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "");
 	}
 
-
   //    GRAPH showing edge appearance frequency 
 	else if (chartType == "edgeFr") {
 
-    //Rest function
     //get the Data using RESTful services
       for (var j = 0; j < userOptions.length; j++) {
         $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/edge_appearance?edge_ids=' + userOptions[j], function(data) {
@@ -135,26 +131,12 @@ function genGraph() {
 
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (userOptions.length)) {
-            dataArray = [[]];
-            dataArray[0] = ["time"];
-
-            for (var k = 0; k < serverResponse.length; k++) {
-              dataArray[0].push(serverResponse[k].id); 
-            }
-
-            for (var k = 0; k < serverResponse[0].data.length; k++) {
-              // dataArray[k + 1] = [];
-              dataArray[k + 1] = [serverResponse[0].data[k].x];
-              for (var l = 0; l < serverResponse.length; l++) {
-                dataArray[k + 1].push(serverResponse[l].data[k].y);
-              }
-            }
+            dataArray = getDataArray(serverResponse, "time");
             drawLineChart(dataArray, "Edge appearance frequency (Simulation " + simulation_id + ")", createChartSpace(), "time", "appearances");
         }
         })
       }
   } 
-
 
   //    GRAPH showing #cars per lane
 	else if (chartType == "transVeh") {
@@ -169,8 +151,26 @@ function genGraph() {
 
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (laneChoice.length)) {
-            dataArray = [[]];
-            dataArray[0] = ["time"];
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Number of lane transiting vehicles (Simulation " + simulation_id + ")", createChartSpace(), "time", "cars");
+
+          }
+        })
+      }
+	}
+
+	//draw a useless graph
+	else if (chartType == "otherC") {
+		drawPieChart(getXMLarray(currentXML[10]), "Vehicles and their speed", createChartSpace());
+	}
+
+}
+
+
+
+function getDataArray(serverResponse, xTitle) {
+  var dataArray = [[]];
+            dataArray[0] = [xTitle];
 
             for (var k = 0; k < serverResponse.length; k++) {
               dataArray[0].push(serverResponse[k].id); 
@@ -183,24 +183,8 @@ function genGraph() {
                 dataArray[k + 1].push(serverResponse[l].data[k].y);
               }
             }
-            // console.log(dataArray);
-            drawLineChart(dataArray, "Number of lane transiting vehicles (Simulation " + simulation_id + ")", createChartSpace(), "time", "cars");
-
-          }
-        })
-      }
-
-	}
-
-	//draw a useless graph
-	else if (chartType == "otherC") {
-		drawPieChart(getXMLarray(currentXML[10]), "Vehicles and their speed", createChartSpace());
-	}
-
+  return dataArray;
 }
-
-
-
 
 
 
