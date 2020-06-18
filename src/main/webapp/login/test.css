@@ -15,7 +15,7 @@ body {
   padding: 20px;
 }
 .page {
-  background: white;
+  background: #e2e2e5;
   display: flex;
   flex-direction: column;
   height: calc(100% - 40px);
@@ -44,7 +44,7 @@ body {
   }
 }
 .left {
-  background: #e2e2e5;
+  background: white;
   height: calc(100% - 40px);
   top: 20px;
   position: relative;
@@ -62,6 +62,12 @@ body {
   font-size: 50px;
   font-weight: 900;
   margin: 50px 40px 40px;
+}
+.eula {
+  color: #999;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 40px;
 }
 .right {
   background: #474A59;
@@ -88,7 +94,7 @@ path {
   stroke-width: 4;
   stroke-dasharray: 240 1386;
 }
-#myform {
+.form {
   margin: 40px;
   position: absolute;
 }
@@ -104,7 +110,7 @@ input {
   background: transparent;
   border: 0;
   color: #f2f2f2;
-  font-size: 15px;
+  font-size: 20px;
   height: 30px;
   line-height: 30px;
   outline: none !important;
@@ -113,14 +119,14 @@ input {
 input::-moz-focus-inner { 
   border: 0; 
 }
-#login-button {
-  color: #999;
+#submit {
+  color: #707075;
   margin-top: 40px;
   transition: color 300ms;
 }
-#login-button:focus {
+#submit:focus {
   color: #f2f2f2;
 }
-#login-button:active {
+#submit:active {
   color: #d0d0d2;
 }
