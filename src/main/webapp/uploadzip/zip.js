@@ -25,38 +25,49 @@ $("#zipform").submit(function (evt) {
     console.log(zipFile.files[0]);
     // formData.append('zip', zipFile.files[0]);
     formData = zipFile.files[0];
-    if (formData != null) {
-    	$.ajax({
-    		xhr : function() {
-    			var xhr = new window.XMLHttpRequest();
+    
+    var percent = 25;
+    $('#progressBar').attr('aria-valuenow', percent).css('width', percent + '%').text(percent + '%');
+    $.ajax({
+    	xhr : function() {
+			var xhr = new window.XMLHttpRequest();
 
-    			xhr.upload.addEventListener('progress', function(e) {
-    				if (e.lengthComputable) {
+			xhr.upload.addEventListener('progress', function(e) {
+
+				if (e.lengthComputable) {
+
+					console.log('Bytes Loaded: ' + e.loaded);
+					console.log('Total Size: ' + e.total);
+					console.log('Percentage Uploaded: ' + (e.loaded / e.total))
+
 					var percent = Math.round((e.loaded / e.total) * 100);
+
 					$('#progressBar').attr('aria-valuenow', percent).css('width', percent + '%').text(percent + '%');
-    				}	
-    			});
-    			return xhr;
-    		},
-    		url: '/CentroGeo/resources/simulations',
-    		type: 'POST',
-    		data: formData,
-    		async: true,
-    		cache: false,
-    		contentType: 'application/zip',
-    		dataType: 'application/zip',
-    		title: 'file',
-    		enctype: 'application/zip',
-    		processData: false,
-    		success: function (response) {
-    			alert("Successfully uploaded zip file");
-    		},
-    		error: function (jqXHR, textStatus, errorThrown) {
-    			alert(jqXHR.responseText)
-    		}
+
+				}
+
+			});
+
+			return xhr;
+		},
+        url: '/CentroGeo/resources/simulations',
+        type: 'POST',
+        data: formData,
+        async: true,
+        cache: false,
+        contentType: 'application/zip',
+        dataType: 'application/zip',
+        title: 'file',
+        enctype: 'application/zip',
+        processData: false,
+        success: function (response) {
+            alert("Successfully uploaded zip file");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseText)
+        }
         
-    	});
-    }
+    });
     return false;
 });
 });
