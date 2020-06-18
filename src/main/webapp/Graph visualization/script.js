@@ -12,6 +12,7 @@ function onload() {
 
  	google.charts.load('current', {'packages':['corechart']});
  	google.charts.load('current', {'packages':['bar']});
+  google.charts.load('current', {'packages':['line']});
 
 
 
@@ -19,8 +20,7 @@ function onload() {
 function genGraph() {
   console.log("Generating the graph");
 
-//will have to be flexible
-  var simulation_id = 1;
+  var simulation_id = getSelectedSimulationID();
 
   var chartType = "";
   chartType = getActiveChartType();
@@ -193,7 +193,7 @@ function genGraph() {
               }
             }
             // console.log(dataArray);
-            drawLineChart(dataArray, "Number of lane transiting vehicles", createChartSpace(), "time", "cars");
+            drawLineChart(dataArray, "Number of lane transiting vehicles (Simulation " + simulation_id + ")", createChartSpace(), "time", "cars");
 
           }
         })
@@ -264,6 +264,8 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 
 	var options = {
 		title: title,
+    //subtitle not supported in google core charts.
+    // subtitle: Simulation id,
 		curveType: 'none',
 		legend: { position: 'bottom' },
 		crosshair: { trigger: 'both' },
@@ -275,9 +277,12 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 	};
 
 	var chart = new google.visualization.LineChart(document.getElementById(id));
+  chart.draw(data, options);
 
-
-	chart.draw(data, options);
+// alt version using google material charts for subtitle
+//   var chart = new google.charts.Line(document.getElementById(id));
+//   chart.draw(data, google.charts.Line.convertOptions(options));
+	
 }
 
 
