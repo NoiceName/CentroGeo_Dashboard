@@ -173,18 +173,6 @@ public enum ChartDAO {
 	}
 	
 	
-	private ArrayList<ChartPoint> getChartPoints(ResultSet result) throws SQLException {
-		ArrayList<ChartPoint> points = new ArrayList<>();
-		while(result.next()) {
-			double y = Double.parseDouble(result.getString("speed"));
-			double x = result.getFloat("time");
-			ChartPoint point = new ChartPoint(x, y);
-			points.add(point);
-		}
-		return points;
-	}
-	
-	
 	/**
 	 * Generates specified EdgeAppearanceFrequency chart.
 	 * @param simulationId - ID of a simulation
@@ -224,7 +212,9 @@ public enum ChartDAO {
 		return chart; 
 		
 	}
-    /**
+  
+	
+	/**
      * Generate Cumulative Number of Arrived Vehicles chart
      * @param simulationId - Id of a simulation
      * @return chart object
@@ -264,7 +254,7 @@ public enum ChartDAO {
 	    	ps.close();
 	    	conn.close();
 	    }
-			Chart chart = new Chart(points,"Cumulative Number of Arrived Vehicles");
+			Chart chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
 		    return chart;
 	}
 

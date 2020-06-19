@@ -62,8 +62,8 @@
 <div class="col-6 list-group" id="chartChoice" value=''>
 										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Lane transiting vehicles</a>		
 										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle info</a>
-										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">edge appearance frequency </a>
-										<a class="list-group-item list-group-item-action chart-type" id="uselessChartSelect" data-toggle="list" value="otherC">Useless graph</a>			
+										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">Edge appearance frequency </a>
+										<a class="list-group-item list-group-item-action chart-type" id="cumulChartSelect" data-toggle="list" value="cumulVeh">Cumulative number of arrived vehicles </a>			
 									</div>	
 									<!-- Chart Options -->
 									<div class="col-6">
@@ -73,7 +73,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">Lane ID</span>
 												</div>
-												<input id="laneIdInput" type="text" class="form-control" placeholder="eg. :e_31">
+												<input id="laneIdInput" type="text" class="form-control" placeholder="eg. e31_0">
 											</div>
 											<div class="input-group mb-3 d-none chart-options" id="vehicleChartOptions">
 												<div class="input-group-prepend">
@@ -87,8 +87,11 @@
 												</div>
 												<input id="edgeIdInput" type="text" class="form-control" placeholder="eg. e43">
 											</div>
-											<div class="input-group mb-3 d-none chart-options" id="pieChartOptions">
-												Something to do with piecharts
+											<div class="input-group mb-3 d-none chart-options" id="cumulChartOptions">
+												<div class="input-group-prepend">
+													<span class="input-group-text">Simulation ID</span>
+												</div>
+												<input id="cumulIdInput" type="text" class="form-control" placeholder="eg. 2">
 											</div>
 										</div>
 										<!-- Second row of options --> 

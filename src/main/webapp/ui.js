@@ -13,15 +13,15 @@ $(function () {
 		clearSelectedAndFound();
 	});
 
-	$("#uselessChartSelect").click(function () {
-		clearInputFields();
-		$("#pieChartOptions").removeClass('d-none');
-		clearSelectedAndFound();
-	});
-
 	$("#edgeFrChartSelect").click(function () {
 		clearInputFields();
 		$("#edgeFrOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#cumulChartSelect").click(function () {
+		clearInputFields();
+		$("#cumulChartOptions").removeClass('d-none');
 		clearSelectedAndFound();
 	});
 	
@@ -113,6 +113,33 @@ $(function() {
 			});
 		}
 		else if (input.length <= 1) {
+
+		}
+	}); 
+});
+
+
+//select simulationID for cumulutative arrive vehicles
+$(function() {
+	var laneIdInput = $("#cumulIdInput");
+
+	laneIdInput.keyup(function() {
+		var ids = getSimIds();
+		var jsLaneIdInput = document.getElementById("cumulIdInput");
+		let input = jsLaneIdInput.value;
+		let p = document.getElementById('foundIdsContainer');
+		//clear the found input after each keystroke
+		let foundContainer = document.getElementById('foundIdsContainer');
+		removeBadges(foundContainer);
+		//If the input is longer than 2 characters
+		if(input.length >= 1) {
+			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
+			let filtered = getFilteredIds(input, ids);
+			filtered.forEach(function(item) {
+				createBadgeAndAdd(item,p);
+			});
+		}
+		else if (input.length <= 0) {
 
 		}
 	}); 

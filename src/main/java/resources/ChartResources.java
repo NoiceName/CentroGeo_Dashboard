@@ -67,8 +67,8 @@ public class ChartResources {
 	}
 	
 	@GET
-	@Path("cumulative_number_of_arrived_vehicles")
-	@Produces("application/jason")
+	@Path("/cumulative_number_of_arrived_vehicles")
+	@Produces("application/json")
 	public Chart getArrivedVehicles() throws SQLException {
 		
 		return ChartDAO.instance.getVehicleNumber(simulation_id);

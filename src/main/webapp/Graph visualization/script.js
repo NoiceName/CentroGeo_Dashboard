@@ -32,10 +32,10 @@ function genGraph() {
 
   //check that user has given id options
   var userOptions;
-  if (getSelectedIds().length < 1) {
-    return
-  } else {
+  if (getSelectedIds().length >= 1) {
     userOptions = getSelectedIds();
+  } else {
+    userOptions = -1;
   }
   
   var chartType = "";
@@ -102,20 +102,34 @@ function genGraph() {
 	}
 
 	//draw a useless graph
-	else if (chartType == "otherC") {
-    var xmlFile = currentXML[10];
-    //Return array containing every vehicle + the speed of that vehicle
-    var vArray =  xmlFile.getElementsByTagName('vehicle');
-    var outArray = [[]];
-    outArray[0] = ["Vehicle id", "Speed"];
+	else if (chartType == "cumulVeh") {
+    var simId = [];
 
-    for (var i = 0; i < vArray.length; i++) {
-      outArray[i+1] = [];
-      outArray[i+1][0] = vArray[i].getAttribute("id");
-      outArray[i+1][1] = parseInt(vArray[i].getAttribute("speed"));
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+      console.log("useroption length = " + simId.length);
     }
-  		drawPieChart(outArray, "Vehicles and their speed", createChartSpace());
-  	}
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/cumulative_number_of_arrived_vehicles', function(data) {
+          serverResponse.push(data);
+          console.log(serverResponse);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Cumulative number of arrived vehicles", createChartSpace(), "time", "count");
+
+          }
+        })
+      }
+
+
+  }
+
 }
 
 
@@ -175,6 +189,8 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 }
 
 
+
+//should return all lane id's f currently selected simulation
 function getLanesId() {
 
   var snapshot = currentXML[1];
@@ -202,6 +218,11 @@ function getEdgeId() {
   return edgeIds;
 }
 
+//should return all simulation id's f the database
+function getSimIds() {
+  return [getSelectedSimulationID(), "1", "2", "5", "6"];
+}
+
 
 
 
@@ -213,7 +234,7 @@ $(function () {     $('#chartGen').click(function(event) {
 
  $(function () {     $(document).ready(function() {
       //Statically set simulation id !!! that is sent to the server
-	  var simulation_id = '1';
+	  var simulation_id = getSelectedSimulationID();
 
     $.ajax({
       url: '/CentroGeo/resources/simulations/'+simulation_id+'/snapshots',
@@ -246,8 +267,7 @@ $(function () {     $('#chartGen').click(function(event) {
         }
         
         currentXML = dataArray;
-
-    return xmlDoc;
+        return 
   }
     
     }); 
