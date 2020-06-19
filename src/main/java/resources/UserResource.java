@@ -11,6 +11,7 @@ import javax.ws.rs.core.*;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.google.common.net.HttpHeaders;
+import cookie_manager.Secured;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import cookie_manager.CookieManager;
@@ -61,17 +62,46 @@ public class UserResource {
 		if (returnPasswordHash == null||!match){
 			response.put("result", "false");
 			return Response.serverError().entity(response.toString()).build();
-			}
-		else {
+		} else {
 			//Generate and save a new token and send it to the user inform of a cookie 
 			String token = CookieManager.assignCookie(new User(username,returnPasswordHash)); 
 			NewCookie authCookie = new NewCookie(HttpHeaders.AUTHORIZATION, token, "/",
 					null, null, 60*60*24, false, true);
 			response.put("result", "true");
 			return Response.ok().entity(response.toString()).cookie(authCookie).build();
-			
-		    }
+		}
 		
+	}
+
+	@POST
+	@Secured
+	@Path("/change_password")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Response changePassword(String userInformation) {
+		JSONObject userJson = new JSONObject(userInformation);
+		String username = userJson.getString("username");
+		String oldPassword = userJson.getString("oldPassword");
+		String newPassword = userJson.getString("newPassword");
+
+		JSONObject response = new JSONObject();
+
+		System.out.println(username + oldPassword + newPassword);
+
+		//verify hash_password
+		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
+		String returnPasswordHash = UserDAO.instance.getUserPassword(username);
+		boolean match = argon2.verify(returnPasswordHash, oldPassword);
+
+		if (match){
+			String passwordHash = argon2.hash(4, 1024 * 1024, 8, newPassword);
+			UserDAO.instance.setUserPassword(username, passwordHash);
+			response.put("result", "true");
+			return Response.ok().entity(response.toString()).build();
+		} else {
+			response.put("result", "false");
+			return Response.serverError().entity(response.toString()).build();
+		}
 	}
 	
 }

@@ -12,6 +12,21 @@ import model.User;
 
 public enum UserDAO {
 	instance;
+
+	public void setUserPassword(String userName, String hashPassword){
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String query = "UPDATE projectschema.user SET password_hash = ? WHERE username = ?";
+		PreparedStatement statement = db.prepareStatement(query);
+		try {
+			statement.setString(1, hashPassword);
+			statement.setString(2, userName);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 		
 	public String getUserPassword(String userName){
 		
