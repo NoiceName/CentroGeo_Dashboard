@@ -72,42 +72,61 @@ public enum ChartDAO {
 				"where s.simulation = ?\r\n" + 
 				"order by s.time) as vehicles\r\n" + 
 				"where veh_id = ?;";
-		PreparedStatement ps = db.prepareStatement(statement);	
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
 		Chart chart = null;
 		try {
 			ps.setInt(1, simulation_id);
 			ps.setString(2, vehicle_id);
 			ResultSet result = ps.executeQuery();
-			chart = new Chart(getChartPoints(result), vehicle_id);
+			while(result.next()) {
+				double speed = result.getFloat("speed");
+				double time = result.getFloat("time");
+				//Creating points on an speedByTimeChart.
+				ChartPoint point = new ChartPoint(time, speed);
+				points.add(point);
+			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "speed in m/s");
 		return chart; 
-		
 	}
+
+
 
 	public Chart getSpeedFactorByTimeChart(int simulation_id, String vehicle_id) {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
 		String statement = "select time, speedFactor\r\n" + 
-				"from (select s.time, unnest(xpath('//vehicle/@speedFactor', s.data))::text as speed, unnest(xpath('//vehicle/@id', s.data))::text as veh_id\r\n" + 
+				"from (select s.time, unnest(xpath('//vehicle/@speedFactor', s.data))::text as speedfactor, unnest(xpath('//vehicle/@id', s.data))::text as veh_id\r\n" + 
 				"from projectschema.snapshot s\r\n" + 
 				"where s.simulation = ?\r\n" + 
 				"order by s.time) as vehicles\r\n" + 
 				"where veh_id = ?;";
 		PreparedStatement ps = db.prepareStatement(statement);	
+		ArrayList<ChartPoint> points = new ArrayList<>();
 		Chart chart = null;
 		try {
 			ps.setInt(1, simulation_id);
 			ps.setString(2, vehicle_id);
 			ResultSet result = ps.executeQuery();
-			chart = new Chart(getChartPoints(result), vehicle_id);
+			while(result.next()) {
+				double speedFactor = result.getFloat("speedfactor");
+				double time = result.getFloat("time");
+				//Creating points on an speedByTimeChart.
+				ChartPoint point = new ChartPoint(time, speedFactor);
+				points.add(point);
+			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "speedFactor");
 		return chart; 
 	}
 
@@ -128,18 +147,27 @@ public enum ChartDAO {
 				"AND vehicles.veh_id = ?\r\n" + 
 				"AND edges LIKE ('%' || REPLACE(l.lane_id, '_0', '') || ' %')\r\n" + 
 				"GROUP BY routes.time";
-		PreparedStatement ps = db.prepareStatement(statement);	
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
 		Chart chart = null;
 		try {
 			ps.setInt(1, simulation_id);
 			ps.setInt(2, simulation_id);
 			ps.setString(3, vehicle_id);
 			ResultSet result = ps.executeQuery();
-			chart = new Chart(getChartPoints(result), vehicle_id);
+			while(result.next()) {
+				double routeLength = result.getFloat("length");
+				double time = result.getFloat("time");
+				//Creating points on an routelength by time.
+				ChartPoint point = new ChartPoint(time, routeLength);
+				points.add(point);
+			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "route length in km");
 		return chart; 
 	}
 	

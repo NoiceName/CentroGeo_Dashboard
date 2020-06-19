@@ -52,87 +52,15 @@ function genGraph() {
 
     console.log("loading REST")
     $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/vehicle_information?vehicle_id=' + userOptions[0], function(data) {
-          serverResponse.push(data[0]);
+          for (var i = 0; i < 3; i++) {
+            serverResponse.push(data[i]);
+          }
+          console.log(serverResponse);
           //response has been loaded, graph can be drawn.
             dataArray = getDataArray(serverResponse, "time");
-            drawLineChart(dataArray, "Vehicle stats (Simulation " + simulation_id + ")", createChartSpace(), "time", "y");
+            drawLineChart(dataArray, "Stats for vehicle: " + userOptions[0] + " (Simulation " + simulation_id + ")", createChartSpace(), "time", "y");
         
         })
-
-
-
-
-
-    var timeStamps = [];
-		//select choosen vehicle
-    var vehChoice = getSelectedIds()[0];
-    if (getSelectedIds().length < 1) {return}
-
-    var routeLengths = [];
-    var speeds = [];
-    var speedFactors = [];
-
-    for (var i = 0; i < currentXML.length; i++) {
-      var snapshot = currentXML[i];
-
-      // get route length, or if not exist: routeLenght = 0
-      try {
-        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        var result = nodes.iterateNext();
-        var routeId = result.getAttribute("route");
-
-        path = "/snapshot/route[@id=\""+ routeId + "\"]";
-        nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        result = nodes.iterateNext();
-        routeLengths[i] = result.getAttribute("edges").split("e").length -1;
-
-      } catch(err) {
-        routeLengths[i] = 0
-     }
-     // get vehicle speed, or if not exist: speed = 0;
-     try {
-        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        var result = nodes.iterateNext();
-        var speed = result.getAttribute("speed");
-        speeds[i] = parseFloat(speed);
-
-     } catch(err) {
-        speeds[i] = 0;
-     }
-     // get vehicle speedFactor, or if not exist: speedFactor = 0;
-     try {
-        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        var result = nodes.iterateNext();
-        var speedFactor = result.getAttribute("speedFactor");
-        speedFactors[i] = parseFloat(speedFactor);
-
-     } catch(err) {
-        speedFactors[i] = 0;
-     }
-
-
-
-     // get timeStamps
-        var timeStamp;
-        var time;
-
-        timeStamp = snapshot.getElementsByTagName('snapshot'); 
-        time = timeStamp[0].getAttribute("time");
-      
-        timeStamps[i] = parseFloat(time);
-    }
-
-    var dataArray = [[]];
-      dataArray[0] = ["Time stamp", "routeLength", "speed", "speedFactor"];
-
-      for (var i = 0; i < routeLengths.length; i++) {
-        dataArray[i+1] = [timeStamps[i], routeLengths[i], speeds[i], speedFactors[i]];
-      }
-
-      drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "");
 	}
 
   //    GRAPH showing edge appearance frequency 
