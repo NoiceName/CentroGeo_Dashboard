@@ -1,10 +1,10 @@
 
 	 //var options =['congestion','date'];
 	 //localStorage.setItem("tag-options", JSON.stringify(options));
-	  var domSelect = $('#tag');
-	
+
 	 $(document).ready(function (){
-	  // check if localStorage has option list   
+	 	var domSelect = $('#tag');
+	  // check if localStorage has option list
 	    
 		var selectHTML = "";
 		var myArray = JSON.parse(localStorage.getItem('tag-options'));	
@@ -21,8 +21,8 @@
 		}	
    });		
 
-	   
-	 $("#add-new-tag").click (function(event) {
+$(function() {
+	$("#add-new-tag").click (function(event) {
 	   
 	     event.preventDefault();
 	   // check if the storage has options	    
@@ -123,10 +123,5 @@
 			console.log("data sent");
 
 			});
-	  
-
-		
-
-     
-
+});
 
