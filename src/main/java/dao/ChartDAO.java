@@ -191,7 +191,5 @@ public enum ChartDAO {
 			Chart chart = new Chart(points,"Cumulative Number of Arrived Vehicles");
 		    return chart;
 	}
-	public static void main(String[] args) throws SQLException {
-		System.out.println(ChartDAO.instance.getVehicleNumber(1));
-	}
+
 }
