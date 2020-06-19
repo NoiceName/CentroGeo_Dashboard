@@ -21,8 +21,8 @@
 		}	
    });		
 
-	   
-	 $("#add-new-tag").click (function(event) {
+$(function() {
+	$("#add-new-tag").click (function(event) {
 	   
 	     event.preventDefault();
 	   // check if the storage has options	    
@@ -123,10 +123,5 @@
 			console.log("data sent");
 
 			});
-	  
-
-		
-
-     
-
+});
 

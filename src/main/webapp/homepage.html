@@ -15,6 +15,7 @@
 	<script src="uploadzip/zip.js"></script>
 	<script src="ui.js"></script>
 	<script src="Graph visualization/generatingGraphs.js"></script>
+	<script src="metadata/editMetadata.js"></script>
 	<style>
 	  @media print {
         #createChartButton, #genReportButton, #uploadSimButton{
@@ -36,6 +37,9 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" id="uploadSimButton" data-toggle="modal" data-target="#uploadSimulationMenu">Upload Simulation</a>	
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="genReportButton" data-toggle="modal" data-target="#editMetadataMenu">Edit Metadata</a>	
 					</li>
 				</ul>
 			</div>
@@ -155,6 +159,77 @@
   									</div>
 								</div>
 </div>
+							</div>	
+						</div>
+					</div>
+				</div>	
+			</div>	
+			<div>
+			<div class="modal fade" id="editMetadataMenu">
+				<div class="modal-dialog modal-dialog-centered modal-xl">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Please enter the changes for the selected simulation</h5>	
+						</div>	
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="d-flex justify-content-center">
+									<form id="myForm" action="/CentroGeo/resources/simulations/metadata" method = "post">   
+										<div class="form-group">
+											<label for="title">Title</label>
+											<input type="text" class="form-control" id="title" name = "title">
+										</div>
+										
+										<div class="form-group">
+											<label for="editor">Editor</label>
+											<input type="text" class="form-control" id="editor" name = "editor">
+										</div>
+									
+										<div class="form-group">
+											<label for="date">Date</label>
+											<input type="date" class="form-control" id="date" name = "date">
+										</div>
+										
+										<div class = "form-group">
+										<div class="form-row">
+												<div class="col-xs-8">
+													<label for="tag">Tag</label>
+												</div>
+										</div>
+										<div class="form-row">
+												<div class="col-xs-8">						
+													<select class="form-control" name = "tag" data-live-search="true" id="tag">
+															<!--option list of tag-->
+													</select>
+												</div>
+												<div class="col-xs-4">
+													<button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#add-tag-modal" >Add Tag</button>		 
+												</div>
+												<div class = "col-xs-4">
+													<button type="button" class="btn btn-outline-secondary" id="remove">Remove Tag</button>
+												</div>
+											</div>					
+										</div>
+										<div class="form-group">
+											<label for="description">Desciption</label>
+											<textarea class="form-control" id="description" name ="description" rows="3" placeholder = "Additonal info..."></textarea>
+										</div>
+										
+										<div class="form-group">
+											<div class = "form-row">
+											<div class="col-xs-3">
+											<input type="submit" value = "Submit" class="btn btn-info" >
+											</div>
+											<div class = "form-row">
+											<div class="col-xs-3">
+											<button type="button" class="btn btn-secondary" >Cancel</button>
+											</div>
+											</div>
+											</div>	
+										</div>
+									</form>
+								</div>	
+							</div>
 							</div>	
 						</div>
 					</div>
