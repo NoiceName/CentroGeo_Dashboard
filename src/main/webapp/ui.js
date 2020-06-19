@@ -236,6 +236,7 @@ function clearSimulations(){
 	$('.simulation').remove();
 }
 
+//Returns all loaded simulations from the database
 function getLoadedSimulations(){
 	return loadedSimulations;
 }
@@ -355,8 +356,10 @@ function getSelectedSimulationDiv(){
 
 //Display the name of the "selected simulation"
 function setSelectedName(simulationName){
-	let display = document.getElementById('currentSimulation');
-	display.innerText = simulationName;
+	let displays = document.getElementsByClassName('selectedSimulationDisplay');
+	for(let i = 0; i!=displays.length; i++){
+	    displays[i].innerText = simulationName;
+	}
 }
 
 //Deselect a particular simulation
