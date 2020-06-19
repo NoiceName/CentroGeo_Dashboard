@@ -49,6 +49,20 @@ function genGraph() {
 
   //    GRAPH showing info about chosen vehicle over time
 	if (chartType == "vehInfo") {
+
+    console.log("loading REST")
+    $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/vehicle_information?vehicle_id=' + userOptions[0], function(data) {
+          serverResponse.push(data[0]);
+          //response has been loaded, graph can be drawn.
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Vehicle stats (Simulation " + simulation_id + ")", createChartSpace(), "time", "y");
+        
+        })
+
+
+
+
+
     var timeStamps = [];
 		//select choosen vehicle
     var vehChoice = getSelectedIds()[0];

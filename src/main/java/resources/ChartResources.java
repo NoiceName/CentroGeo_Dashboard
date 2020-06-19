@@ -37,12 +37,13 @@ public class ChartResources {
 	
 	@GET
 	@Path("/vehicle_information")
+	@Produces("application/json")
 	public ArrayList<Chart> getVehicleInformation(@QueryParam("vehicle_id") String vehicle_id) {
 		ArrayList<Chart> charts = new ArrayList<>();
 			Chart speedChart = ChartDAO.instance.getSpeedByTimeChart(simulation_id, vehicle_id);
 			charts.add(speedChart);
-			Chart speedFactorChart = ChartDAO.instance.getSpeedFactorByTimeChart(simulation_id, vehicle_id);
-			charts.add(speedFactorChart);
+//			Chart speedFactorChart = ChartDAO.instance.getSpeedFactorByTimeChart(simulation_id, vehicle_id);
+//			charts.add(speedFactorChart);
 			Chart routeLengthChart = ChartDAO.instance.getRouteLengthByTimeChart(simulation_id, vehicle_id);
 			charts.add(routeLengthChart);
 		return charts;

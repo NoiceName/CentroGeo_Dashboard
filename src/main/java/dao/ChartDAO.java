@@ -115,7 +115,7 @@ public enum ChartDAO {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		String statement = "SELECT routes.time, SUM(l.length)\r\n" + 
+		String statement = "SELECT routes.time, ROUND((CAST(SUM(l.length) AS numeric)/1000), 4) as length\r\n" + 
 				"FROM (	SELECT s.time, unnest(xpath('/snapshot/route/@edges', s.data))::text as edges, unnest(xpath('/snapshot/route/@id', s.data))::text as route_id \r\n" + 
 				"		FROM projectschema.snapshot s \r\n" + 
 				"		WHERE s.simulation = ?\r\n" + 
