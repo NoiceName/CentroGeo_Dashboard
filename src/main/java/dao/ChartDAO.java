@@ -186,7 +186,6 @@ public enum ChartDAO {
 				ChartPoint point = new ChartPoint(time, count);
 				points.add(point);
 			}
-			System.out.println("all points added for " + laneId);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
