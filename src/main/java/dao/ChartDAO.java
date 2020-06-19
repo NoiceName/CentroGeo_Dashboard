@@ -112,7 +112,35 @@ public enum ChartDAO {
 	}
 
 	public Chart getRouteLengthByTimeChart(int simulation_id, String vehicle_id) {
-		return new Chart();
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "SELECT routes.time, SUM(l.length)\r\n" + 
+				"FROM (	SELECT s.time, unnest(xpath('/snapshot/route/@edges', s.data))::text as edges, unnest(xpath('/snapshot/route/@id', s.data))::text as route_id \r\n" + 
+				"		FROM projectschema.snapshot s \r\n" + 
+				"		WHERE s.simulation = ?\r\n" + 
+				"		ORDER BY s.time) as routes, (	SELECT s1.time, unnest(xpath('//vehicle/@route', s1.data))::text as routeId, unnest(xpath('//vehicle/@id', s1.data))::text as veh_id \r\n" + 
+				"				  						FROM projectschema.snapshot s1 \r\n" + 
+				"										WHERE s1.simulation = ?\r\n" + 
+				"										ORDER BY s1.time) as vehicles, projectschema.lane l\r\n" + 
+				"WHERE route_id = routeId\r\n" + 
+				"AND vehicles.time = routes.time\r\n" + 
+				"AND vehicles.veh_id = ?\r\n" + 
+				"AND edges LIKE ('%' || REPLACE(l.lane_id, '_0', '') || ' %')\r\n" + 
+				"GROUP BY routes.time";
+		PreparedStatement ps = db.prepareStatement(statement);	
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulation_id);
+			ps.setInt(2, simulation_id);
+			ps.setString(3, vehicle_id);
+			ResultSet result = ps.executeQuery();
+			chart = new Chart(getChartPoints(result), vehicle_id);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return chart; 
 	}
 	
 	
