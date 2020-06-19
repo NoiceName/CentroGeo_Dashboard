@@ -340,10 +340,23 @@ function selectSimulation(){
 		deselectSimulation(selectedSimulation);
 	}
 	selectedSimulation = this;
+	let name = selectedSimulation.getElementsByClassName('simulation-name')[0].innerText;
+	setSelectedName(name);
 	this.classList.add('bg-dark');
 	this.classList.add('text-white');
 	this.classList.add('selected');
 	getSelectedSimulationID();
+}
+
+//Returns the div of the selected simulation
+function getSelectedSimulationDiv(){
+	return selectedSimulation;
+}
+
+//Display the name of the "selected simulation"
+function setSelectedName(simulationName){
+	let display = document.getElementById('currentSimulation');
+	display.innerText = simulationName;
 }
 
 //Deselect a particular simulation
