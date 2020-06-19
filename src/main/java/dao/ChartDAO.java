@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Array;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -146,5 +147,51 @@ public enum ChartDAO {
 		Chart chart = new Chart(points, laneId);
 		return chart; 
 		
+	}
+    /**
+     * Generate Cumulative Number of Arrived Vehicles chart
+     * @param simulationId - Id of a simulation
+     * @return chart object
+     * @throws SQLException
+     */
+	public Chart getVehicleNumber(int simulationId) throws SQLException {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		Connection conn = null;
+		ArrayList<ChartPoint> points = new ArrayList<>(); 
+		
+		Database.loadPGSQL();
+	    Database db = new Database(); 
+	      
+	    try {
+	    	conn = db.connectPGSQL();
+	    	String statement= "SELECT s.time, unnest(xpath('//delay/@number', s.data))::text as number " + 
+	    			"FROM projectschema.snapshot s " + 
+	    			"WHERE s.simulation = ?  " + 
+	    			"ORDER BY time ASC";
+	    	ps = db.prepareStatement(statement);
+		
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+				double time = result.getFloat("time");
+				double number = Double.parseDouble(result.getString("number"));
+				//create points on chart of Cumulative Number of Arrived Vehicles
+				ChartPoint point = new ChartPoint(time, number);
+				points.add(point);								
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	    finally {
+	    	ps.close();
+	    	conn.close();
+	    }
+			Chart chart = new Chart(points,"Cumulative Number of Arrived Vehicles");
+		    return chart;
+	}
+	public static void main(String[] args) throws SQLException {
+		System.out.println(ChartDAO.instance.getVehicleNumber(1));
 	}
 }

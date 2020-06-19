@@ -1,5 +1,6 @@
 package resources;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,5 +56,13 @@ public class ChartResources {
 			charts.add(chart);
 		}
 		return charts;
+	}
+	
+	@GET
+	@Path("cumulative_number_of_arrived_vehicles")
+	@Produces("application/jason")
+	public Chart getArrivedVehicles() throws SQLException {
+		
+		return ChartDAO.instance.getVehicleNumber(simulation_id);
 	}
 }
