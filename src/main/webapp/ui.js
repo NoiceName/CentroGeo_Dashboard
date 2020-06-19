@@ -214,13 +214,15 @@ $(function() {
 //Pulls the simulations from the API
 function refreshSimulations(){
 	clearSimulations();
-	$.get("/CentroGeo/resources/simulations", function (resp) {loadSimulations(resp);});
+	$.get("/CentroGeo/resources/simulations", function (resp) {
+		loadedSimulations = resp;
+		loadSimulations(resp);
+	});
 }
 
 //Given an array of simulation objects updates loads them into SelectSimulationMenu modal
 function loadSimulations(simulations){
 	//remove simulations here
-	loadedSimulations = simulations;
 	var container = document.getElementById('simulation-container');
 	for(var i = 0; i!=simulations.length; i++){
 		let simulation = createSimulationDiv(simulations[i]);
@@ -232,18 +234,36 @@ function loadSimulations(simulations){
 //Removes all simulations from the simulation container
 function clearSimulations(){
 	$('.simulation').remove();
-	loadedSimulatios = null;
+}
+
+function getLoadedSimulations(){
+	return loadedSimulations;
+}
+
+function clearSavedSimulations(){
+	loadedSimulations = null;
 }
 
 //Removes a specified simulation from the list
+//simulation_id is an string "integer"
 function removeSimulation(simulation_id){
+	let simulationContainer = document.getElementById('simulation-container');
+    let simulation = getSimulationDivById(simulation_id);
+    simulationContainer.removeChild(simulation);
 }
 
+//Simulation ID is a string in this case
+//Returns the Div of the specified simulation
 function getSimulationDivById(simulation_id){
 	let idArr = document.getElementsByClassName('simulation-id');
-	let idSpan = idArr[0];
-	let simulation = document.closest('.simulation');
-	console.log(simulation);
+	for(let i = 0; i!=idArr.length; i++){
+		if(idArr[i].innerText == simulation_id){
+			let idSpan = idArr[i];
+			let simulation = idSpan.closest('.simulation');
+			return simulation;
+		}
+	}
+	return null;
 }
 
 //Creating simulation div
