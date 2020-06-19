@@ -1,4 +1,3 @@
-
 $(function () {
 	$( '#myform' ).submit(function( event ) {
 		event.preventDefault();
@@ -41,7 +40,5 @@ function successLogin(resp) {
 		var password = $('#userpassword');
 		username.val("");
 		password.val("");
-		$('#failedLogin').removeClass('hidden');	
 	}
 }
-
