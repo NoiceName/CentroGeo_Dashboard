@@ -15,6 +15,7 @@
 	<script src="uploadzip/zip.js"></script>
 	<script src="ui.js"></script>
 	<script src="Graph visualization/generatingGraphs.js"></script>
+	<script src="filtering-simulations/filter.js"></script>
 	<style>
 	  @media print {
         #createChartButton, #genReportButton, #uploadSimButton{
@@ -29,7 +30,7 @@
 		<!-- top menu -->
 		<div class="row border-bottom">
 			<div class="col-12">
-				<ul class="nav justify-content-center">
+				<ul class="nav justify-content-center" id="navigation-test">
 					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#selectSimulationMenu">Select Simulation</a></li>
 					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#createChartMenu">Create Chart</a></li>
 					<li class="nav-item">
@@ -60,10 +61,10 @@
 								<div class="row">
 									<!-- Chart Select --> 
 <div class="col-6 list-group" id="chartChoice" value=''>
-										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Lane transiting vehicles</a>		
-										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle info</a>
-										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">edge appearance frequency </a>
-										<a class="list-group-item list-group-item-action chart-type" id="uselessChartSelect" data-toggle="list" value="otherC">Useless graph</a>			
+										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Number of vehicles on a line</a>		
+										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle Information</a>
+										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">Edge Appearance Frequency </a>
+										<a class="list-group-item list-group-item-action chart-type" id="uselessChartSelect" data-toggle="list" value="otherC">Useless Graph</a>			
 									</div>	
 									<!-- Chart Options -->
 									<div class="col-6">
@@ -175,11 +176,12 @@
 									<div class="col-12">
 										<div class="row">
 											<div class="input-group mb-3">
-											  <input type="text" class="form-control" placeholder="Simulation Name or Tag">
+											  <input type="text" class="form-control" placeholder="Simulation Name or Tag" id="simulation-filter">
 											</div>	
 										</div> 
 										<div class="row">
 											<div class="scroll-spy w-100" id="simulation-container">
+											<!--  Simulations go here -->
 											</div>
 										</div>
 									</div>

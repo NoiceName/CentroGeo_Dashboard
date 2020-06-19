@@ -1,4 +1,5 @@
 var selectedSimulation = null;
+var loadedSimulations = null;
 
 $(function () {
 	$("#lineChartSelect").click(function () {
@@ -26,7 +27,6 @@ $(function () {
 	});
 	
 });
-
 //Hides all other option menus
 function clearInputFields(){
 	var elements = document.getElementsByClassName('chart-options');
@@ -213,11 +213,14 @@ $(function() {
 
 //Pulls the simulations from the API
 function refreshSimulations(){
+	clearSimulations();
 	$.get("/CentroGeo/resources/simulations", function (resp) {loadSimulations(resp);});
 }
 
 //Given an array of simulation objects updates loads them into SelectSimulationMenu modal
 function loadSimulations(simulations){
+	//remove simulations here
+	loadedSimulations = simulations;
 	var container = document.getElementById('simulation-container');
 	for(var i = 0; i!=simulations.length; i++){
 		let simulation = createSimulationDiv(simulations[i]);
@@ -226,12 +229,22 @@ function loadSimulations(simulations){
 	}
 }
 
-//For testing
-$(function(){ 
-	refreshSimulations(); 
-});
+//Removes all simulations from the simulation container
+function clearSimulations(){
+	$('.simulation').remove();
+	loadedSimulatios = null;
+}
 
-function getSelectedSimulation(){}
+//Removes a specified simulation from the list
+function removeSimulation(simulation_id){
+}
+
+function getSimulationDivById(simulation_id){
+	let idArr = document.getElementsByClassName('simulation-id');
+	let idSpan = idArr[0];
+	let simulation = document.closest('.simulation');
+	console.log(simulation);
+}
 
 //Creating simulation div
 function createSimulationDiv(simulation){
