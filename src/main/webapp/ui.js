@@ -22,13 +22,13 @@ $(function () {
 
 	$("#cumulChartSelect").click(function () {
 		clearInputFields();
-		$("#cumulChartOptions").removeClass('d-none');
+		$("#simOptions").removeClass('d-none');
 		clearSelectedAndFound();
 	});
 
 	$("#runningChartSelect").click(function () {
 		clearInputFields();
-		$("#runningChartOptions").removeClass('d-none');
+		$("#simOptions").removeClass('d-none');
 		clearSelectedAndFound();
 	});
 	
@@ -125,13 +125,13 @@ $(function() {
 });
 
 
-//select simulationID for cumulutative arrive vehicles
+//select simulationID from user input for several graphs
 $(function() {
-	var laneIdInput = $("#cumulIdInput");
+	var laneIdInput = $("#simIdInput");
 
 	laneIdInput.keyup(function() {
 		var ids = getSimIds();
-		var jsLaneIdInput = document.getElementById("cumulIdInput");
+		var jsLaneIdInput = document.getElementById("simIdInput");
 		let input = jsLaneIdInput.value;
 		let p = document.getElementById('foundIdsContainer');
 		//clear the found input after each keystroke
@@ -151,31 +151,6 @@ $(function() {
 	}); 
 });
 
-//select simulationID for running vehicles
-$(function() {
-	var laneIdInput = $("#runIdInput");
-
-	laneIdInput.keyup(function() {
-		var ids = getSimIds();
-		var jsLaneIdInput = document.getElementById("runIdInput");
-		let input = jsLaneIdInput.value;
-		let p = document.getElementById('foundIdsContainer');
-		//clear the found input after each keystroke
-		let foundContainer = document.getElementById('foundIdsContainer');
-		removeBadges(foundContainer);
-		//If the input is longer than 2 characters
-		if(input.length >= 1) {
-			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
-			let filtered = getFilteredIds(input, ids);
-			filtered.forEach(function(item) {
-				createBadgeAndAdd(item,p);
-			});
-		}
-		else if (input.length <= 0) {
-
-		}
-	}); 
-});
  
 //Removes all badges from a specified container
 function removeBadges(container){

@@ -81,4 +81,12 @@ public class ChartResources {
 		
 		return ChartDAO.instance.getRunVehicles(simulation_id);
 	}
+	
+	@GET
+	@Path("/average_vehicle_speed")
+	@Produces("application/json")
+	public Chart getAVGSpeed() throws SQLException {
+		
+		return ChartDAO.instance.getAverageSpeed(simulation_id);
+	}
 }
