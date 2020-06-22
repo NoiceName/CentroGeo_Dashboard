@@ -91,7 +91,7 @@ public enum SimulationDAO {
 Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		String query = "DELETE FROM projectschema.simulation WHERE name LIKE ?";
+		String query = "DELETE FROM projectschema.simulation WHERE name = ?";
 		PreparedStatement statement = db.prepareStatement(query);
 		try {
 			statement.setString(1, name);
