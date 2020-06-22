@@ -1,4 +1,7 @@
+//A div which corresponds to the simulation that has been selected by the user (null in the case that if no simulation has been selected);
 var selectedSimulation = null;
+
+//An array of objects containing the simulations loaded from the database
 var loadedSimulations = null;
 
 $(function () {
@@ -388,6 +391,21 @@ function getSelectedSimulationDiv(){
 	return selectedSimulation;
 }
 
+function getSelectedSimulationObj(){
+	let id = getSelectedSimulationID();
+	if (id==-1) {
+		alert("Please select a simulation first!");
+	} else {
+		let sims = getLoadedSimulations()
+		for(var i = 0; i!=sims.length; i++){
+			if(sims[i].simulationId==id){
+				return sims[i];
+			}
+		}
+		return null;
+	}
+}
+
 //Display the name of the "selected simulation"
 function setSelectedName(simulationName){
 	let displays = document.getElementsByClassName('selectedSimulationDisplay');
@@ -401,6 +419,10 @@ function deselectSimulation(simulation){
 	simulation.classList.remove('bg-dark');
 	simulation.classList.remove('text-white');
 	simulation.classList.remove('selected');
+	selectedSimulation = null;
+}
+
+function clearSelectedSimulation(){
 	selectedSimulation = null;
 }
 

@@ -87,16 +87,15 @@ public enum SimulationDAO {
 		return rowsAffected;
 	}
 
-	public void deleteSimulation(String name){
-Database db = new Database();
+	public void deleteSimulation(int id){
+		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		String query = "DELETE FROM projectschema.simulation WHERE name LIKE ?";
+		String query = "DELETE FROM projectschema.simulation WHERE simulation_id = ?";
 		PreparedStatement statement = db.prepareStatement(query);
 		try {
-			statement.setString(1, name);
+			statement.setInt(1, id);
 			statement.executeUpdate();
-			System.out.println("Deleted simulation: " + name);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
