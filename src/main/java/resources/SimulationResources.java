@@ -54,10 +54,11 @@ public class SimulationResources {
 	
 	@DELETE
 	@Secured
+	@Path("/{simulation_id}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void deleteSimulation(@FormParam("id") String name){
-		System.out.println(name);
-		SimulationDAO.instance.deleteSimulation(name);
+	public void deleteSimulation(@PathParam("simulation_id") int id){
+		System.out.println("Deleting sim id: " + id);
+		SimulationDAO.instance.deleteSimulation(id);
 	}
 	
 }
