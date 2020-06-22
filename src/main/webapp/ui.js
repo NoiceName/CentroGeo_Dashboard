@@ -361,11 +361,10 @@ function getSelectedSimulationObj(){
 	let id = getSelectedSimulationID();
 	if (id==-1) {
 		alert("Please select a simulation first!");
-		return null;
 	} else {
 		let sims = getLoadedSimulations()
 		for(var i = 0; i!=sims.length; i++){
-			if(sims[i].id==id){
+			if(sims[i].simulationId==id){
 				return sims[i];
 			}
 		}
@@ -386,6 +385,10 @@ function deselectSimulation(simulation){
 	simulation.classList.remove('bg-dark');
 	simulation.classList.remove('text-white');
 	simulation.classList.remove('selected');
+	selectedSimulation = null;
+}
+
+function clearSelectedSimulation(){
 	selectedSimulation = null;
 }
 

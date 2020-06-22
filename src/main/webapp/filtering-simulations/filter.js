@@ -38,6 +38,14 @@ $('document').ready(function(){
 	});
 });
 
+//Removes the simulation names from all displays
+function clearSimulationNameDisplays(){
+    let displays = document.getElementsByClassName('selectedSimulationDisplay');
+    for(let i = 0; i!=displays.length; i++){
+    	displays[i].innerText = '';
+	}
+}
+
 //Return true if a string begins with a pattern
 //Return false otherwise
 function startsWith(pattern, string){
