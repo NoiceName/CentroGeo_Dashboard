@@ -14,6 +14,7 @@ $(function() {
                 type: 'DELETE',
                 url: '/CentroGeo/resources/simulations/'+id,
                 success: function(resp){
+                    alert('Simulation: ' + selectedSimObj.name + "was deleted");
                     refreshSimulations();
                     clearSimulationNameDisplays();
                     clearSelectedSimulation();
