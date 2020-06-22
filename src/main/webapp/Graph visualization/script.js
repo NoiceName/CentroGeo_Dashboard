@@ -7,7 +7,7 @@ var laneIds;
 
 
 function onload() {
-  
+
 }
 
 
@@ -47,22 +47,8 @@ function genGraph() {
 
   // determine what graph should be drawn
 
-  //    GRAPH showing info about chosen vehicle over time
-	if (chartType == "vehInfo") {
-
-    $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/vehicle_information?vehicle_id=' + userOptions[0], function(data) {
-          for (var i = 0; i < 3; i++) {
-            serverResponse.push(data[i]);
-          }
-          //response has been loaded, graph can be drawn.
-            dataArray = getDataArray(serverResponse, "time");
-            drawLineChart(dataArray, "Stats for vehicle: " + userOptions[0] + " (Simulation " + simulation_id + ")", createChartSpace(), "time", "y");
-        
-        })
-	}
-
   //    GRAPH showing edge appearance frequency 
-	else if (chartType == "edgeFr") {
+	if (chartType == "edgeFr") {
 
     //get the Data using RESTful services
       for (var j = 0; j < userOptions.length; j++) {
@@ -99,6 +85,55 @@ function genGraph() {
       }
 	}
 
+   //    GRAPH showing info about chosen vehicle over time
+  else if (chartType == "vehInfo") {
+
+    $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/vehicle_information?vehicle_id=' + userOptions[0], function(data) {
+          for (var i = 0; i < 3; i++) {
+            serverResponse.push(data[i]);
+          }
+          //response has been loaded, graph can be drawn.
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Stats for vehicle: " + userOptions[0] + " (Simulation " + simulation_id + ")", createChartSpace(), "time", "y");
+        
+        })
+  }
+
+  //  GRAPH showing the average route length over time
+  else if (chartType == "avgRoute") {
+    
+  }
+
+  //  GRAPH showing the average speed over time
+  else if (chartType == "avgSpeed") {
+    var simId = [];
+
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/average_vehicle_speed', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Average speed of the vehicles", createChartSpace(), "time", "speed (m/s)");
+
+          }
+        })
+      }
+  }
+
+  //  GRAPH showing the average speedFactor over time
+  else if (chartType == "avgSpeedF") {
+
+  }
+
 	//   Graph showing the total number of arrived cars over time
 	else if (chartType == "cumulVeh") {
     var simId = [];
@@ -124,7 +159,7 @@ function genGraph() {
       }
   }
 
-  //   GRAPH showing the number of running vehicles ver time
+  //   GRAPH showing the number of running vehicles over time
   else if (chartType == "runningVeh") {
     var simId = [];
 
@@ -194,19 +229,9 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 
 
 
-//should return all lane id's f currently selected simulation
+//should return all lane id's of currently selected simulation
 function getLanesId() {
-
-  var snapshot = currentXML[1];
-  laneIds = [];
-
-  var lanes = snapshot.getElementsByTagName('lane');
-
-  for (var i = 0; i < lanes.length; i++) {
-    laneIds[i] = [];
-    laneIds[i] = lanes[i].getAttribute("id");
-  }
-
+  laneIds = ["e6_0", "e9_0", ":n10_0_0", ":n11_0_0", ":n12_0_0"]
   return laneIds;
 }
 

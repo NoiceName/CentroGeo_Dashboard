@@ -320,7 +320,7 @@ public enum ChartDAO {
 			e.printStackTrace();
 		}
 		//Create a chart with the given points.
-		chart = new Chart(points, "AVG speed in m/s");
+		chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
 		return chart; 
 	}
 

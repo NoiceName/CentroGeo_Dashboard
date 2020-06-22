@@ -5,6 +5,12 @@ var selectedSimulation = null;
 var loadedSimulations = null;
 
 $(function () {
+	$("#edgeFrChartSelect").click(function () {
+		clearInputFields();
+		$("#edgeFrOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
 	$("#lineChartSelect").click(function () {
 		clearInputFields();
 		$("#lineChartOptions").removeClass('d-none');
@@ -17,9 +23,21 @@ $(function () {
 		clearSelectedAndFound();
 	});
 
-	$("#edgeFrChartSelect").click(function () {
+	$("#avgRouteChartSelect").click(function () {
 		clearInputFields();
-		$("#edgeFrOptions").removeClass('d-none');
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#avgVehSpeedChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#avgVehSpeedFChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
 		clearSelectedAndFound();
 	});
 
