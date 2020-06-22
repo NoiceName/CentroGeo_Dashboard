@@ -1,4 +1,7 @@
+//A div which corresponds to the simulation that has been selected by the user (null in the case that if no simulation has been selected);
 var selectedSimulation = null;
+
+//An array of objects containing the simulations loaded from the database
 var loadedSimulations = null;
 
 $(function () {
@@ -352,6 +355,22 @@ function selectSimulation(){
 //Returns the div of the selected simulation
 function getSelectedSimulationDiv(){
 	return selectedSimulation;
+}
+
+function getSelectedSimulationObj(){
+	let id = getSelectedSimulationID();
+	if (id==-1) {
+		alert("Please select a simulation first!");
+		return null;
+	} else {
+		let sims = getLoadedSimulations()
+		for(var i = 0; i!=sims.length; i++){
+			if(sims[i].id==id){
+				return sims[i];
+			}
+		}
+		return null;
+	}
 }
 
 //Display the name of the "selected simulation"
