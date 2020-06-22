@@ -296,7 +296,7 @@ public enum ChartDAO {
 		db.connectPGSQL();
 		// to omit the cars with a null speed, remove the SQL comment bfore the "WHERE speed > 0"
 		String statement = "SELECT time, ROUND(AVG(speed), 2) AS AVGspeed\r\n" + 
-				"FROM (	SELECT s.time, CAST(unnest(xpath('//vehicle/@speed', s.data))::text AS numeric) AS speed, unnest(xpath('//vehicle/@id', s.data))::text AS veh_id \r\n" + 
+				"FROM (	SELECT s.time, CAST(unnest(xpath('//vehicle/@speed', s.data))::text AS numeric) AS speed \r\n" + 
 				"		FROM projectschema.snapshot s\r\n" + 
 				"		WHERE s.simulation = ?\r\n" + 
 				"		ORDER BY s.time) AS vehicles\r\n" + 
@@ -310,6 +310,39 @@ public enum ChartDAO {
 			ResultSet result = ps.executeQuery();
 			while(result.next()) {
 				double speed = result.getFloat("avgSpeed");
+				double time = result.getFloat("time");
+				//Creating points on an speedByTimeChart.
+				ChartPoint point = new ChartPoint(time, speed);
+				points.add(point);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		return chart; 
+	}
+	
+	
+	public Chart getAverageSpeedF(int simulationId) {
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "SELECT time, ROUND(AVG(speedF), 5) AS avgSpeedF\r\n" + 
+				"FROM (	SELECT s.time, CAST(unnest(xpath('//vehicle/@speedFactor', s.data))::text AS numeric) AS speedF \r\n" + 
+				"		FROM projectschema.snapshot s\r\n" + 
+				"		WHERE s.simulation = ?\r\n" + 
+				"		ORDER BY s.time) AS vehicles\r\n" + 
+				"GROUP BY time";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulationId);
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				double speed = result.getFloat("avgSpeedF");
 				double time = result.getFloat("time");
 				//Creating points on an speedByTimeChart.
 				ChartPoint point = new ChartPoint(time, speed);

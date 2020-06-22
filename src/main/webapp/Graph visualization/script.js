@@ -131,7 +131,26 @@ function genGraph() {
 
   //  GRAPH showing the average speedFactor over time
   else if (chartType == "avgSpeedF") {
+    var simId = [];
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
 
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/average_vehicle_speed_factor', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Average speed factor of the vehicles", createChartSpace(), "time", "speed factor");
+
+          }
+        })
+      }
   }
 
 	//   Graph showing the total number of arrived cars over time
