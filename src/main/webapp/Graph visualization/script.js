@@ -7,7 +7,7 @@ var laneIds;
 
 
 function onload() {
-  console.log("page is loaded");
+  
 }
 
 
@@ -50,12 +50,10 @@ function genGraph() {
   //    GRAPH showing info about chosen vehicle over time
 	if (chartType == "vehInfo") {
 
-    console.log("loading REST")
     $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/vehicle_information?vehicle_id=' + userOptions[0], function(data) {
           for (var i = 0; i < 3; i++) {
             serverResponse.push(data[i]);
           }
-          console.log(serverResponse);
           //response has been loaded, graph can be drawn.
             dataArray = getDataArray(serverResponse, "time");
             drawLineChart(dataArray, "Stats for vehicle: " + userOptions[0] + " (Simulation " + simulation_id + ")", createChartSpace(), "time", "y");
@@ -101,7 +99,7 @@ function genGraph() {
       }
 	}
 
-	//draw a useless graph
+	//   Graph showing the total number of arrived cars over time
 	else if (chartType == "cumulVeh") {
     var simId = [];
 
@@ -109,14 +107,12 @@ function genGraph() {
       simId[0] = getSelectedSimulationID();
     } else {
       simId = userOptions;
-      console.log("useroption length = " + simId.length);
     }
 
     //get the Data using RESTful services
       for (var j = 0; j < simId.length; j++) {
         $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/cumulative_number_of_arrived_vehicles', function(data) {
           serverResponse.push(data);
-          console.log(serverResponse);
 
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (simId.length)) {
@@ -126,8 +122,31 @@ function genGraph() {
           }
         })
       }
+  }
 
+  //   GRAPH showing the number of running vehicles ver time
+  else if (chartType == "runningVeh") {
+    var simId = [];
 
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/number_of_running_vehicles', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Number of running vehicles", createChartSpace(), "time", "count");
+
+          }
+        })
+      }
   }
 
 }
@@ -150,21 +169,6 @@ function getDataArray(serverResponse, xTitle) {
               }
             }
   return dataArray;
-}
-
-
-function drawPieChart(dataArray, title, id) {
-	var data = google.visualization.arrayToDataTable(dataArray);
-
-
-	var options = {
-		title: title,
-    height: 350,
-	};
-
-	var chart = new google.visualization.PieChart(document.getElementById(id));
-
-	chart.draw(data, options);
 }
 
 
@@ -251,13 +255,8 @@ $(function () {     $('#chartGen').click(function(event) {
     //resp is the data array
 
         //avoid loading the data multiple times
-        console.log("XML retrieved");
-        alert("Simulation loaded!");
         XMLloaded = true;
-
-//        console.log(resp);
         
-
         dataArray = [];
         var parser = new DOMParser();
 

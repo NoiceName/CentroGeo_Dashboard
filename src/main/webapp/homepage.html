@@ -73,7 +73,8 @@
 										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Lane transiting vehicles</a>		
 										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle info</a>
 										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">Edge appearance frequency </a>
-										<a class="list-group-item list-group-item-action chart-type" id="cumulChartSelect" data-toggle="list" value="cumulVeh">Cumulative number of arrived vehicles </a>			
+										<a class="list-group-item list-group-item-action chart-type" id="cumulChartSelect" data-toggle="list" value="cumulVeh">Cumulative number of arrived vehicles </a>	
+										<a class="list-group-item list-group-item-action chart-type" id="runningChartSelect" data-toggle="list" value="runningVeh">Number of running vehicles </a>		
 									</div>	
 									<!-- Chart Options -->
 									<div class="col-6">
@@ -102,6 +103,12 @@
 													<span class="input-group-text">Simulation ID</span>
 												</div>
 												<input id="cumulIdInput" type="text" class="form-control" placeholder="eg. 2">
+											</div>
+											<div class="input-group mb-3 d-none chart-options" id="runningChartOptions">
+												<div class="input-group-prepend">
+													<span class="input-group-text">Simulation ID</span>
+												</div>
+												<input id="runIdInput" type="text" class="form-control" placeholder="eg. 2">
 											</div>
 										</div>
 										<!-- Second row of options --> 

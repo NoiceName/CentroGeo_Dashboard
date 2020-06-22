@@ -73,4 +73,12 @@ public class ChartResources {
 		
 		return ChartDAO.instance.getVehicleNumber(simulation_id);
 	}
+	
+	@GET
+	@Path("/number_of_running_vehicles")
+	@Produces("application/json")
+	public Chart getRunningVehicles() throws SQLException {
+		
+		return ChartDAO.instance.getRunVehicles(simulation_id);
+	}
 }

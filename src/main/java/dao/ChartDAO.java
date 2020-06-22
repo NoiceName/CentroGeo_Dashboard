@@ -221,22 +221,17 @@ public enum ChartDAO {
      * @throws SQLException
      */
 	public Chart getVehicleNumber(int simulationId) throws SQLException {
-		// TODO Auto-generated method stub
-		PreparedStatement ps = null;
-		Connection conn = null;
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT s.time, unnest(xpath('//delay/@end', s.data))::text as number " + 
+    			"FROM projectschema.snapshot s " + 
+    			"WHERE s.simulation = ?  " + 
+    			"ORDER BY time ASC";
+		PreparedStatement ps = db.prepareStatement(statement);
 		ArrayList<ChartPoint> points = new ArrayList<>(); 
 		
-		Database.loadPGSQL();
-	    Database db = new Database(); 
-	      
 	    try {
-	    	conn = db.connectPGSQL();
-	    	String statement= "SELECT s.time, unnest(xpath('//delay/@number', s.data))::text as number " + 
-	    			"FROM projectschema.snapshot s " + 
-	    			"WHERE s.simulation = ?  " + 
-	    			"ORDER BY time ASC";
-	    	ps = db.prepareStatement(statement);
-		
 	    	ps.setInt(1, simulationId);
 	    	ResultSet result = ps.executeQuery();
 	    	while(result.next()) {
@@ -252,8 +247,43 @@ public enum ChartDAO {
 		}
 	    finally {
 	    	ps.close();
-	    	conn.close();
 	    }
+			Chart chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		    return chart;
+	}
+
+
+	/**
+     * Generate Number of running vehicles chart
+     * @param simulationId - Id of a simulation
+     * @return chart object
+     * @throws SQLException
+     */
+	public Chart getRunVehicles(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT s.time, unnest(xpath('//delay/@number', s.data))::text as number " + 
+    			"FROM projectschema.snapshot s " + 
+    			"WHERE s.simulation = ?  " + 
+    			"ORDER BY time ASC";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+				double time = result.getFloat("time");
+				double number = Double.parseDouble(result.getString("number"));
+				//create points on chart of Cumulative Number of Arrived Vehicles
+				ChartPoint point = new ChartPoint(time, number);
+				points.add(point);								
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 			Chart chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
 		    return chart;
 	}
