@@ -1,4 +1,5 @@
 var selectedSimulation = null;
+var loadedSimulations = null;
 
 $(function () {
 	$("#lineChartSelect").click(function () {
@@ -26,7 +27,6 @@ $(function () {
 	});
 	
 });
-
 //Hides all other option menus
 function clearInputFields(){
 	var elements = document.getElementsByClassName('chart-options');
@@ -240,11 +240,16 @@ $(function() {
 
 //Pulls the simulations from the API
 function refreshSimulations(){
-	$.get("/CentroGeo/resources/simulations", function (resp) {loadSimulations(resp);});
+	clearSimulations();
+	$.get("/CentroGeo/resources/simulations", function (resp) {
+		loadedSimulations = resp;
+		loadSimulations(resp);
+	});
 }
 
 //Given an array of simulation objects updates loads them into SelectSimulationMenu modal
 function loadSimulations(simulations){
+	//remove simulations here
 	var container = document.getElementById('simulation-container');
 	for(var i = 0; i!=simulations.length; i++){
 		let simulation = createSimulationDiv(simulations[i]);
@@ -253,12 +258,41 @@ function loadSimulations(simulations){
 	}
 }
 
-//For testing
-$(function(){ 
-	refreshSimulations(); 
-});
+//Removes all simulations from the simulation container
+function clearSimulations(){
+	$('.simulation').remove();
+}
 
-function getSelectedSimulation(){}
+//Returns all loaded simulations from the database
+function getLoadedSimulations(){
+	return loadedSimulations;
+}
+
+function clearSavedSimulations(){
+	loadedSimulations = null;
+}
+
+//Removes a specified simulation from the list
+//simulation_id is an string "integer"
+function removeSimulation(simulation_id){
+	let simulationContainer = document.getElementById('simulation-container');
+    let simulation = getSimulationDivById(simulation_id);
+    simulationContainer.removeChild(simulation);
+}
+
+//Simulation ID is a string in this case
+//Returns the Div of the specified simulation
+function getSimulationDivById(simulation_id){
+	let idArr = document.getElementsByClassName('simulation-id');
+	for(let i = 0; i!=idArr.length; i++){
+		if(idArr[i].innerText == simulation_id){
+			let idSpan = idArr[i];
+			let simulation = idSpan.closest('.simulation');
+			return simulation;
+		}
+	}
+	return null;
+}
 
 //Creating simulation div
 function createSimulationDiv(simulation){
@@ -334,10 +368,25 @@ function selectSimulation(){
 		deselectSimulation(selectedSimulation);
 	}
 	selectedSimulation = this;
+	let name = selectedSimulation.getElementsByClassName('simulation-name')[0].innerText;
+	setSelectedName(name);
 	this.classList.add('bg-dark');
 	this.classList.add('text-white');
 	this.classList.add('selected');
 	getSelectedSimulationID();
+}
+
+//Returns the div of the selected simulation
+function getSelectedSimulationDiv(){
+	return selectedSimulation;
+}
+
+//Display the name of the "selected simulation"
+function setSelectedName(simulationName){
+	let displays = document.getElementsByClassName('selectedSimulationDisplay');
+	for(let i = 0; i!=displays.length; i++){
+	    displays[i].innerText = simulationName;
+	}
 }
 
 //Deselect a particular simulation
