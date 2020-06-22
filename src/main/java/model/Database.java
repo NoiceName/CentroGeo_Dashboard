@@ -10,7 +10,7 @@ public class Database {
 	//Specify the parameters for the database here!
 	//The URL of the database (Note: the url string should begin with 'jdbc::postgresq:' "
 	//The username of the database user
-	String url = "jdbc:postgresql://localhost:5432/";
+	String url = "jdbc:postgresql://localhost:5432/mod4_project";
 	String username = "postgres";
 	String password = "password";
 	//Do not change this variable
