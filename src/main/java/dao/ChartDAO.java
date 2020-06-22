@@ -357,4 +357,8 @@ public enum ChartDAO {
 		return chart; 
 	}
 
+	public Chart getAverageRouteL(int simulationId) {
+		
+		return null;
+	}
 }
