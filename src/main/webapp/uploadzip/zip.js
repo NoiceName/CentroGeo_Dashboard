@@ -52,6 +52,7 @@ $("#zipform").submit(function (evt) {
     			alert("Successfully uploaded zip file");
     		},
     		error: function (jqXHR, textStatus, errorThrown) {
+    		    //Gives an error for some reason
     			alert(jqXHR.responseText)
     		}
         
