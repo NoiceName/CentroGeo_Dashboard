@@ -1,6 +1,4 @@
 
-
-
  $(document).ready(function (){
 	 	var domSelect = $('#tag');
 	  // check if localStorage has option list
