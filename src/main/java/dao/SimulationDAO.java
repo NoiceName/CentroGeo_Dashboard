@@ -4,12 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
+import extraction.ZipExtraction;
 import model.Database;
 import model.Simulation;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public enum SimulationDAO {
 	instance;
@@ -24,7 +32,7 @@ public enum SimulationDAO {
 		Connection conn = null;
 		int rowsAffected = 0;// failed in updating
 		Database.loadPGSQL();
-	    Database db = new Database();	
+	    Database db = new Database();
 		try {
 			
 			conn = db.connectPGSQL();
@@ -60,6 +68,43 @@ public enum SimulationDAO {
 		return rowsAffected;
 	}
 
+	public int addEmptyMetadata() throws SQLException {
+		Database db = new Database();
+		db.connectPGSQL();
+
+		String query = "INSERT INTO projectschema.simulation(name, date, tags, description) " +
+				"VALUES (NULL, NULL, NULL, NULL) RETURNING simulation_id";
+
+		PreparedStatement statement = db.prepareStatement(query);
+		statement.execute();
+
+		ResultSet returning = statement.getResultSet();
+		returning.next();
+		return returning.getInt(1);
+	}
+
+	public void addMetadata(int simulationID, String name, String date, String tags, String description) throws SQLException, ParseException {
+		Database db = new Database();
+		db.connectPGSQL();
+
+		//language=PostgreSQL
+		String query = "UPDATE projectschema.simulation SET name=?, date=?, tags=?, description=? WHERE simulation_id=?";
+
+		PreparedStatement statement = db.prepareStatement(query);
+		statement.setInt(5, simulationID);
+		statement.setString(1, name);
+
+		DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+		java.util.Date fixedDate = format.parse(date);
+		statement.setDate(2, new java.sql.Date(fixedDate.getTime()));
+
+		statement.setString(3, tags);
+		statement.setString(4, description);
+
+		statement.executeUpdate();
+		db.getConnection().close();
+	}
+
 	public void deleteSimulation(int id){
 		Database db = new Database();
 		Database.loadPGSQL();
@@ -81,7 +126,7 @@ public enum SimulationDAO {
 
 		Connection connection = db.getConnection();
 		System.out.println("Downloaded file");
-		extraction.ZipExtraction.getZipData(stream, connection);
+		// ZipExtraction.getZipData(stream);
 		System.out.println("File added to database");
 	}
 

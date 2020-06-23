@@ -10,9 +10,7 @@ public class Database {
 	//Specify the parameters for the database here!
 	//The URL of the database (Note: the url string should begin with 'jdbc::postgresq:' "
 	String url = "jdbc:postgresql://localhost:5433/centrogeo";
-	//The username of the database user
 	String username = "postgres";
-	//The password of the database user
 	String password = "1YIrISqSsLxYFI8Itig6";
 	//Do not change this variable
 	String schemaName = "projectschema";
@@ -41,6 +39,14 @@ public class Database {
 	 * Loads the driver for a pgsql database.
 	 */
 	public static void loadPGSQL(){
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void nloadPGSQL(){
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {

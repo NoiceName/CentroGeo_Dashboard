@@ -20,6 +20,7 @@ create table "projectschema".snapshot(
 
 create table "projectschema".lane(
                                      lane_id text primary key,
+                                     edge_id text,
                                      simulation integer not null
                                          references "projectschema".simulation (simulation_id) on delete cascade,
                                      index integer,
@@ -46,6 +47,8 @@ create table "projectschema".user(
 
 create table "projectschema".vehicle(
                                         vehicle_id text primary key,
+                                        simulation integer not null
+                                            references "projectschema".simulation (simulation_id) on delete cascade,
                                         depart real
 );
 
