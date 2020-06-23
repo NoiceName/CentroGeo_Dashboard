@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import dao.ChartDAO;
 import model.Chart;
+import model.ChartPoint;
 
 @Path("/simulations/{simulation_id}/charts")
 public class ChartResources {
@@ -55,5 +56,13 @@ public class ChartResources {
 			charts.add(chart);
 		}
 		return charts;
+	}
+	
+	@GET
+	@Path("/average_vehicle_speed")
+	@Produces("application/json")
+	public Chart getAverageVehicleSpeed() {
+		Chart chart = ChartDAO.instance.getAverageVehicleSpeed(simulation_id);
+		return chart;
 	}
 }
