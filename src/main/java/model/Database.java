@@ -13,6 +13,10 @@ public class Database {
 	String url = "jdbc:postgresql://localhost:5432/";
 	String username = "postgres";
 	String password = "password";
+	//Information used for testing when deploying
+	//	String url = "jdbc:postgresql://bronto.ewi.utwente.nl/";
+	//	String username = "dab_di19202b_2";
+	//	String password = "3JvJt7ETzXVak62M";
 	//Do not change this variable
 	String schemaName = "projectschema";
 
