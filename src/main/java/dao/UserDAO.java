@@ -64,7 +64,6 @@ public enum UserDAO {
 		 * 1:user data entered successfully!
 		 */
 		PreparedStatement query = null;
-		int returnString = 0; 
 		Connection conn = null;
 		
 		Database.loadPGSQL();
@@ -100,18 +99,17 @@ public enum UserDAO {
 			String hashedPassword = sCryptPasswordEncoder.encode(password);
 			
 			query.setString(2, hashedPassword);			
-			returnString = query.executeUpdate();
+			return query.executeUpdate();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			returnString = 0; // User data not entered;
+			return 0; // User data not entered;
 		}
 		finally {
 			query.close();
 			conn.close();
 		}
 		
-		return returnString;		
 	}	
 }
 

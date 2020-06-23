@@ -14,7 +14,7 @@ class UserDAOTest2 {
 	void testInsertUser() throws Exception {
 		//insert an existing username and password
 		User user1= new User("user1","123456");	
-		assertEquals(1, UserDAO.instance.insertUser(user1));
+		assertEquals(0, UserDAO.instance.insertUser(user1));
 		
 	}
 	
