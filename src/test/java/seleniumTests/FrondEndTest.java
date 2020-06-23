@@ -86,26 +86,38 @@ public class FrondEndTest {
     }
 
     /**
-     * Deletes simulation with a tag of amazing-tag
+     * Deletes simulation with a tag of "amazing tag" the previous test gives it that name
      */
     @Test
-    static public void deleteSimulation(){
+    public void deleteSimulation(){
         WebElement selectSim = new WebDriverWait(driver, 4).until(ExpectedConditions.elementToBeClickable(By.id("deleteSelectedSimulation")));
-        driver.findElement(By.id("selectSimulationButton"));
+        driver.findElement(By.id("selectSimulationButton")).click();
         driver.findElement(By.id("simulation-filter")).sendKeys("amazing tag");
+        try {
+            TimeUnit.SECONDS.sleep(4);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        driver.findElement(By.id("simulation-container")).click();
+        driver.findElement(By.id("closeSelectSimulationMenu")).click();
         try {
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        driver.findElement(By.id("simulation-container")).click();
-        driver.findElement(By.name("body")).click();
-
+        WebElement deleteSim = new WebDriverWait(driver, 4).until(ExpectedConditions.elementToBeClickable(By.id("deleteSelectedSimulation")));
+        deleteSim.click();
+        WebElement but = new WebDriverWait(driver, 4).until(ExpectedConditions.elementToBeClickable(By.id("delSim")));
+        but.click();
     }
 
 
+    /**
+     * Close the browser
+     */
     @AfterAll
     static public void finalise(){
+        driver.quit();
     }
 
 
