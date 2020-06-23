@@ -64,7 +64,7 @@ public enum UserDAO {
 		 * 1:user data entered successfully!
 		 */
 		PreparedStatement query = null;
-		int returnString = 0; // user data entered successfully!;
+		int returnString = 0; 
 		Connection conn = null;
 		
 		Database.loadPGSQL();

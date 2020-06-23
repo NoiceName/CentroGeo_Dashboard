@@ -9,9 +9,9 @@ import java.util.Properties;
 public class Database {
 	//Specify the parameters for the database here!
 	//The URL of the database (Note: the url string should begin with 'jdbc::postgresq:' "
-	String url = "jdbc:postgresql://localhost:5432/";
-	String username = "postgres";
-	String password = "password";
+	String url= "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di19202b_124";
+	String username ="dab_di19202b_124";
+	String password = "qY3D5KASvWJbHQpX";
 	//Do not change this variable
 	String schemaName = "projectschema";
 

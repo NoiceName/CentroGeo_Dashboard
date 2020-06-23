@@ -5,9 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
-import de.mkammerer.argon2.Argon2Factory.Argon2Types;
 import model.User;
 
 class UserDAOTest2 {
@@ -17,7 +14,7 @@ class UserDAOTest2 {
 	void testInsertUser() throws Exception {
 		//insert an existing username and password
 		User user1= new User("user1","123456");	
-		assertEquals(0, UserDAO.instance.insertUser(user1));
+		assertEquals(1, UserDAO.instance.insertUser(user1));
 		
 	}
 	
@@ -42,14 +39,9 @@ class UserDAOTest2 {
 		  keyLength,
 		  saltLength);
 		boolean match = sCryptPasswordEncoder.matches(rawPassword, returnHashedPassword);
-        
-//		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);	
-//		
-//		boolean success = argon2.verify(returnPassword, password);
 		
 		assertTrue(match);	
-		
-				
+						
 	}
 	
 
