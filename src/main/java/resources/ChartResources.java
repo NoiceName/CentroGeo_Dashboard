@@ -76,6 +76,14 @@ public class ChartResources {
 	}
 	
 	@GET
+	@Path("/number_of_transferred_vehicles")
+	@Produces("application/json")
+	public Chart getTransferredVehicles() throws SQLException {
+		
+		return ChartDAO.instance.getTransVehicles(simulation_id);
+	}
+	
+	@GET
 	@Path("/number_of_running_vehicles")
 	@Produces("application/json")
 	public Chart getRunningVehicles() throws SQLException {

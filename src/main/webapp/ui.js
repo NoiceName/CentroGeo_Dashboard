@@ -47,6 +47,12 @@ $(function () {
 		clearSelectedAndFound();
 	});
 
+	$("#transChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
 	$("#runningChartSelect").click(function () {
 		clearInputFields();
 		$("#simOptions").removeClass('d-none');
