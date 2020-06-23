@@ -1,18 +1,35 @@
 package seleniumTests;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+//Test cases in this class should be executed once the server is running
 public class FrondEndTest {
     //Set this to the directory of the location of your geckodriver + firefox should be installed on your system
-    String dir = "C:/WebDriver/bin/geckodriver.exe";
+    static String dir = "C:/WebDriver/bin/geckodriver.exe";
+    static WebDriver driver;
+
+    @BeforeAll
+    static public void setup(){
+        System.setProperty("webdriver.gecko.driver", dir);
+        driver = new FirefoxDriver();
+        driver.get("http://localhost:8080/CentroGeo/login/log_in.html");
+    }
 
     @Test
-    public void testSimulationDelete(){
-        System.setProperty("webdriver.gecko.driver", dir);
-        WebDriver driver = new FirefoxDriver();
+    public void loginTest(){
     }
+
+    @AfterAll
+    static public void finalise(){
+        driver.close();
+    }
+
+
+
 
 
 
