@@ -1,14 +1,9 @@
 package dao;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
-import de.mkammerer.argon2.Argon2Factory.Argon2Types;
 import model.Database;
 import model.User;
 
@@ -78,11 +73,7 @@ public enum UserDAO {
 			query = conn.prepareStatement(sql);
 			query.setString(1, user.getUserName());
 			String password = user.getPassword();
-			
-			//hash_password using Argon2
-//			Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
-//			String passwordHash = argon2.hash(4, 1024 * 1024, 8, password);
-			
+						
 			//hasd_password using SCryptPasswordEncoder
 			int cpuCost = (int) Math.pow(2, 14); // factor to increase CPU costs
 			int memoryCost = 8;      // increases memory usage

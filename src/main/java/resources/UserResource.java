@@ -19,10 +19,6 @@ import cookie_manager.CookieManager;
 import dao.UserDAO;
 import model.User;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
-import de.mkammerer.argon2.Argon2Factory.Argon2Types;
-
 
 @Path("/user_resource")
 public class UserResource {
@@ -54,9 +50,6 @@ public class UserResource {
 
 		JSONObject response = new JSONObject();
 	    String returnHashedPassword = UserDAO.instance.getUserPassword(username);
-		//verify hash_password
-//		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
-//		boolean match = argon2.verify(returnPasswordHash, password);
 		
 		// verify password using SCryptPasswordEncoder
 		int cpuCost = (int) Math.pow(2, 14); // factor to increase CPU costs
