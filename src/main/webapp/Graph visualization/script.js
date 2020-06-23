@@ -2,17 +2,17 @@ var currentXML;
 var XMLloaded = false;
 
 var vehIds;
-var edgeIds
+var edgeIds;
+var laneIds;
 
 
 function onload() {
-  console.log("page is loaded");
+
 }
 
 
  	google.charts.load('current', {'packages':['corechart']});
  	google.charts.load('current', {'packages':['bar']});
-  google.charts.load('current', {'packages':['line']});
 
 
 
@@ -32,10 +32,10 @@ function genGraph() {
 
   //check that user has given id options
   var userOptions;
-  if (getSelectedIds().length < 1) {
-    return
-  } else {
+  if (getSelectedIds().length >= 1) {
     userOptions = getSelectedIds();
+  } else {
+    userOptions = -1;
   }
   
   var chartType = "";
@@ -47,82 +47,8 @@ function genGraph() {
 
   // determine what graph should be drawn
 
-  //    GRAPH showing info about chosen vehicle over time
-	if (chartType == "vehInfo") {
-    var timeStamps = [];
-		//select choosen vehicle
-    var vehChoice = getSelectedIds()[0];
-    if (getSelectedIds().length < 1) {return}
-
-    var routeLengths = [];
-    var speeds = [];
-    var speedFactors = [];
-
-    for (var i = 0; i < currentXML.length; i++) {
-      var snapshot = currentXML[i];
-
-      // get route length, or if not exist: routeLenght = 0
-      try {
-        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        var result = nodes.iterateNext();
-        var routeId = result.getAttribute("route");
-
-        path = "/snapshot/route[@id=\""+ routeId + "\"]";
-        nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        result = nodes.iterateNext();
-        routeLengths[i] = result.getAttribute("edges").split("e").length -1;
-
-      } catch(err) {
-        routeLengths[i] = 0
-     }
-     // get vehicle speed, or if not exist: speed = 0;
-     try {
-        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        var result = nodes.iterateNext();
-        var speed = result.getAttribute("speed");
-        speeds[i] = parseFloat(speed);
-
-     } catch(err) {
-        speeds[i] = 0;
-     }
-     // get vehicle speedFactor, or if not exist: speedFactor = 0;
-     try {
-        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        var result = nodes.iterateNext();
-        var speedFactor = result.getAttribute("speedFactor");
-        speedFactors[i] = parseFloat(speedFactor);
-
-     } catch(err) {
-        speedFactors[i] = 0;
-     }
-
-
-
-     // get timeStamps
-        var timeStamp;
-        var time;
-
-        timeStamp = snapshot.getElementsByTagName('snapshot'); 
-        time = timeStamp[0].getAttribute("time");
-      
-        timeStamps[i] = parseFloat(time);
-    }
-
-    var dataArray = [[]];
-      dataArray[0] = ["Time stamp", "routeLength", "speed", "speedFactor"];
-
-      for (var i = 0; i < routeLengths.length; i++) {
-        dataArray[i+1] = [timeStamps[i], routeLengths[i], speeds[i], speedFactors[i]];
-      }
-
-      drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "");
-	}
-
   //    GRAPH showing edge appearance frequency 
-	else if (chartType == "edgeFr") {
+	if (chartType == "edgeFr") {
 
     //get the Data using RESTful services
       for (var j = 0; j < userOptions.length; j++) {
@@ -159,10 +85,123 @@ function genGraph() {
       }
 	}
 
-	//draw a useless graph
-	else if (chartType == "otherC") {
-		drawPieChart(getXMLarray(currentXML[10]), "Vehicles and their speed", createChartSpace());
-	}
+   //    GRAPH showing info about chosen vehicle over time
+  else if (chartType == "vehInfo") {
+
+    $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/vehicle_information?vehicle_id=' + userOptions[0], function(data) {
+          for (var i = 0; i < 3; i++) {
+            serverResponse.push(data[i]);
+          }
+          //response has been loaded, graph can be drawn.
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Stats for vehicle: " + userOptions[0] + " (Simulation " + simulation_id + ")", createChartSpace(), "time", "y");
+        
+        })
+  }
+
+  //  GRAPH showing the average route length over time
+  else if (chartType == "avgRoute") {
+    
+  }
+
+  //  GRAPH showing the average speed over time
+  else if (chartType == "avgSpeed") {
+    var simId = [];
+
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/average_vehicle_speed', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Average speed of the vehicles", createChartSpace(), "time", "speed (m/s)");
+
+          }
+        })
+      }
+  }
+
+  //  GRAPH showing the average speedFactor over time
+  else if (chartType == "avgSpeedF") {
+    var simId = [];
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/average_vehicle_speed_factor', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Average speed factor of the vehicles", createChartSpace(), "time", "speed factor");
+
+          }
+        })
+      }
+  }
+
+	//   Graph showing the total number of arrived cars over time
+	else if (chartType == "cumulVeh") {
+    var simId = [];
+
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/cumulative_number_of_arrived_vehicles', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Cumulative number of arrived vehicles", createChartSpace(), "time", "count");
+
+          }
+        })
+      }
+  }
+
+  //   GRAPH showing the number of running vehicles over time
+  else if (chartType == "runningVeh") {
+    var simId = [];
+
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/number_of_running_vehicles', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Number of running vehicles", createChartSpace(), "time", "count");
+
+          }
+        })
+      }
+  }
 
 }
 
@@ -187,60 +226,12 @@ function getDataArray(serverResponse, xTitle) {
 }
 
 
-
-function drawBarChart(dataArray, title, id) {
-
-	var data = google.visualization.arrayToDataTable([
-		['Year', 'Sales', 'Expenses', 'Profit'],
-		['2014', 1000, 400, 200],
-		['2015', 1170, 460, 250],
-		['2016', 660, 1120, 300],
-		['2017', 1030, 540, 350]
-	]);
-
-	var options = {
-		chart: {
-			title: 'Mockup graph',
-			subtitle: 'Sales, Expenses, and Profit: 2014-2017',
-      height: 350,
-		},
-		bars: 'vertical' // Required for Material Bar Charts.
-	};
-
-	var chart = new google.charts.Bar(document.getElementById(id));
-
-	chart.draw(data, google.charts.Bar.convertOptions(options));
-
-}
-
-
-
-
-function drawPieChart(dataArray, title, id) {
-	var data = google.visualization.arrayToDataTable(dataArray);
-
-
-	var options = {
-		title: title,
-    height: 350,
-	};
-
-	var chart = new google.visualization.PieChart(document.getElementById(id));
-
-	chart.draw(data, options);
-}
-
-
-
-
 function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 	var data = google.visualization.arrayToDataTable(dataArray);
 
 
 	var options = {
 		title: title,
-    //subtitle not supported in google core charts.
-    // subtitle: Simulation id,
 		curveType: 'none',
 		legend: { position: 'bottom' },
 		crosshair: { trigger: 'both' },
@@ -253,77 +244,14 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 
 	var chart = new google.visualization.LineChart(document.getElementById(id));
   chart.draw(data, options);
-
-// alt version using google material charts for subtitle
-//   var chart = new google.charts.Line(document.getElementById(id));
-//   chart.draw(data, google.charts.Line.convertOptions(options));
-	
 }
 
 
 
-
-
-function getXMLarray(xmlFile) {
-
-	//Return array containing every vehicle + the speed of that vehicle
-	var vArray =  xmlFile.getElementsByTagName('vehicle');
-	var outArray = [[]];
-	outArray[0] = ["Vehicle id", "Speed"];
-
-	for (var i = 0; i < vArray.length; i++) {
-		outArray[i+1] = [];
-		outArray[i+1][0] = vArray[i].getAttribute("id");
-		outArray[i+1][1] = parseInt(vArray[i].getAttribute("speed"));
-	}
-
-
-	// console.log(outArray.slice(0, 6));
-	return outArray;
-}
-
-
-
-
-
-//populate the laneSelect with options
-function populateLaneSelect(xmlfile2) {
-
-	var xmlFile = xmlfile2;
-	var options = xmlFile.getElementsByTagName('lane'); 
-	var vLanes = [];
-
-	for (var i = 0; i < options.length; i++) {
-		vLanes[i] = [];
-		vLanes[i] = options[i].getAttribute("id");
-	}
-
-	selectEl = document.getElementById("laneSelect"); 
-
-	for (var i = 1; i < options.length; i++) {
-		selectEl.options.add(new Option(vLanes[i], vLanes[i]));
-	}
-
-	console.log("lanes populated");
-}
-
-
-
-
+//should return all lane id's of currently selected simulation
 function getLanesId() {
-
-  var snapshot = currentXML[1];
-  var lanesID = [];
-
-  var lanes = snapshot.getElementsByTagName('lane');
-
-  for (var i = 0; i < lanes.length; i++) {
-    lanesID[i] = [];
-    lanesID[i] = lanes[i].getAttribute("id");
-  }
-
-  return lanesID;
-
+  laneIds = ["e6_0", "e9_0", ":n10_0_0", ":n11_0_0", ":n12_0_0"]
+  return laneIds;
 }
 
 //should return all the veh id's as an array
@@ -338,6 +266,11 @@ function getEdgeId() {
   return edgeIds;
 }
 
+//should return all simulation id's f the database
+function getSimIds() {
+  return [getSelectedSimulationID(), "1", "2", "5", "6"];
+}
+
 
 
 
@@ -349,7 +282,7 @@ $(function () {     $('#chartGen').click(function(event) {
 
  $(function () {     $(document).ready(function() {
       //Statically set simulation id !!! that is sent to the server
-	  var simulation_id = '1';
+	  var simulation_id = getSelectedSimulationID();
 
     $.ajax({
       url: '/CentroGeo/resources/simulations/'+simulation_id+'/snapshots',
@@ -366,13 +299,8 @@ $(function () {     $('#chartGen').click(function(event) {
     //resp is the data array
 
         //avoid loading the data multiple times
-        console.log("XML retrieved");
-        alert("Simulation loaded!");
         XMLloaded = true;
-
-//        console.log(resp);
         
-
         dataArray = [];
         var parser = new DOMParser();
 
@@ -381,12 +309,8 @@ $(function () {     $('#chartGen').click(function(event) {
             dataArray[i] = xmlDoc;
         }
         
-        
-//        populateLaneSelect(dataArray[1]);
-
         currentXML = dataArray;
-
-    return xmlDoc;
+        return 
   }
     
     }); 

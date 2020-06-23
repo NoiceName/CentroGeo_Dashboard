@@ -8,6 +8,16 @@ function filter(pattern){
 		for (let i = 0; i != simulationCopy.length; i++) {
 			let simObj = simulationCopy[i];
 			let tags = simObj.tags.split(';');
+			console.log(tags);
+			for(let z = 0; z!=tags.length; z++){
+			    if (tags[0]==null){
+			    	break;
+				}
+				let tag = tags[z];
+				tag = tag.trim();
+				console.log(tag);
+				tags[z] = tag;
+			}
 			if (!startsWith(pattern, simObj.name) && !checkArrayStartsWith(pattern, tags)) {
 				simulationCopy.splice(i, 1);
 				removed = true;

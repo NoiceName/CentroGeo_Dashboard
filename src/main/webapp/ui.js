@@ -5,6 +5,12 @@ var selectedSimulation = null;
 var loadedSimulations = null;
 
 $(function () {
+	$("#edgeFrChartSelect").click(function () {
+		clearInputFields();
+		$("#edgeFrOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
 	$("#lineChartSelect").click(function () {
 		clearInputFields();
 		$("#lineChartOptions").removeClass('d-none');
@@ -17,15 +23,33 @@ $(function () {
 		clearSelectedAndFound();
 	});
 
-	$("#uselessChartSelect").click(function () {
+	$("#avgRouteChartSelect").click(function () {
 		clearInputFields();
-		$("#pieChartOptions").removeClass('d-none');
+		$("#simOptions").removeClass('d-none');
 		clearSelectedAndFound();
 	});
 
-	$("#edgeFrChartSelect").click(function () {
+	$("#avgVehSpeedChartSelect").click(function () {
 		clearInputFields();
-		$("#edgeFrOptions").removeClass('d-none');
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#avgVehSpeedFChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#cumulChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#runningChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
 		clearSelectedAndFound();
 	});
 	
@@ -120,6 +144,34 @@ $(function() {
 		}
 	}); 
 });
+
+
+//select simulationID from user input for several graphs
+$(function() {
+	var laneIdInput = $("#simIdInput");
+
+	laneIdInput.keyup(function() {
+		var ids = getSimIds();
+		var jsLaneIdInput = document.getElementById("simIdInput");
+		let input = jsLaneIdInput.value;
+		let p = document.getElementById('foundIdsContainer');
+		//clear the found input after each keystroke
+		let foundContainer = document.getElementById('foundIdsContainer');
+		removeBadges(foundContainer);
+		//If the input is longer than 2 characters
+		if(input.length >= 1) {
+			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
+			let filtered = getFilteredIds(input, ids);
+			filtered.forEach(function(item) {
+				createBadgeAndAdd(item,p);
+			});
+		}
+		else if (input.length <= 0) {
+
+		}
+	}); 
+});
+
  
 //Removes all badges from a specified container
 function removeBadges(container){

@@ -74,36 +74,48 @@
 								<div class="row">
 									<!-- Chart Select --> 
 <div class="col-6 list-group" id="chartChoice" value=''>
-										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Number of vehicles on a line</a>		
-										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle Information</a>
-										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">Edge Appearance Frequency </a>
-										<a class="list-group-item list-group-item-action chart-type" id="uselessChartSelect" data-toggle="list" value="otherC">Useless Graph</a>			
+										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">Edge appearance frequency </a>
+										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Lane transiting vehicles</a>		
+										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle info</a>
+										<a class="list-group-item list-group-item-action chart-type" id="avgRouteChartSelect" data-toggle="list" value="avgRoute">Average route length</a>
+										<a class="list-group-item list-group-item-action chart-type" id="avgVehSpeedChartSelect" data-toggle="list" value="avgSpeed">Average vehicle speed</a>
+										<a class="list-group-item list-group-item-action chart-type" id="avgVehSpeedFChartSelect" data-toggle="list" value="avgSpeedF">Average vehicle speed Factor</a>
+										<a class="list-group-item list-group-item-action chart-type" id="cumulChartSelect" data-toggle="list" value="cumulVeh">Cumulative number of arrived vehicles </a>	
+										<a class="list-group-item list-group-item-action chart-type" id="runningChartSelect" data-toggle="list" value="runningVeh">Number of running vehicles </a>		
 									</div>	
 									<!-- Chart Options -->
 									<div class="col-6">
 										<!-- First Row of options --> 
 										<div class="row">
+
 											<div class="input-group mb-3 d-none chart-options" id="lineChartOptions">
 												<div class="input-group-prepend">
 													<span class="input-group-text">Lane ID</span>
 												</div>
-												<input id="laneIdInput" type="text" class="form-control" placeholder="eg. :e_31">
+												<input id="laneIdInput" type="text" class="form-control" placeholder="eg. e31_0">
 											</div>
+
 											<div class="input-group mb-3 d-none chart-options" id="vehicleChartOptions">
 												<div class="input-group-prepend">
 													<span class="input-group-text">Vehicle ID</span>
 												</div>
 												<input id="vehIdInput" type="text" class="form-control" placeholder="eg. v40">
 											</div>
+
 											<div class="input-group mb-3 d-none chart-options" id="edgeFrOptions">
 												<div class="input-group-prepend">
 													<span class="input-group-text">Edge ID</span>
 												</div>
 												<input id="edgeIdInput" type="text" class="form-control" placeholder="eg. e43">
 											</div>
-											<div class="input-group mb-3 d-none chart-options" id="pieChartOptions">
-												Something to do with piecharts
+
+											<div class="input-group mb-3 d-none chart-options" id="simOptions">
+												<div class="input-group-prepend">
+													<span class="input-group-text">Simulation ID</span>
+												</div>
+												<input id="simIdInput" type="text" class="form-control" placeholder="eg. 2">
 											</div>
+
 										</div>
 										<!-- Second row of options --> 
 										<div class="row">

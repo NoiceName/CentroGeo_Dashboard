@@ -1,5 +1,6 @@
 package resources;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +39,16 @@ public class ChartResources {
 	
 	@GET
 	@Path("/vehicle_information")
-	public JSONObject getVehicleInformation(@QueryParam("vehicle_id") String vehicle_id) {
-		return new JSONObject();
+	@Produces("application/json")
+	public ArrayList<Chart> getVehicleInformation(@QueryParam("vehicle_id") String vehicle_id) {
+		ArrayList<Chart> charts = new ArrayList<>();
+			Chart speedChart = ChartDAO.instance.getSpeedByTimeChart(simulation_id, vehicle_id);
+			charts.add(speedChart);
+			Chart speedFactorChart = ChartDAO.instance.getSpeedFactorByTimeChart(simulation_id, vehicle_id);
+			charts.add(speedFactorChart);
+			Chart routeLengthChart = ChartDAO.instance.getRouteLengthByTimeChart(simulation_id, vehicle_id);
+			charts.add(routeLengthChart);
+		return charts;
 	}
 
 	/**
@@ -59,10 +68,34 @@ public class ChartResources {
 	}
 	
 	@GET
+	@Path("/cumulative_number_of_arrived_vehicles")
+	@Produces("application/json")
+	public Chart getArrivedVehicles() throws SQLException {
+		
+		return ChartDAO.instance.getVehicleNumber(simulation_id);
+	}
+	
+	@GET
+	@Path("/number_of_running_vehicles")
+	@Produces("application/json")
+	public Chart getRunningVehicles() throws SQLException {
+		
+		return ChartDAO.instance.getRunVehicles(simulation_id);
+	}
+	
+	@GET
 	@Path("/average_vehicle_speed")
 	@Produces("application/json")
-	public Chart getAverageVehicleSpeed() {
-		Chart chart = ChartDAO.instance.getAverageVehicleSpeed(simulation_id);
-		return chart;
+	public Chart getAVGSpeed() throws SQLException {
+		
+		return ChartDAO.instance.getAverageSpeed(simulation_id);
+	}
+	
+	@GET
+	@Path("/average_vehicle_speed_factor")
+	@Produces("application/json")
+	public Chart getAVGSpeedF() throws SQLException {
+		
+		return ChartDAO.instance.getAverageSpeedF(simulation_id);
 	}
 }
