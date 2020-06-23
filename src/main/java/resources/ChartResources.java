@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import dao.ChartDAO;
 import model.Chart;
+import model.ChartPoint;
 
 @Path("/simulations/{simulation_id}/charts")
 public class ChartResources {

@@ -210,6 +210,53 @@ public enum ChartDAO {
 				//Create a chart with the given points.
 		Chart chart = new Chart(points, laneId);
 		return chart; 
+
+	}
+	
+	public Chart getAverageVehicleSpeed(int simulationId) {
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "select time, speed\r\n" + 
+				"from (select s.time, unnest(xpath('//vehicle/@speed', s.data))::text as speed\r\n" + 
+				"from projectschema.snapshot s\r\n" + 
+				"where s.simulation = ? \r\n" + 
+				"order by s.time) as vehicles";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
+		try {
+			ps.setInt(1, simulationId);
+			ResultSet result = ps.executeQuery();
+			double prevTime = result.getFloat("time");
+			ArrayList<Double> speeds = new ArrayList<>();
+			while(result.next()) {
+				double speed = result.getFloat("speed");
+				double time = result.getFloat("time");
+				double totalSpeed = 0;
+				double avg = 0;
+				if(time == prevTime) {
+					if(speed > 0) {
+						speeds.add(speed);
+					}
+				} else {
+					for(int i = 0; i < speeds.size(); i++) {
+						 totalSpeed = totalSpeed + speeds.get(i);
+					}
+					avg = totalSpeed / speeds.size();
+					speeds.clear();
+				}
+				prevTime = time;
+				ChartPoint point = new ChartPoint(time, avg);
+				points.add(point);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		//Chart chart = new Chart(points, );
+		//return chart;
+		return null;
 		
 	}
   
