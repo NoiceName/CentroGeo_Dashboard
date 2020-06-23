@@ -294,7 +294,7 @@ public enum ChartDAO {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		// to omit the cars with a null speed, remove the SQL comment bfore the "WHERE speed > 0"
+		// to omit the cars with a null speed, remove the SQL comment before the "WHERE speed > 0"
 		String statement = "SELECT time, ROUND(AVG(speed), 2) AS AVGspeed\r\n" + 
 				"FROM (	SELECT s.time, CAST(unnest(xpath('//vehicle/@speed', s.data))::text AS numeric) AS speed \r\n" + 
 				"		FROM projectschema.snapshot s\r\n" + 

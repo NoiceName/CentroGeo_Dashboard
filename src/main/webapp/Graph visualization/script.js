@@ -47,7 +47,7 @@ function genGraph() {
 
   // determine what graph should be drawn
 
-  //    GRAPH showing edge appearance frequency 
+  //  GRAPH showing edge appearance frequency 
 	if (chartType == "edgeFr") {
 
     //get the Data using RESTful services
@@ -64,7 +64,7 @@ function genGraph() {
       }
   } 
 
-  //    GRAPH showing #cars per lane
+  //  GRAPH showing #cars per lane
 	else if (chartType == "transVeh") {
     //select choosen lane
     var laneChoice;
@@ -85,7 +85,7 @@ function genGraph() {
       }
 	}
 
-   //    GRAPH showing info about chosen vehicle over time
+  //  GRAPH showing info about chosen vehicle over time
   else if (chartType == "vehInfo") {
 
     $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/vehicle_information?vehicle_id=' + userOptions[0], function(data) {
@@ -102,6 +102,7 @@ function genGraph() {
   //  GRAPH showing the average route length over time
   else if (chartType == "avgRoute") {
     
+
   }
 
   //  GRAPH showing the average speed over time
@@ -153,7 +154,7 @@ function genGraph() {
       }
   }
 
-	//   Graph showing the total number of arrived cars over time
+	//  GRAPH showing the total number of arrived cars over time
 	else if (chartType == "cumulVeh") {
     var simId = [];
 
@@ -178,7 +179,7 @@ function genGraph() {
       }
   }
 
-  //   GRAPH showing the number of running vehicles over time
+  //  GRAPH showing the number of running vehicles over time
   else if (chartType == "runningVeh") {
     var simId = [];
 
