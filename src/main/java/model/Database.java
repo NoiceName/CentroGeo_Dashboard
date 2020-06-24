@@ -90,6 +90,18 @@ public class Database {
 		return null;
 	}
 
+	/**
+	 * Closes an open connection for this database
+	 */
+	public void closeConnection(){
+		try {
+			this.connection.close();
+		} catch (SQLException throwables) {
+		    System.out.println(throwables.getMessage());
+			throwables.printStackTrace();
+		}
+	}
+
 	public String getSchema() {
 		return this.schemaName;
 	}
