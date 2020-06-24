@@ -111,5 +111,75 @@ public enum SimulationDAO {
 		extraction.ZipExtraction.getZipData(stream, connection);
 		System.out.println("File added to database");
 	}
+	
+	public ArrayList<Integer> getSimulationIds() {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT sim.simulation_id\r\n" + 
+						  "FROM projectschema.simulation sim\r\n";
+
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<Integer> simIDs = new ArrayList<>(); 
+		
+	    try {
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+	    		simIDs.add(result.getInt("simulation_id"));
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		    return simIDs;
+	}
+	
+	public ArrayList<Integer> getLaneIds(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT l.lane_id\r\n" + 
+						  "FROM projectschema.lane l\r\n" + 
+				          "WHERE l.simulation = ?";
+
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<Integer> laneIDs = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+	    		laneIDs.add(result.getInt("simulation_id"));
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		    return laneIDs;
+	}
+	
+	public ArrayList<Integer> getEdgeIds(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT l.lane_id\r\n" + 
+						  "FROM projectschema.lane l\r\n" + 
+				          "WHERE l.simulation = ?";
+
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<Integer> EdgeIDs = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+	    		EdgeIDs.add(result.getInt("simulation_id"));
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		    return EdgeIDs;
+	}
 
 }
