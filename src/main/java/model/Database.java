@@ -94,16 +94,16 @@ public class Database {
 		return this.schemaName;
 	}
 
-	public void setUrl(String url){
-		this.url = url;
+	public static void setUrl(String pasurl){
+		url = pasurl;
 	}
 
-	public void setPassword(String pass){
-		this.url = pass;
+	public static void setPassword(String pass){
+		password = pass;
 	}
 
-	public void setUsername(String username){
-		this.url = username;
+	public static void setUsername(String user){
+		username = user;
 	}
 
 	public Connection getConnection() {

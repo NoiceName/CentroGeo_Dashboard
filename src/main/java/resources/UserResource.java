@@ -12,6 +12,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.google.common.net.HttpHeaders;
 import cookie_manager.Secured;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
@@ -97,7 +99,7 @@ public class UserResource {
 		System.out.println(username + oldPassword + newPassword);
 
 		//verify hash_password
-		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
+		Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
 		String returnPasswordHash = UserDAO.instance.getUserPassword(username);
 		boolean match = argon2.verify(returnPasswordHash, oldPassword);
 
