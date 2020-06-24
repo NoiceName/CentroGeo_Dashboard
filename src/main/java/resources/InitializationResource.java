@@ -137,6 +137,7 @@ public class InitializationResource {
          }
       }
       db.closeConnection();
+      //TODO set administrator in the database here>
       resp.setResult("success");
       return resp;
    }
