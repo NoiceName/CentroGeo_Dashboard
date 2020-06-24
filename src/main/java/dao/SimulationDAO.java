@@ -134,7 +134,7 @@ public enum SimulationDAO {
 		    return simIDs;
 	}
 	
-	public ArrayList<Integer> getLaneIds(int simulationId) {
+	public ArrayList<String> getLaneIds(int simulationId) {
 		Database db = new Database(); 
 		Database.loadPGSQL();
 		db.connectPGSQL();
@@ -143,13 +143,13 @@ public enum SimulationDAO {
 				          "WHERE l.simulation = ?";
 
 		PreparedStatement ps = db.prepareStatement(statement);
-		ArrayList<Integer> laneIDs = new ArrayList<>(); 
+		ArrayList<String> laneIDs = new ArrayList<>(); 
 		
 	    try {
 	    	ps.setInt(1, simulationId);
 	    	ResultSet result = ps.executeQuery();
 	    	while(result.next()) {
-	    		laneIDs.add(result.getInt("simulation_id"));
+	    		laneIDs.add(result.getString("lane_id"));
 			}
 		}catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -158,7 +158,7 @@ public enum SimulationDAO {
 		    return laneIDs;
 	}
 	
-	public ArrayList<Integer> getEdgeIds(int simulationId) {
+	public ArrayList<String> getEdgeIds(int simulationId) {
 		Database db = new Database(); 
 		Database.loadPGSQL();
 		db.connectPGSQL();
@@ -167,19 +167,49 @@ public enum SimulationDAO {
 				          "WHERE l.simulation = ?";
 
 		PreparedStatement ps = db.prepareStatement(statement);
-		ArrayList<Integer> EdgeIDs = new ArrayList<>(); 
+		ArrayList<String> edgeIDs = new ArrayList<>(); 
 		
 	    try {
 	    	ps.setInt(1, simulationId);
 	    	ResultSet result = ps.executeQuery();
 	    	while(result.next()) {
-	    		EdgeIDs.add(result.getInt("simulation_id"));
+	    		//edgeIDs.add(result.getInt("simulation_id"));
 			}
 		}catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		    return EdgeIDs;
+		    return edgeIDs;
+	}
+	
+	public ArrayList<String> getVehicleIds(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT DISTINCT(ct.vehicles) \r\n" + 
+						  "FROM (SELECT unnest(xpath('//lane/vehicles/@value', s.data))::text as vehicles \r\n" + 
+				          "		FROM projectschema.snapshot s\r\n" + 
+				          "		WHERE s.simulation = ?) as ct"; 
+
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<String> vehicleIDs = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+	    		String[] ids = result.getString("vehicles").split(" ");
+	    		for(int i=0; i< ids.length; i++) {
+	    			if(!vehicleIDs.contains(ids[i])) {
+	    				vehicleIDs.add(ids[i]);
+	    			}
+	    		}
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		    return vehicleIDs;
 	}
 
 }

@@ -72,16 +72,24 @@ public class SimulationResources {
 	@GET
 	@Path("/{simulation_id}/lane_ids")
 	@Produces("application/json")
-	public ArrayList<Integer> getLaneIds(@PathParam("simulation_id") int id) {
-		ArrayList<Integer> laneIDs = SimulationDAO.instance.getLaneIds(id);
+	public ArrayList<String> getLaneIds(@PathParam("simulation_id") int id) {
+		ArrayList<String> laneIDs = SimulationDAO.instance.getLaneIds(id);
 		return laneIDs;
 	}
 	
 	@GET
 	@Path("/{simulation_id}/edge_ids")
 	@Produces("application/json")
-	public ArrayList<Integer> getEdgeIds(@PathParam("simulation_id") int id) {
-		ArrayList<Integer> EdgeIDs = SimulationDAO.instance.getEdgeIds(id);
-		return EdgeIDs;
+	public ArrayList<String> getEdgeIds(@PathParam("simulation_id") int id) {
+		ArrayList<String> edgeIDs = SimulationDAO.instance.getEdgeIds(id);
+		return edgeIDs;
+	}
+	
+	@GET
+	@Path("/{simulation_id}/vehicle_ids")
+	@Produces("application/json")
+	public ArrayList<String> getVehicleIds(@PathParam("simulation_id") int id) {
+		ArrayList<String> vehicleIDs = SimulationDAO.instance.getVehicleIds(id);
+		return vehicleIDs;
 	}
 }
