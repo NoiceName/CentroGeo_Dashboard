@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -116,7 +117,7 @@ public enum SnapshotDAO {
 	public ArrayList<Snapshot> getAllSnapshotsForOneLane(int simulation_id, String lane_id){
 		Database db = new Database();
 		db.connectPGSQL();
-		String statement = "select s.time, s.snapshot_id, sl.lane, count(sv.snapshot_vehicle_id)" 
+		String statement = "select s.time, s.snapshot_id, sl.lane, count(sv.snapshot_vehicle_id)"
 				+ "from \"projectschema\".snapshot s, \"projectschema\".snapshotlane sl, \"projectschema\".snapshotvehicle sv"
 				+ "where s.snapshot_id = ?"
 				+ "and l.lane_id = ?"
@@ -126,6 +127,23 @@ public enum SnapshotDAO {
 				+ "group by s.time, s.snapshot_id, sl.lane";
 		PreparedStatement st = db.prepareStatement(statement);
 		return new ArrayList<Snapshot>();
+	}
+
+	public void addSnapshot(int simulationID, double time, SQLXML xmlVal) throws SQLException {
+		Database db = DatabaseDAO.instance.getDatabase();
+
+		//language=PostgreSQL
+		String query = "INSERT INTO projectschema.snapshot (simulation, time, data) " +
+				"VALUES (?, ?, ?)";
+
+		PreparedStatement statement = null;
+
+		statement = db.prepareStatement(query);
+		statement.setInt(1, simulationID);
+		statement.setDouble(2, time);
+		statement.setSQLXML(3, xmlVal);
+
+		statement.executeUpdate();
 	}
 
 }
