@@ -15,7 +15,7 @@ public class InitResp {
         this.result = res;
     }
 
-    public String gerResult(){
+    public String getResult(){
         return this.result;
     }
 

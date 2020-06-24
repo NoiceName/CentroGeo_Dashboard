@@ -1,6 +1,7 @@
 package resources;
 
 import model.Database;
+import model.InitResp;
 import org.json.JSONObject;
 
 import javax.ws.rs.*;
@@ -12,7 +13,8 @@ public class InitializationResource {
 
    @POST
    @Consumes("application/x-www-form-urlencoded")
-   public JSONObject receiveInformation(@FormParam("database_url") String dbUrl, @FormParam("database_username") String dbUsername, @FormParam("database_password") String password) {
+   @Produces("application/json")
+   public InitResp receiveInformation(@FormParam("database_url") String dbUrl, @FormParam("database_username") String dbUsername, @FormParam("database_password") String password) {
       //Check if the given parameters are valid
        System.out.println("executed");
       Database.loadPGSQL();
@@ -20,12 +22,13 @@ public class InitializationResource {
       props.setProperty("user", dbUsername);
       props.setProperty("password", password);
       Connection con = null;
-      JSONObject resp = new JSONObject();
+      InitResp resp = new InitResp();
       try {
          con = DriverManager.getConnection(dbUrl, props);
          con.close();
       } catch (SQLException e) {
-            resp.put("result", "bad_login");
+            resp.setResult("bad_login");
+            System.out.println("bad_login");
             return resp;
       }
       Database.setUrl(dbUrl);
@@ -41,12 +44,12 @@ public class InitializationResource {
             schemaName = rs.getString("schema_name");
          }
       } catch (SQLException throwables) {
-          System.out.println(throwables.getMessage());
+          schemaName = null;
       }
 
-      PreparedStatement schemaSt;
-      if(schemaName.equals("projectschema")){
-          resp.put("result", "bad_exists");
+      if(!(schemaName == null)){
+          resp.setResult("bad_exists");
+          return resp;
       } else {
           PreparedStatement schemaStatement = db.prepareStatement("drop schema if exists \"projectschema\" cascade;\n" +
                   "\n" +
@@ -127,8 +130,8 @@ public class InitializationResource {
              System.out.println(throwables.getMessage());
          }
       }
-
-      resp.put("result", "success");
+      db.closeConnection();
+      resp.setResult("success");
       return resp;
    }
 
