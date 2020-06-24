@@ -304,7 +304,10 @@ function drawThinLineChart(dataArray, title, id, hTitle, vTitle) {
 
 //should return all lane id's of currently selected simulation
 function getLanesId() {
-  laneIds = ["e6_0", "e9_0", ":n10_0_0", ":n11_0_0", ":n12_0_0"]
+  // laneIds = ["e6_0", "e9_0", ":n10_0_0", ":n11_0_0", ":n12_0_0"]
+  $.get('/CentroGeo/resources/simulations/'+ getSelectedSimulationID() +'/lane_ids', function(data) {
+          laneIds = data;
+        })
   return laneIds;
 }
 
