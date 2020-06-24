@@ -10,9 +10,9 @@ public class Database {
 	//Specify the parameters for the database here!
 	//The URL of the database (Note: the url string should begin with 'jdbc::postgresq:' "
 	//The username of the database user
-	String url = "jdbc:postgresql://localhost:5432/";
-	String username = "postgres";
-	String password = "password";
+	static String url = "jdbc:postgresql://localhost:5432/";
+	static String username = "postgres";
+	static String password = "password";
 	//Do not change this variable
 	String schemaName = "projectschema";
 
@@ -82,6 +82,18 @@ public class Database {
 
 	public String getSchema() {
 		return this.schemaName;
+	}
+
+	public void setUrl(String url){
+		this.url = url;
+	}
+
+	public void setPassword(String pass){
+		this.url = pass;
+	}
+
+	public void setUsername(String username){
+		this.url = username;
 	}
 
 	public Connection getConnection() {
