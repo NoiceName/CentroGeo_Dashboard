@@ -410,17 +410,20 @@ public enum ChartDAO {
 	}
 
 	
+	//returns transferred (teleportd) vehicles over time.
 	public Chart getTransVehicles(int simulationId) {
 		Database db = new Database(); 
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		String statement= "SELECT d.time, COUNT(d.veh_ids) as number\r\n" + 
-				"FROM (\r\n" + 
-				"SELECT s.time as time, unnest(xpath('/snapshot/vehicleTransfer/@id', s.data))::text as veh_ids \r\n" + 
-				"FROM projectschema.snapshot s  \r\n" + 
-				"WHERE s.simulation = ? \r\n" + 
-				"ORDER BY s.time ) as d\r\n" + 
-				"GROUP BY d.time";
+		String statement= "SELECT DISTINCT s1.time, COALESCE( (	SELECT COUNT(d.veh_ids)as number \r\n" + 
+				"					FROM (	SELECT s.time as time, unnest(xpath('/snapshot/vehicleTransfer/@id', s.data))::text as veh_ids \r\n" + 
+				"							FROM projectschema.snapshot s  \r\n" + 
+				"							WHERE s.simulation = ? \r\n" + 
+				"							ORDER BY s.time ) as d\r\n" + 
+				"				 			WHERE d.time = s1.time\r\n" + 
+				"							GROUP BY d.time), 0) as counted				   \r\n" + 
+				"FROM projectschema.snapshot s1\r\n" + 
+				"ORDER BY s1.time";
 		PreparedStatement ps = db.prepareStatement(statement);
 		ArrayList<ChartPoint> points = new ArrayList<>(); 
 		
@@ -429,7 +432,7 @@ public enum ChartDAO {
 	    	ResultSet result = ps.executeQuery();
 	    	while(result.next()) {
 				double time = result.getFloat("time");
-				double number = Double.parseDouble(result.getString("number"));
+				int number = Integer.parseInt(result.getString("counted"));
 				//create points on chart of Cumulative Number of Arrived Vehicles
 				ChartPoint point = new ChartPoint(time, number);
 				points.add(point);								

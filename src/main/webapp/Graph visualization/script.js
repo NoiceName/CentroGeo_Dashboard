@@ -246,7 +246,12 @@ function getDataArray(serverResponse, xTitle) {
               // dataArray[k + 1] = [];
               dataArray[k + 1] = [serverResponse[0].data[k].x];
               for (var l = 0; l < serverResponse.length; l++) {
-                dataArray[k + 1].push(serverResponse[l].data[k].y);
+                // when comparing 2 simulations retrieved data length may vary
+                if (l > serverResponse[l].data.length) {
+                  dataArray[k + 1].push(0);
+                } else {
+                   dataArray[k + 1].push(serverResponse[l].data[k].y);
+                }
               }
             }
   return dataArray;
