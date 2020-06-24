@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -62,8 +63,14 @@ public enum SimulationDAO {
 			"WHERE simulation_id = ?; ";
 						
 			query = conn.prepareStatement(sql);
-			query.setString(1, editor);			
-			query.setDate(2, new java.sql.Date(date.getTime()));
+			query.setString(1, editor);	
+			
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			final String stringDate= dateFormat.format(date);
+			final java.sql.Date sqlDate=  java.sql.Date.valueOf(stringDate);
+			query.setDate(2, sqlDate);
+			
 			query.setString(3, tag);
 			query.setString(4, description);
 			query.setInt(5, title);

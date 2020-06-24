@@ -19,6 +19,7 @@
    });		
 	 
 $(function() {
+	//add new tags in the select list
 	$("#add-new-tag").click (function(event) {
 	   
 	     event.preventDefault();
@@ -44,21 +45,25 @@ $(function() {
 	   
 	   });
 	
-//	$('#tag').click(function(event){
-//		event.preventDefault();
-//		var choices = $('#tag');
-//		var result = [];
-//		var currentOption;
-//		for(i = 0;i<choices.length; i++){
-//			currentOption = choices[i];
-//			if(currentOption.selected == true){
-//				result += currentOption.value + ";"; 
-//			}
-//		} 
-//		console.log(result);
-//		choices.val(result);
-//		
-//	});
+	/**
+	 * select multiple tags,
+	 * For windows: Hold down the control (ctrl) button to select multiple options
+	 * For Mac: Hold down the command button to select multiple options 
+	 */ 
+	$('#tag').change(function(event){
+		event.preventDefault();
+		var choices = $('#tag option');
+		var values = [];
+	
+		for(i = 0;i<choices.length; i++){		 
+			if(choices[i].selected){
+				var currentOption = choices[i].text;
+				values.push(currentOption);
+			}
+		} 
+	    $('#tagValues').val(values);
+		console.log(values);		
+	});
 	
     $("#remove").click(function (event) {
 		 event.preventDefault();
@@ -89,14 +94,14 @@ $(function() {
 			var title = $( '#title' );
 			var editor = $( '#editor' );
 			var date = $( '#date' );
-			var tag = $( '#tag' );
+			var tag = $( '#tagValues' );
 			var description = $( '#description' );
 			
 			var formData = JSON.stringify({
 				'title' : title.val(),
 				'editor' : editor.val(),
 				'date': date.val(),
-				'tag': tag.val(),
+				'tag_values': tag.val(),
 				'description': description.val()
 			});
 			
