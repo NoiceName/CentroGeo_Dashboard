@@ -69,8 +69,7 @@ public enum SimulationDAO {
 	}
 
 	public int addEmptyMetadata() throws SQLException {
-		Database db = new Database();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 
 		String query = "INSERT INTO projectschema.simulation(name, date, tags, description) " +
 				"VALUES (NULL, NULL, NULL, NULL) RETURNING simulation_id";
@@ -84,8 +83,7 @@ public enum SimulationDAO {
 	}
 
 	public void addMetadata(int simulationID, String name, String date, String tags, String description) throws SQLException, ParseException {
-		Database db = new Database();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 
 		//language=PostgreSQL
 		String query = "UPDATE projectschema.simulation SET name=?, date=?, tags=?, description=? WHERE simulation_id=?";
@@ -102,7 +100,6 @@ public enum SimulationDAO {
 		statement.setString(4, description);
 
 		statement.executeUpdate();
-		db.getConnection().close();
 	}
 
 	public void deleteSimulation(int id){

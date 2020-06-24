@@ -130,8 +130,7 @@ public enum SnapshotDAO {
 	}
 
 	public void addSnapshot(int simulationID, double time, SQLXML xmlVal) throws SQLException {
-		Database db = new Database();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 
 		//language=PostgreSQL
 		String query = "INSERT INTO projectschema.snapshot (simulation, time, data) " +
@@ -145,7 +144,6 @@ public enum SnapshotDAO {
 		statement.setSQLXML(3, xmlVal);
 
 		statement.executeUpdate();
-		db.getConnection().close();
 	}
 
 }

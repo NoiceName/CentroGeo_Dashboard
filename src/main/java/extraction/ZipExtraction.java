@@ -1,9 +1,6 @@
 package extraction;
 
-import dao.NetDAO;
-import dao.RoutesDAO;
-import dao.SimulationDAO;
-import dao.SnapshotDAO;
+import dao.*;
 import model.Database;
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.Attributes;
@@ -27,20 +24,24 @@ public enum ZipExtraction {
 
 	// Keeps track of which simulation is currently being added
 	public int simulationID;
+	public Connection connection;
+
+	public void extract(InputStream stream) throws Exception {
+		DatabaseDAO.instance.setupDatabase();
+		Database db = DatabaseDAO.instance.getDatabase();
+
+		connection = db.getConnection();
+
+		simulationID = SimulationDAO.instance.addEmptyMetadata();
+
+		getZipData(stream);
+	}
 
 	public void getZipData(InputStream stream) throws Exception {
 		// Stops the stream from being closed by other methods
 		WontCloseZipInputStream zipStream = new WontCloseZipInputStream(stream);
 
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
-
-		Connection connection = db.getConnection();
-
 		boolean containsMetadata = false;
-
-		simulationID = SimulationDAO.instance.addEmptyMetadata();
 
 		try {
 			for (ZipEntry e; (e = zipStream.getNextEntry()) != null; ) {

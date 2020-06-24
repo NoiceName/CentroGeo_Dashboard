@@ -9,8 +9,7 @@ public enum NetDAO {
 	instance;
 
 	public void addNet(String id, String edge_id, int simulationID, int index, double length, String shape) throws SQLException {
-		Database db = new Database();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 
 		//language=PostgreSQL
 		String query = "INSERT INTO projectschema.lane (lane_id, edge_id, simulation, index, length, shape) " +
