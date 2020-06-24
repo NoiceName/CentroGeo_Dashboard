@@ -1,8 +1,5 @@
 
-	 //var options =['congestion','date'];
-	 //localStorage.setItem("tag-options", JSON.stringify(options));
-
-	 $(document).ready(function (){
+ $(document).ready(function (){
 	 	var domSelect = $('#tag');
 	  // check if localStorage has option list
 	    
@@ -20,7 +17,7 @@
     
 		}	
    });		
-
+	 
 $(function() {
 	$("#add-new-tag").click (function(event) {
 	   
@@ -46,10 +43,27 @@ $(function() {
 	   alert("New tag added!");
 	   
 	   });
-	   
+	
+//	$('#tag').click(function(event){
+//		event.preventDefault();
+//		var choices = $('#tag');
+//		var result = [];
+//		var currentOption;
+//		for(i = 0;i<choices.length; i++){
+//			currentOption = choices[i];
+//			if(currentOption.selected == true){
+//				result += currentOption.value + ";"; 
+//			}
+//		} 
+//		console.log(result);
+//		choices.val(result);
+//		
+//	});
+	
     $("#remove").click(function (event) {
 		 event.preventDefault();
 		 var options = [];
+		 var domSelect = $('#tag');
 		 
 		 if(options === null){
 			 alert('sorry, no tags can be deleted!');
@@ -57,25 +71,18 @@ $(function() {
 		 else {
 			 options = JSON.parse(localStorage.getItem('tag-options'));
 		 }
-		 
-        $("#tag option:selected").remove();
-		 var removeTag = domSelect.children("option:selected").val();
-		 
+		 var removeTag = $("#tag option:selected").val();        		
 		 var index = options.indexOf(removeTag);
 
-        if(index > -1){
+         if(index > -1){
 				options.splice(index, 1);
-          }
-
-    	   
-		 
-		 localStorage.setItem("tag-options", JSON.stringify(options));
+          }		 
+		 localStorage.setItem("tag-options", JSON.stringify(options)); 
+		 $("#tag option:selected").remove();
 		 console.log(JSON.parse(localStorage.getItem('tag-options')));
-        alert("Selected tag removed.");
+         alert("Selected tag removed.");
      });
-
-
-    
+	   
 	  $('#myForm' ).submit(function( event ) {
 			event.preventDefault();
 			

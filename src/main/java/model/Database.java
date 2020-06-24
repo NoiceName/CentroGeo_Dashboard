@@ -14,6 +14,7 @@ public class Database {
 	static String username = "postgres";
 	static String password = "password";
 
+
 	//Do not change this variable
 	String schemaName = "projectschema";
 
