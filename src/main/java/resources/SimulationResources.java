@@ -19,6 +19,7 @@ import javax.xml.crypto.Data;
 
 import cookie_manager.Secured;
 import dao.SimulationDAO;
+import extraction.ZipExtraction;
 import model.Simulation;
 import org.json.JSONObject;
 
@@ -37,10 +38,10 @@ public class SimulationResources {
 	@Consumes("application/zip")
 	public Response addSimulation(InputStream stream){
 		try {
-			SimulationDAO.instance.addSimulation(stream);
+			ZipExtraction.instance.extract(stream);
 			return Response.ok().entity("").build();
 		} catch (Exception e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
 		}
 	}
