@@ -61,4 +61,35 @@ public class SimulationResources {
 		SimulationDAO.instance.deleteSimulation(id);
 	}
 	
+	@GET
+	@Path("/simulation_ids")
+	@Produces("application/json")
+	public ArrayList<Integer> getSimulationIds() {
+		ArrayList<Integer> simIDs = SimulationDAO.instance.getSimulationIds();
+		return simIDs;
+	}
+	
+	@GET
+	@Path("/{simulation_id}/lane_ids")
+	@Produces("application/json")
+	public ArrayList<String> getLaneIds(@PathParam("simulation_id") int id) {
+		ArrayList<String> laneIDs = SimulationDAO.instance.getLaneIds(id);
+		return laneIDs;
+	}
+	
+	@GET
+	@Path("/{simulation_id}/edge_ids")
+	@Produces("application/json")
+	public ArrayList<String> getEdgeIds(@PathParam("simulation_id") int id) {
+		ArrayList<String> edgeIDs = SimulationDAO.instance.getEdgeIds(id);
+		return edgeIDs;
+	}
+	
+	@GET
+	@Path("/{simulation_id}/vehicle_ids")
+	@Produces("application/json")
+	public ArrayList<String> getVehicleIds(@PathParam("simulation_id") int id) {
+		ArrayList<String> vehicleIDs = SimulationDAO.instance.getVehicleIds(id);
+		return vehicleIDs;
+	}
 }

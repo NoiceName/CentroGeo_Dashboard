@@ -111,5 +111,105 @@ public enum SimulationDAO {
 		extraction.ZipExtraction.getZipData(stream, connection);
 		System.out.println("File added to database");
 	}
+	
+	public ArrayList<Integer> getSimulationIds() {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT sim.simulation_id\r\n" + 
+						  "FROM projectschema.simulation sim\r\n";
+
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<Integer> simIDs = new ArrayList<>(); 
+		
+	    try {
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+	    		simIDs.add(result.getInt("simulation_id"));
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		    return simIDs;
+	}
+	
+	public ArrayList<String> getLaneIds(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT l.lane_id\r\n" + 
+						  "FROM projectschema.lane l\r\n" + 
+				          "WHERE l.simulation = ?";
+
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<String> laneIDs = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+	    		laneIDs.add(result.getString("lane_id"));
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		    return laneIDs;
+	}
+	
+	public ArrayList<String> getEdgeIds(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT l.lane_id\r\n" + 
+						  "FROM projectschema.lane l\r\n" + 
+				          "WHERE l.simulation = ?";
+
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<String> edgeIDs = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+	    		//edgeIDs.add(result.getInt("simulation_id"));
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		    return edgeIDs;
+	}
+	
+	public ArrayList<String> getVehicleIds(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT DISTINCT(ct.vehicles) \r\n" + 
+						  "FROM (SELECT unnest(xpath('//lane/vehicles/@value', s.data))::text as vehicles \r\n" + 
+				          "		FROM projectschema.snapshot s\r\n" + 
+				          "		WHERE s.simulation = ?) as ct"; 
+
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<String> vehicleIDs = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+	    		String[] ids = result.getString("vehicles").split(" ");
+	    		for(int i=0; i< ids.length; i++) {
+	    			if(!vehicleIDs.contains(ids[i])) {
+	    				vehicleIDs.add(ids[i]);
+	    			}
+	    		}
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		    return vehicleIDs;
+	}
 
 }
