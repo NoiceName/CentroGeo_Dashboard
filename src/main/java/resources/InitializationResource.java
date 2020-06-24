@@ -11,12 +11,19 @@ import java.util.Properties;
 @Path("/initialize_db")
 public class InitializationResource {
 
+   /**
+    * @param dbUrl - The url of a postgres database
+    * @param dbUsername - The username of a postgres database
+    * @param password - The password of the database
+    * @return - InitResp object which is set to success in the case the database was created
+    * Set to bad_login in the case the login details are incorrect
+    * Set to bad_exists in the case "projectschema" already exists
+    */
    @POST
    @Consumes("application/x-www-form-urlencoded")
    @Produces("application/json")
    public InitResp receiveInformation(@FormParam("database_url") String dbUrl, @FormParam("database_username") String dbUsername, @FormParam("database_password") String password) {
       //Check if the given parameters are valid
-       System.out.println("executed");
       Database.loadPGSQL();
       Properties props = new Properties();
       props.setProperty("user", dbUsername);
@@ -28,7 +35,6 @@ public class InitializationResource {
          con.close();
       } catch (SQLException e) {
             resp.setResult("bad_login");
-            System.out.println("bad_login");
             return resp;
       }
       Database.setUrl(dbUrl);
