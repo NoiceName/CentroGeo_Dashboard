@@ -187,13 +187,11 @@ function genGraph() {
     } else {
       simId = userOptions;
     }
-    console.log("hello?")
+
     //get the Data using RESTful services
       for (var j = 0; j < simId.length; j++) {
         $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/number_of_transferred_vehicles', function(data) {
           serverResponse.push(data);
-          console.log("hey!");
-          console.log(serverResponse);
 
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (simId.length)) {

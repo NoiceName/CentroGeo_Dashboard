@@ -196,8 +196,8 @@ public enum ChartDAO {
 			ps.setString(2, laneId);
 			ResultSet result = ps.executeQuery();
 			while(result.next()) {
-				String[] cars = result.getString("vehicles").split("v");
-				int count = cars.length -1;
+				String[] cars = result.getString("vehicles").split(" ");
+				int count = cars.length;
 				double time = result.getFloat("time");
 				//Creating points on an EdgeAppearanceChart.
 				ChartPoint point = new ChartPoint(time, count);
