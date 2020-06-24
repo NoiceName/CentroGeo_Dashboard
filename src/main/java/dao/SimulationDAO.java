@@ -203,7 +203,7 @@ public enum SimulationDAO {
 		Database db = new Database(); 
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		String statement= "SELECT l.lane_id\r\n" + 
+		String statement= "SELECT REPLACE(l.lane_id, '_0', '') as edge\r\n" + 
 						  "FROM projectschema.lane l\r\n" + 
 				          "WHERE l.simulation = ?";
 
@@ -214,7 +214,7 @@ public enum SimulationDAO {
 	    	ps.setInt(1, simulationId);
 	    	ResultSet result = ps.executeQuery();
 	    	while(result.next()) {
-	    		//edgeIDs.add(result.getInt("simulation_id"));
+	    		edgeIDs.add(result.getString("edge"));
 			}
 		}catch (SQLException e) {
 			System.out.println(e.getMessage());

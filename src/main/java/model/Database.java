@@ -13,6 +13,7 @@ public class Database {
 	static String url = "jdbc:postgresql://localhost:5432/";
 	static String username = "postgres";
 	static String password = "password";
+
 	//Do not change this variable
 	String schemaName = "projectschema";
 

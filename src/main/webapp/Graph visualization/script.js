@@ -47,7 +47,7 @@ function genGraph() {
 
   // determine what graph should be drawn
 
-  //    GRAPH showing edge appearance frequency 
+  //  GRAPH showing edge appearance frequency 
 	if (chartType == "edgeFr") {
 
     //get the Data using RESTful services
@@ -64,7 +64,7 @@ function genGraph() {
       }
   } 
 
-  //    GRAPH showing #cars per lane
+  //  GRAPH showing #cars per lane
 	else if (chartType == "transVeh") {
     //select choosen lane
     var laneChoice;
@@ -85,7 +85,7 @@ function genGraph() {
       }
 	}
 
-   //    GRAPH showing info about chosen vehicle over time
+  //  GRAPH showing info about chosen vehicle over time
   else if (chartType == "vehInfo") {
 
     $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/vehicle_information?vehicle_id=' + userOptions[0], function(data) {
@@ -102,6 +102,7 @@ function genGraph() {
   //  GRAPH showing the average route length over time
   else if (chartType == "avgRoute") {
     
+
   }
 
   //  GRAPH showing the average speed over time
@@ -146,14 +147,14 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (simId.length)) {
             dataArray = getDataArray(serverResponse, "time");
-            drawLineChart(dataArray, "Average speed factor of the vehicles", createChartSpace(), "time", "speed factor");
+            drawThinLineChart(dataArray, "Average speed factor of the vehicles", createChartSpace(), "time", "speed factor");
 
           }
         })
       }
   }
 
-	//   Graph showing the total number of arrived cars over time
+	//  GRAPH showing the total number of arrived cars over time
 	else if (chartType == "cumulVeh") {
     var simId = [];
 
@@ -178,7 +179,31 @@ function genGraph() {
       }
   }
 
-  //   GRAPH showing the number of running vehicles over time
+  //  GRAPH showing the number of transferred (teleported) vehicles over time
+  else if (chartType == "transferVeh") {
+    var simId = [];
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/number_of_transferred_vehicles', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            drawLineChart(dataArray, "Number of transferred vehicles", createChartSpace(), "time", "count");
+
+          }
+        })
+      }
+  }
+
+  //  GRAPH showing the number of running vehicles over time
   else if (chartType == "runningVeh") {
     var simId = [];
 
@@ -219,7 +244,12 @@ function getDataArray(serverResponse, xTitle) {
               // dataArray[k + 1] = [];
               dataArray[k + 1] = [serverResponse[0].data[k].x];
               for (var l = 0; l < serverResponse.length; l++) {
-                dataArray[k + 1].push(serverResponse[l].data[k].y);
+                // when comparing 2 simulations retrieved data length may vary
+                if (l > serverResponse[l].data.length) {
+                  dataArray[k + 1].push(0);
+                } else {
+                   dataArray[k + 1].push(serverResponse[l].data[k].y);
+                }
               }
             }
   return dataArray;
@@ -248,9 +278,34 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 
 
 
+function drawThinLineChart(dataArray, title, id, hTitle, vTitle) {
+  var data = google.visualization.arrayToDataTable(dataArray);
+
+
+  var options = {
+    title: title,
+    curveType: 'none',
+    legend: { position: 'bottom' },
+    crosshair: { trigger: 'both' },
+    explorer: {axis: 'horizontal'},
+    hAxis: {title:hTitle, format:"#", minValue: 0, viewWindow: {min: 0}},
+    vAxis: {title:vTitle, format:"#", minValue: 1, maxValue: 1, viewWindow: {min: 0}},
+    // hard coded height, maybe change change this in the generatingGraph.js
+    height: 350,
+  };
+
+  var chart = new google.visualization.LineChart(document.getElementById(id));
+  chart.draw(data, options);
+}
+
+
+
 //should return all lane id's of currently selected simulation
 function getLanesId() {
-  laneIds = ["e6_0", "e9_0", ":n10_0_0", ":n11_0_0", ":n12_0_0"]
+  // laneIds = ["e6_0", "e9_0", ":n10_0_0", ":n11_0_0", ":n12_0_0"]
+  $.get('/CentroGeo/resources/simulations/'+ getSelectedSimulationID() +'/lane_ids', function(data) {
+          laneIds = data;
+        })
   return laneIds;
 }
 
@@ -268,7 +323,8 @@ function getEdgeId() {
 
 //should return all simulation id's f the database
 function getSimIds() {
-  return [getSelectedSimulationID(), "1", "2", "5", "6"];
+  var simIds = [getSelectedSimulationID(), "1", "2", "5", "6"];
+  return simIds;
 }
 
 

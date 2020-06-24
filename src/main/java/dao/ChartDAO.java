@@ -196,8 +196,8 @@ public enum ChartDAO {
 			ps.setString(2, laneId);
 			ResultSet result = ps.executeQuery();
 			while(result.next()) {
-				String[] cars = result.getString("vehicles").split("v");
-				int count = cars.length -1;
+				String[] cars = result.getString("vehicles").split(" ");
+				int count = cars.length;
 				double time = result.getFloat("time");
 				//Creating points on an EdgeAppearanceChart.
 				ChartPoint point = new ChartPoint(time, count);
@@ -341,7 +341,7 @@ public enum ChartDAO {
 		Database db = new Database();
 		Database.loadPGSQL();
 		db.connectPGSQL();
-		// to omit the cars with a null speed, remove the SQL comment bfore the "WHERE speed > 0"
+		// to omit the cars with a null speed, remove the SQL comment before the "WHERE speed > 0"
 		String statement = "SELECT time, ROUND(AVG(speed), 2) AS AVGspeed\r\n" + 
 				"FROM (	SELECT s.time, CAST(unnest(xpath('//vehicle/@speed', s.data))::text AS numeric) AS speed \r\n" + 
 				"		FROM projectschema.snapshot s\r\n" + 
@@ -402,6 +402,48 @@ public enum ChartDAO {
 		//Create a chart with the given points.
 		chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
 		return chart; 
+	}
+
+	public Chart getAverageRouteL(int simulationId) {
+		
+		return null;
+	}
+
+	
+	//returns transferred (teleportd) vehicles over time.
+	public Chart getTransVehicles(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT DISTINCT s1.time, COALESCE( (	SELECT COUNT(d.veh_ids)as number \r\n" + 
+				"					FROM (	SELECT s.time as time, unnest(xpath('/snapshot/vehicleTransfer/@id', s.data))::text as veh_ids \r\n" + 
+				"							FROM projectschema.snapshot s  \r\n" + 
+				"							WHERE s.simulation = ? \r\n" + 
+				"							ORDER BY s.time ) as d\r\n" + 
+				"				 			WHERE d.time = s1.time\r\n" + 
+				"							GROUP BY d.time), 0) as counted				   \r\n" + 
+				"FROM projectschema.snapshot s1\r\n" + 
+				"ORDER BY s1.time";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+				double time = result.getFloat("time");
+				int number = Integer.parseInt(result.getString("counted"));
+				//create points on chart of Cumulative Number of Arrived Vehicles
+				ChartPoint point = new ChartPoint(time, number);
+				points.add(point);								
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+			Chart chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		    return chart;
+		    
 	}
 
 }
