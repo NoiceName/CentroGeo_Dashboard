@@ -20,6 +20,9 @@ zipButton.addEventListener("click", function() {
 
 /*Sends the zip-file to the server.*/
 $("#zipform").submit(function (evt) {
+	const button = document.getElementById("submit");
+	button.disabled = true;
+	
 	var menu = document.getElementById("zipmenu");
 
 	var alignDIV = document.createElement("DIV");
@@ -38,7 +41,6 @@ $("#zipform").submit(function (evt) {
 
     var formData = new FormData();
     console.log(zipFile.files[0]);
-    // formData.append('zip', zipFile.files[0]);
     formData = zipFile.files[0];
     if (formData != null) {
     	$.ajax({
@@ -54,10 +56,12 @@ $("#zipform").submit(function (evt) {
     		processData: false,
     		success: function (response) {
     			alignDIV.remove();
+    			button.disabled = false;
     			alert("Successfully uploaded zip file");
     		},
     		error: function (jqXHR, textStatus, errorThrown) {
     			alignDIV.remove();
+    			button.disabled = false;
     			alert(jqXHR.responseText)
     		}
         
