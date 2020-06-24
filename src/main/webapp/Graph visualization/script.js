@@ -4,6 +4,7 @@ var XMLloaded = false;
 var vehIds;
 var edgeIds;
 var laneIds;
+var simIds = [];
 
 
 function onload() {
@@ -300,30 +301,37 @@ function drawThinLineChart(dataArray, title, id, hTitle, vTitle) {
 
 
 
-//should return all lane id's of currently selected simulation
+//returns all lane id's of currently selected simulation
 function getLanesId() {
-  // laneIds = ["e6_0", "e9_0", ":n10_0_0", ":n11_0_0", ":n12_0_0"]
   $.get('/CentroGeo/resources/simulations/'+ getSelectedSimulationID() +'/lane_ids', function(data) {
           laneIds = data;
         })
   return laneIds;
 }
 
-//should return all the veh id's as an array
+//returns all the veh id's as an array
 function getVehId() {
-  vehIds = ["v10", "v25", "v40", "v61", "v135", "v254", "v316", "v479", "v524", "v698", "v702", "v866", "v978"];
+	$.get('/CentroGeo/resources/simulations/'+ getSelectedSimulationID() +'/vehicle_ids', function(data) {
+        vehIds = data;
+      })
   return vehIds;
 }
 
-//should return all the edge id's
+//returns all the edge id's
 function getEdgeId() {
-  edgeIds = ["e2", "e14", "e15", "e25", "e26", "e27", "e33", "e38", "e31", "e43"];
+	$.get('/CentroGeo/resources/simulations/'+ getSelectedSimulationID() +'/edge_ids', function(data) {
+        edgeIds = data;
+      })
   return edgeIds;
 }
 
-//should return all simulation id's f the database
+//returns all simulation id's f the database
 function getSimIds() {
-  var simIds = [getSelectedSimulationID(), "1", "2", "5", "6"];
+	$.get('/CentroGeo/resources/simulations/simulation_ids', function(data) {
+        for (var i = 0; i < data.length; i++) {
+          simIds[i] = data[i].toString();
+        }
+      })
   return simIds;
 }
 
