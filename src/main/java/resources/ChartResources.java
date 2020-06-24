@@ -98,4 +98,5 @@ public class ChartResources {
 		
 		return ChartDAO.instance.getAverageSpeedF(simulation_id);
 	}
+	
 }

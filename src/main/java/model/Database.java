@@ -47,6 +47,14 @@ public class Database {
 		}
 	}
 
+	public void nloadPGSQL(){
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Connects to the specified PGSQL database
 	 * @return
