@@ -339,10 +339,16 @@ function getSimIds() {
 
 
 $(function () {     $('#chartGen').click(function(event) {
-  genGraph();
+	genGraph();
 
- });
- });
+});
+});
+
+$(function () {     $('#changePass').click(function(event) {
+	location.replace("../login/change_password.html");
+
+});
+});
 
  $(function () {     $(document).ready(function() {
       //Statically set simulation id !!! that is sent to the server

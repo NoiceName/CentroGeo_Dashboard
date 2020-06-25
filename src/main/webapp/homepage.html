@@ -21,7 +21,7 @@
 	<style>
 	  @media print {
         #createChartButton, #genReportButton, #uploadSimButton, #selectSimulationButton, #editMetadataButton,
-        	#deleteSelectedSimulation, #selectedSimulation{
+        	#deleteSelectedSimulation, #selectedSimulation, #changePass{
            display: none;
         }
       }
@@ -34,21 +34,24 @@
 		<div class="row border-bottom">
 			<div class="col-12">
 				<ul class="nav justify-content-center" id="navigation-test">
-					<li class="nav-item"> <a class="nav-link bg-primary" id="selectSimulationButton" data-toggle="modal" data-target="#selectSimulationMenu">Select Simulation</a></li>
+					<li class="nav-item">
+						<a class="nav-link" id="uploadSimButton" data-toggle="modal" data-target="#uploadSimulationMenu">Upload Simulation</a>
+					</li>
+					<li class="nav-item"> <a class="nav-link" id="selectSimulationButton" data-toggle="modal" data-target="#selectSimulationMenu">Select Simulation</a></li>
+					<li class="nav-item">
+						<a class="nav-link" id="deleteSelectedSimulation" data-toggle="modal" data-target="#deleteSimConfirmation">Delete Simulation</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="editMetadataButton" data-toggle="modal" data-target="#editMetadataMenu">Edit Metadata</a>
+					</li>
 					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#createChartMenu">Create Chart</a></li>
 					<li class="nav-item">
 						<a class="nav-link" id="genReportButton" onclick="generateReport()">Generate Report</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" id="uploadSimButton" data-toggle="modal" data-target="#uploadSimulationMenu">Upload Simulation</a>
+						<a class="nav-link" id="changePass" href="../CentroGeo/login/change_password.html" style="color:black">Change Password</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" id="editMetadataButton" data-toggle="modal" data-target="#editMetadataMenu">Edit Metadata</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link bg-danger" id="deleteSelectedSimulation" data-toggle="modal" data-target="#deleteSimConfirmation">Delete Simulation</a>
-					</li>
-				</ul>
+				</ul>			
 			</div>
 			<span class="col-12">
 				<ul class="nav justify-content-center" id="">
