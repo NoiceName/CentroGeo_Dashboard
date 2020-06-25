@@ -26,9 +26,7 @@ public enum ChartDAO {
 	 * @return chart object
 	 */
 	public Chart getEdgeAppereance(int simulationId, String edgeId) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = "select ct.time as time, count(ct.data) as counter\r\n" + 
 				"from (select s.time as time, unnest(xpath('//route/@edges', s.data))::text as data \r\n" + 
 				"from projectschema.snapshot s \r\n" + 
@@ -64,9 +62,7 @@ public enum ChartDAO {
 	
 	
 	public Chart getSpeedByTimeChart(int simulation_id, String vehicle_id) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = "select time, speed\r\n" + 
 				"from (select s.time, unnest(xpath('//vehicle/@speed', s.data))::text as speed, unnest(xpath('//vehicle/@id', s.data))::text as veh_id\r\n" + 
 				"from projectschema.snapshot s\r\n" + 
@@ -99,9 +95,7 @@ public enum ChartDAO {
 
 
 	public Chart getSpeedFactorByTimeChart(int simulation_id, String vehicle_id) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = "select time, speedFactor\r\n" + 
 				"from (select s.time, unnest(xpath('//vehicle/@speedFactor', s.data))::text as speedfactor, unnest(xpath('//vehicle/@id', s.data))::text as veh_id\r\n" + 
 				"from projectschema.snapshot s\r\n" + 
@@ -132,9 +126,7 @@ public enum ChartDAO {
 	}
 
 	public Chart getRouteLengthByTimeChart(int simulation_id, String vehicle_id) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = "SELECT routes.time, ROUND((CAST(SUM(l.length) AS numeric)/1000), 4) as length\r\n" + 
 				"FROM (	SELECT s.time, unnest(xpath('/snapshot/route/@edges', s.data))::text as edges, unnest(xpath('/snapshot/route/@id', s.data))::text as route_id \r\n" + 
 				"		FROM projectschema.snapshot s \r\n" + 
@@ -180,9 +172,7 @@ public enum ChartDAO {
 	 * @return chart object
 	 */
 	public Chart getTransiting_vehicles(int simulationId, String laneId) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = "SELECT ct.time, ct.vehicles\r\n" + 
 				"FROM (SELECT s.time as time, unnest(xpath('//lane/@id', s.data))::text as laneId, unnest(xpath('//lane/vehicles/@value', s.data))::text as vehicles\r\n" + 
 				"	FROM projectschema.snapshot s\r\n" + 
@@ -214,9 +204,7 @@ public enum ChartDAO {
 	}
 	
 	public Chart getAverageVehicleSpeed(int simulationId) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = "select time, speed\r\n" + 
 				"from (select s.time, unnest(xpath('//vehicle/@speed', s.data))::text as speed\r\n" + 
 				"from projectschema.snapshot s\r\n" + 
@@ -268,9 +256,7 @@ public enum ChartDAO {
      * @throws SQLException
      */
 	public Chart getVehicleNumber(int simulationId) throws SQLException {
-		Database db = new Database(); 
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement= "SELECT s.time, unnest(xpath('//delay/@end', s.data))::text as number " + 
     			"FROM projectschema.snapshot s " + 
     			"WHERE s.simulation = ?  " + 
@@ -308,9 +294,7 @@ public enum ChartDAO {
      * @throws SQLException
      */
 	public Chart getRunVehicles(int simulationId) {
-		Database db = new Database(); 
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement= "SELECT s.time, unnest(xpath('//delay/@number', s.data))::text as number " + 
     			"FROM projectschema.snapshot s " + 
     			"WHERE s.simulation = ?  " + 
@@ -338,9 +322,7 @@ public enum ChartDAO {
 	}
 	
 	public Chart getAverageSpeed(int simulationId) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		// to omit the cars with a null speed, remove the SQL comment before the "WHERE speed > 0"
 		String statement = "SELECT time, ROUND(AVG(speed), 2) AS AVGspeed\r\n" + 
 				"FROM (	SELECT s.time, CAST(unnest(xpath('//vehicle/@speed', s.data))::text AS numeric) AS speed \r\n" + 
@@ -373,9 +355,7 @@ public enum ChartDAO {
 	
 	
 	public Chart getAverageSpeedF(int simulationId) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = "SELECT time, ROUND(AVG(speedF), 5) AS avgSpeedF\r\n" + 
 				"FROM (	SELECT s.time, CAST(unnest(xpath('//vehicle/@speedFactor', s.data))::text AS numeric) AS speedF \r\n" + 
 				"		FROM projectschema.snapshot s\r\n" + 
@@ -434,9 +414,7 @@ public enum ChartDAO {
 	
 	//returns transferred (teleportd) vehicles over time.
 	public Chart getTransVehicles(int simulationId) {
-		Database db = new Database(); 
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement= "SELECT DISTINCT s1.time, COALESCE( (	SELECT COUNT(d.veh_ids)as number \r\n" + 
 				"					FROM (	SELECT s.time as time, unnest(xpath('/snapshot/vehicleTransfer/@id', s.data))::text as veh_ids \r\n" + 
 				"							FROM projectschema.snapshot s  \r\n" + 

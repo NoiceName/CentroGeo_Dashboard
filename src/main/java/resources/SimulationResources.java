@@ -36,13 +36,17 @@ public class SimulationResources {
 	@POST
 	@Secured
 	@Consumes("application/zip")
+	@Produces("application/json")
 	public Response addSimulation(InputStream stream){
+		JSONObject response = new JSONObject();
 		try {
 			ZipExtraction.instance.extract(stream);
-			return Response.ok().entity("").build();
+			response.put("result", "true");
+			return Response.ok().entity(response.toString()).build();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+			response.put("result", e.getMessage());
+			return Response.serverError().entity(response.toString()).build();
 		}
 	}
 

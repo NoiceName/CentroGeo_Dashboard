@@ -27,9 +27,7 @@ public enum SimulationDAO {
 	 * @return - An array containing all simulations.
 	 */
 	public ArrayList<Simulation> getSimulations() {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String query = "select * from projectschema.simulation s";
 		PreparedStatement st = db.prepareStatement(query);
 		ArrayList<Simulation> arr = new ArrayList<>();
@@ -57,11 +55,10 @@ public enum SimulationDAO {
 		PreparedStatement query = null;
 		Connection conn = null;
 		int rowsAffected = 0;// failed in updating
-		Database.loadPGSQL();
-	    Database db = new Database();
+		Database db = DatabaseDAO.instance.getDatabase();
 		try {
 			
-			conn = db.connectPGSQL();
+			conn = db.getConnection();
 
 			String sql = 
 			"UPDATE projectschema.simulation "+
@@ -90,7 +87,6 @@ public enum SimulationDAO {
 					
 			   try {
 				   query.close();
-				   conn.close();
 				
 			   } catch (SQLException e) {
 				e.printStackTrace();
@@ -135,9 +131,7 @@ public enum SimulationDAO {
 	}
 
 	public void deleteSimulation(int id){
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String query = "DELETE FROM projectschema.simulation WHERE simulation_id = ?";
 		PreparedStatement statement = db.prepareStatement(query);
 		try {
@@ -149,9 +143,7 @@ public enum SimulationDAO {
 	}
 
 	public void addSimulation(InputStream stream) throws Exception {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 
 		Connection connection = db.getConnection();
 		System.out.println("Downloaded file");
@@ -160,9 +152,7 @@ public enum SimulationDAO {
 	}
 	
 	public ArrayList<Integer> getSimulationIds() {
-		Database db = new Database(); 
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement= "SELECT sim.simulation_id\r\n" + 
 						  "FROM projectschema.simulation sim\r\n";
 
@@ -182,9 +172,7 @@ public enum SimulationDAO {
 	}
 	
 	public ArrayList<String> getLaneIds(int simulationId) {
-		Database db = new Database(); 
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement= "SELECT l.lane_id\r\n" + 
 						  "FROM projectschema.lane l\r\n" + 
 				          "WHERE l.simulation = ?";
@@ -206,9 +194,7 @@ public enum SimulationDAO {
 	}
 	
 	public ArrayList<String> getEdgeIds(int simulationId) {
-		Database db = new Database(); 
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement= "SELECT REPLACE(l.lane_id, '_0', '') as edge\r\n" + 
 						  "FROM projectschema.lane l\r\n" + 
 				          "WHERE l.simulation = ?";
@@ -230,9 +216,7 @@ public enum SimulationDAO {
 	}
 	
 	public ArrayList<String> getVehicleIds(int simulationId) {
-		Database db = new Database(); 
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement= "SELECT DISTINCT(ct.vehicles) \r\n" + 
 						  "FROM (SELECT unnest(xpath('//lane/vehicles/@value', s.data))::text as vehicles \r\n" + 
 				          "		FROM projectschema.snapshot s\r\n" + 

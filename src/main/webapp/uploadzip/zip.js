@@ -50,14 +50,21 @@ $("#zipform").submit(function (evt) {
     		async: true,
     		cache: false,
     		contentType: 'application/zip',
-    		dataType: 'application/zip',
+    		dataType: 'application/json',
     		title: 'file',
     		enctype: 'application/zip',
     		processData: false,
-    		success: function (response) {
-    			alignDIV.remove();
-    			button.disabled = false;
-    			alert("Successfully uploaded zip file");
+    		success: function (resp) {
+				if(resp.result=='true') {
+					alignDIV.remove();
+					button.disabled = false;
+					alert("Successfully uploaded zip file");
+				} else {
+					alignDIV.remove();
+					button.disabled = false;
+					console.log("dont delete this");
+					alert(resp.result)
+				}
     		},
     		error: function (jqXHR, textStatus, errorThrown) {
     			alignDIV.remove();
