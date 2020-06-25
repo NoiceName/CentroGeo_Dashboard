@@ -2,6 +2,7 @@ package resources;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -25,11 +26,16 @@ public class Metadata {
 	public String updateMetadata(String metaData, @Context HttpServletResponse httpResponse) throws ParseException {
 		JSONObject metadataJson = new JSONObject(metaData);
 		int simulationId = metadataJson.getInt("title");
-		String name = metadataJson.getString("editor");
-				
+		String name = metadataJson.getString("simulation_name");
+		
+		
 		String dateStr = metadataJson.getString("date");
+		System.out.println("datastring: "+dateStr);
+		java.util.Date date = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		java.util.Date date = sdf.parse(dateStr);
+		if(dateStr!=null) {		
+		    date = sdf.parse(dateStr);
+		}
 		
 		String tag = metadataJson.getString("tag_values");
 		String description = metadataJson.getString("description");

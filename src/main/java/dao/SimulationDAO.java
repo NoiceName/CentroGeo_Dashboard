@@ -63,12 +63,15 @@ public enum SimulationDAO {
 			"WHERE simulation_id = ?; ";
 						
 			query = conn.prepareStatement(sql);
-			query.setString(1, name);	
-			
+			query.setString(1, name);
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			final String stringDate= dateFormat.format(date);
-			final java.sql.Date sqlDate=  java.sql.Date.valueOf(stringDate);
+			
+			java.sql.Date sqlDate = null;
+			if(date != null){		
+			String stringDate= dateFormat.format(date);
+			sqlDate=  java.sql.Date.valueOf(stringDate);		
+			}
 			query.setDate(2, sqlDate);
 			
 			query.setString(3, tag);
