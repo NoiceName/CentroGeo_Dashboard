@@ -131,19 +131,25 @@
 		</dependency>
 
 
-		<dependency>
-    		<groupId>org.springframework.security</groupId>
-    		<artifactId>spring-security-crypto</artifactId>
-    		<version>5.3.3.RELEASE</version>
-		</dependency>
+        <!-- selenium and its drivers -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+        </dependency>
 
-		<dependency>
-    		<groupId>org.springframework.security</groupId>
-    		<artifactId>spring-security-test</artifactId>
-   	 		<version>5.3.3.RELEASE</version>
-    		<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>htmlunit-driver</artifactId>
+            <version>2.33.2</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-server</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+	
     	<dependency>
          	<groupId>org.bouncycastle</groupId>
          	<artifactId>bcprov-jdk15on</artifactId>

@@ -493,3 +493,4 @@ function createSimulationBadge(type, data) {
 	span.innerText = data;
 	return span;
 }
+
