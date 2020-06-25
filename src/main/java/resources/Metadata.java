@@ -31,6 +31,7 @@ public class Metadata {
 		
 		String dateStr = metadataJson.getString("date");
 		System.out.println("datastring: "+dateStr);
+		
 		java.util.Date date = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		if(dateStr!=null) {		
