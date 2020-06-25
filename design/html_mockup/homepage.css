@@ -1,0 +1,139 @@
+body {
+  background: url('https://cdn.hipwallpaper.com/i/23/48/tb4qfo.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: 3000px;
+  -o-background-size: cover;
+}
+
+a.login {
+	color: white;
+	position: absolute; 
+	right: 10px;
+	bottom: 10px; 
+	width: 100px;
+	border-style: solid;
+	border-radius: 25px;
+	padding-left: 20px;
+}
+
+a.help {
+	color: white;
+	position: absolute;
+	right: 10px;	
+	width: 100px;
+	border-style: solid;
+	border-radius: 25px;
+	padding-left: 30px;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+:root {
+
+--first-child-width: 100px;
+--second-child-width: 135px;
+--third-child-width: 130px;
+--fourth-child-width: 120px;
+--fifth-child-width: 120px;
+
+--total-width: calc(var(--fifth-child-width) + var(--fourth-child-width) + var(--third-child-width) + var(--second-child-width) + var(--first-child-width));
+}
+
+
+p {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: #ecf0f1;
+    font-family: 'Cherry Swash',cursive;
+    font-size: 16px;
+}
+
+span {
+    color: #2BD6B4;
+}
+
+
+
+/*#list {
+	margin: auto;
+	border: 1px solid black;
+	border-radius: 2px;
+}*/
+
+
+/*should be a div containing the graph and the selectors*/
+#big_box {
+	margin-top: 50px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	width: 900px;
+	height: 600px;
+}
+
+
+
+/*styling for the chart*/
+#mainChart {
+	position: relative;
+	margin: auto;
+	border: 3px solid white;
+	text-align: center;
+	width: 100%; 
+	height: 100%;
+	border-radius: 3px;
+	z-index: 1;
+}
+
+
+
+/*selectors for the graphs*/
+.customSelect {
+  text-align: center;
+  width: 200px;
+  right: 0px;
+  position: relative;
+  height: 50px;
+  font-size: 100%;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #c0392b;
+  border: none;
+  border-bottom: 2px solid #962d22;
+  color: white;
+  padding: 100px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 10px;
+  z-index: 5;
+}
+
+
+.customSelect:hover,
+.customSelect:focus {
+  color: #c0392b;
+  background-color: white;
+  border-bottom-color: #DCDCDC;
+}
+
+
+
+
+/*Button specific css */
+#chartGen:hover,
+#chartGen:focus {
+  color: #c0392b;
+  background-color: white;
+  border-bottom-color: #DCDCDC;
+}
+
+#chartGen {
+  width: 150px;
+  right: 0px
+}

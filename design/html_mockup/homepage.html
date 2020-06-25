@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<script src="libraries/jquery-3.5.1.min.js"></script>
+	<title>Home page</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  	<script type="text/javascript" src="Graph visualization/importXML.js"></script>
+  	<script src="Graph visualization/script.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	<script src="uploadzip/zip.js"></script>
+	<script src="ui.js"></script>
+	<script src="Graph visualization/generatingGraphs.js"></script>
+	<script src="filtering-simulations/filter.js"></script>
+	<script src="metadata/editMetadata.js"></script>
+	<script src="filtering-simulations/deletingSimulation.js"></script>
+	<style>
+	  @media print {
+        #createChartButton, #genReportButton, #uploadSimButton, #selectSimulationButton, #editMetadataButton,
+        	#deleteSelectedSimulation, #selectedSimulation, #changePass{
+           display: none;
+        }
+      }
+    </style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<!-- top menu -->
+		<div class="row border-bottom">
+			<div class="col-12">
+				<ul class="nav justify-content-center" id="navigation-test">
+					<li class="nav-item">
+						<a class="nav-link" id="uploadSimButton" data-toggle="modal" data-target="#uploadSimulationMenu">Upload Simulation</a>
+					</li>
+					<li class="nav-item"> <a class="nav-link" id="selectSimulationButton" data-toggle="modal" data-target="#selectSimulationMenu">Select Simulation</a></li>
+					<li class="nav-item">
+						<a class="nav-link" id="deleteSelectedSimulation" data-toggle="modal" data-target="#deleteSimConfirmation">Delete Simulation</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="editMetadataButton" data-toggle="modal" data-target="#editMetadataMenu">Edit Metadata</a>
+					</li>
+					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#createChartMenu">Create Chart</a></li>
+					<li class="nav-item">
+						<a class="nav-link" id="genReportButton" onclick="generateReport()">Generate Report</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="changePass" href="../CentroGeo/login/change_password.html" style="color:black">Change Password</a>
+					</li>
+				</ul>			
+			</div>
+			<span class="col-12">
+				<ul class="nav justify-content-center" id="">
+                    <li class="nav-item" id="selectedSimulation">Selected Simulation: <span class="selectedSimulationDisplay"></span></li>
+				</ul>
+			</div>
+		</div>
+		<div id="reportDiv" style="text-align:center; font-size:30px"></div>
+		<!-- Charts go inside this row !--> 
+		<div class="row" id="charts">
+		</div>
+		<!-- Create Chart menu -->
+		<div>
+			<div id="createChartMenu" class="modal fade">
+				<div class="modal-dialog modal-dialog-centered modal-lg">
+					<div class="modal-content">
+						<!-- Menu Header -->
+						<div class="modal-header">
+							<h5>Chart Options</h5>	
+						</div>
+						<!-- Menu Body -->
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="row">
+									<!-- Chart Select --> 
+<div class="col-6 list-group" id="chartChoice" value=''>
+										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">Edge appearance frequency </a>
+										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Lane transiting vehicles</a>		
+										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle info</a>
+										<a class="list-group-item list-group-item-action chart-type" id="avgRouteChartSelect" data-toggle="list" value="avgRoute">Average route length</a>
+										<a class="list-group-item list-group-item-action chart-type" id="avgVehSpeedChartSelect" data-toggle="list" value="avgSpeed">Average vehicle speed</a>
+										<a class="list-group-item list-group-item-action chart-type" id="avgVehSpeedFChartSelect" data-toggle="list" value="avgSpeedF">Average vehicle speed Factor</a>
+										<a class="list-group-item list-group-item-action chart-type" id="cumulChartSelect" data-toggle="list" value="cumulVeh">Cumulative number of arrived vehicles </a>	
+										<a class="list-group-item list-group-item-action chart-type" id="transChartSelect" data-toggle="list" value="transferVeh">Number of transferred vehicles </a>
+										<a class="list-group-item list-group-item-action chart-type" id="runningChartSelect" data-toggle="list" value="runningVeh">Number of running vehicles </a>		
+									</div>	
+									<!-- Chart Options -->
+									<div class="col-6">
+										<!-- First Row of options --> 
+										<div class="row">
+
+											<div class="input-group mb-3 d-none chart-options" id="lineChartOptions">
+												<div class="input-group-prepend">
+													<span class="input-group-text">Lane ID</span>
+												</div>
+												<input id="laneIdInput" type="text" class="form-control" placeholder="eg. e31_0">
+											</div>
+
+											<div class="input-group mb-3 d-none chart-options" id="vehicleChartOptions">
+												<div class="input-group-prepend">
+													<span class="input-group-text">Vehicle ID</span>
+												</div>
+												<input id="vehIdInput" type="text" class="form-control" placeholder="eg. v40">
+											</div>
+
+											<div class="input-group mb-3 d-none chart-options" id="edgeFrOptions">
+												<div class="input-group-prepend">
+													<span class="input-group-text">Edge ID</span>
+												</div>
+												<input id="edgeIdInput" type="text" class="form-control" placeholder="eg. e43">
+											</div>
+
+											<div class="input-group mb-3 d-none chart-options" id="simOptions">
+												<div class="input-group-prepend">
+													<span class="input-group-text">Simulation ID</span>
+												</div>
+												<input id="simIdInput" type="text" class="form-control" placeholder="eg. 2">
+											</div>
+
+										</div>
+										<!-- Second row of options --> 
+										<div class="row">
+											<!-- Found ID display -->
+											<div class="col-6">
+												<div class="card">
+													<div class="card-body" id="foundIdsContainer">
+														<div class="card-title">Found ID's</div>
+													</div>	
+												</div>
+											</div>
+											<!-- Selected ID display --> 
+											<div class="col-6">
+												<div class="card">
+													<div class="card-body" id="selectedIdsContainer">
+														<div class="card-title">Selected ID's</div>
+													</div>	
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Menu Footer -->
+						<div class="modal-footer">
+							<button class="btn btn-danger" id="undoButton" onclick="undo()">Undo</button>
+							<button class="btn btn-success" id="chartGen">Add Chart</button>	
+						</div>
+					</div>
+				</div>
+			</div>	
+		</div>
+		<!-- Upload Simulation Menu -->
+		<div>
+			<div class="modal fade" id="uploadSimulationMenu">
+				<div class="modal-dialog modal-dialog-centered modal-md">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Please select a simulation</h5>	
+						</div>	
+						<div class="modal-body" id="zipmenu">
+							<div class="container-fluid">
+								<form id="zipform">
+									<div class="form-row">
+										<div class="col-6" align="center">
+											<input type="file" id="zip-file" accept=".zip" hidden="hidden"/>
+											<button type="button" id="zip-button" class="btn btn-primary">Select Simulation Zip</button>
+										</div>
+										<div class="col-6">
+											<div id="custom-text">no file chosen</div>	
+										</div>
+									</div>
+									<div class="form-row mt-3">
+										<div class="col-12">
+											<button type="submit" id="zipSubmitButton" class="btn btn-block btn-success">Upload!</button>
+										</div>	
+									</div>
+								</form>
+								<br>
+</div>
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>	
+			<!-- Select Simulation Menu -->
+		<div>
+			<div class="modal fade" id="selectSimulationMenu">
+				<div class="modal-dialog modal-dialog-centered modal-xl">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Please select a simulation</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeSelectSimulationMenu">
+								<div aria-hidden="true"></div>
+							</button>
+							<h6 class="float-right">Selected Simulation: <span class="selectedSimulationDisplay"></span></h6>
+						</div>
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-12">
+										<div class="row">
+											<div class="col-12">
+												<div class="input-group mb-3">
+												  <input type="text" class="form-control" placeholder="Simulation Name or Tag" id="simulation-filter">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="scroll-spy w-100" id="simulation-container">
+											<!--  Simulations go here -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</div>	
+						</div>
+					</div>
+				</div>	
+			</div>	
+		</div>
+		<div>
+			<div class="modal fade" id="editMetadataMenu">
+				<div class="modal-dialog modal-dialog-centered modal-xl">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Please enter the changes for the selected simulation</h5>
+						</div>
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="d-flex justify-content-center">
+									<form id="myForm" action="/CentroGeo/resources/simulations/metadata" method = "post">
+										<div class="form-group">
+
+											<label for="title">Simulation ID</label>
+											<input type="text" class="form-control" id="title" name = "title" placeholder="simulation id" required="required">
+											<p class="text-danger"><small>*Required Field</small></p>
+										</div>
+
+										<div class="form-group">
+											<label for="name">Name</label>
+											<input type="text" class="form-control" id="name" name = "simulation_name" placeholder = "simulation name">
+										</div>
+
+										<div class="form-group">
+											<label for="date">Date</label>
+											<input type="date" class="form-control" id="date" name = "date" >
+										</div>
+
+										<div class = "form-group">
+											<div class="form-row">
+												<div class="col-xs-8">
+													<label for="tag">Tag</label>
+												</div>
+											</div>
+											<div class="form-row">
+												<div class="col-xs-8">
+												    <input type="text" class="form-control" id="tagValues" name = "tag_values">	
+													<select class="form-control" name = "tag" data-live-search="true" id="tag"  multiple = "multiple" size = "3">
+														<!--option list of tag-->
+													</select>		
+												
+												</div>
+												<div class="col-xs-4">
+													<button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#add-tag-modal"  id="addTagBtn">Add Tag</button>
+												</div>
+												<div class = "col-xs-4">
+													<button type="button" class="btn btn-outline-secondary" id="remove">Remove Tag</button>
+												</div>
+											</div>
+											<div class="form-row">
+												<p class="font-weight-lighter">
+													<small>For windows: Hold down the control (ctrl) button to select multiple options<br>
+														   For Mac: Hold down the command button to select multiple options</small>
+												</p>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="description">Description</label>
+											<textarea class="form-control" id="description" name ="description" rows="3" placeholder = "Additonal info..."></textarea>
+										</div>
+										<div class="form-group">
+											<div class = "form-row">
+												<div class="col-xs-3">
+													<input type="submit" value = "Submit" class="btn btn-info" id="submitMetadata">
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+						</div>
+													<!-- Edit metadata menu  -->
+<div id="add-tag-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title">Add new tag</h5>
+			</div>
+			<div class="modal-body">
+				<form id = "tag-form">
+					<label for = "new-tag" >New tag</label>
+					<input type = "text" id = "newTag" name= "newTag" placeholder = "Tag name...">
+					<button type = "button" id= "add-new-tag"  class ="btn btn-outline-success btn-sm">Add</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" id="closeTags">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+	<div id="deleteSimConfirmation" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Please confirm delete action</h5>
+				</div>
+				<div class="modal-body">
+                    <div id="deleteSimulationContainer">
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal" id="delSim">Delete</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+
+
+</html>
