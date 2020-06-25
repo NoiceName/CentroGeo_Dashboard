@@ -354,6 +354,22 @@ function getSimIds() {
 }
 
 
+
+
+$(function () {     $('#chartGen').click(function(event) {
+	genGraph();
+
+});
+});
+
+
+$(function () {     $('#changePass').click(function(event) {
+	location.replace("../login/change_password.html");
+
+});
+});
+
+
 //Generates a report when 'generate report' button is pressed.
  function generateReport() {
  	document.getElementById('reportDiv').innerHTML = "Report";
