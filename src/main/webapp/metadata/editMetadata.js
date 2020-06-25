@@ -61,7 +61,7 @@ $(function() {
 				values.push(currentOption);
 			}
 		} 
-	    $('#tagValues').val(values);
+	    $('#tagValues').val(values.join(";"));
 		console.log(values);		
 	});
 	
@@ -90,16 +90,16 @@ $(function() {
 	   
 	  $('#myForm' ).submit(function( event ) {
 			event.preventDefault();
-			
+
 			var title = $( '#title' );
-			var editor = $( '#editor' );
+			var name = $( '#name' );
 			var date = $( '#date' );
 			var tag = $( '#tagValues' );
 			var description = $( '#description' );
-			
+
 			var formData = JSON.stringify({
 				'title' : title.val(),
-				'editor' : editor.val(),
+				'simulation_name' : name.val(),
 				'date': date.val(),
 				'tag_values': tag.val(),
 				'description': description.val()
@@ -121,7 +121,8 @@ $(function() {
 							if(resp.result =='true'){
 								//close the page modal and pop up alert!
 								alert("success!");
-								console.log("success!")
+								refreshSimulations();
+								console.log("success!");
 							}
 							else {			
 								alert("oops! something wrong..");				
