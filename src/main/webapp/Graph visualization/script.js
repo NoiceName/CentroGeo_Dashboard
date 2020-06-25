@@ -59,6 +59,8 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (userOptions.length)) {
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawLineChart(dataArray, "Edge appearance frequency (Simulation " + simulation_id + ")", createChartSpace(), "time", "appearances");
         }
         })
@@ -79,6 +81,8 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (laneChoice.length)) {
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawLineChart(dataArray, "Number of lane transiting vehicles (Simulation " + simulation_id + ")", createChartSpace(), "time", "cars");
 
           }
@@ -95,6 +99,8 @@ function genGraph() {
           }
           //response has been loaded, graph can be drawn.
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawLineChart(dataArray, "Stats for vehicle: " + userOptions[0] + " (Simulation " + simulation_id + ")", createChartSpace(), "time", "y");
         
         })
@@ -124,6 +130,8 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (simId.length)) {
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawLineChart(dataArray, "Average speed of the vehicles", createChartSpace(), "time", "speed (m/s)");
 
           }
@@ -148,6 +156,8 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (simId.length)) {
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawThinLineChart(dataArray, "Average speed factor of the vehicles", createChartSpace(), "time", "speed factor");
 
           }
@@ -173,6 +183,8 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (simId.length)) {
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawLineChart(dataArray, "Cumulative number of arrived vehicles", createChartSpace(), "time", "count");
 
           }
@@ -197,6 +209,8 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (simId.length)) {
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawLineChart(dataArray, "Number of transferred vehicles", createChartSpace(), "time", "count");
 
           }
@@ -222,6 +236,8 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (simId.length)) {
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawLineChart(dataArray, "Number of running vehicles", createChartSpace(), "time", "count");
 
           }
@@ -235,15 +251,19 @@ function genGraph() {
 
 function getDataArray(serverResponse, xTitle) {
   var dataArray = [[]];
-            dataArray[0] = [xTitle];
+  dataArray[0] = [xTitle];
 
             for (var k = 0; k < serverResponse.length; k++) {
               dataArray[0].push(serverResponse[k].id); 
+              if (serverResponse[k].data.length == 0) {
+                alert("The selected option: " + serverResponse[k].id + ", does not contain enough datapoints to be represented on a graph");
+                return -1;
+              }
             }
 
             for (var k = 0; k < serverResponse[0].data.length; k++) {
-              // dataArray[k + 1] = [];
               dataArray[k + 1] = [serverResponse[0].data[k].x];
+
               for (var l = 0; l < serverResponse.length; l++) {
                 // when comparing 2 simulations retrieved data length may vary
                 if (l > serverResponse[l].data.length) {
@@ -276,7 +296,6 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 	var chart = new google.visualization.LineChart(document.getElementById(id));
   chart.draw(data, options);
 }
-
 
 
 function drawThinLineChart(dataArray, title, id, hTitle, vTitle) {
@@ -336,50 +355,6 @@ function getSimIds() {
 }
 
 
-
-
-$(function () {     $('#chartGen').click(function(event) {
-  genGraph();
-
- });
- });
-
- $(function () {     $(document).ready(function() {
-      //Statically set simulation id !!! that is sent to the server
-	  var simulation_id = getSelectedSimulationID();
-
-    $.ajax({
-      url: '/CentroGeo/resources/simulations/'+simulation_id+'/snapshots',
-      //try with application/json later
-      type: 'GET',
-      success: function (resp) {success(resp)},
-      error: function(jqXHR, textStatus, errorThrown) {
-        alert('Cannot contact the server!');
-      }
-    });
-    
-
-  function success(resp) {
-    //resp is the data array
-
-        //avoid loading the data multiple times
-        XMLloaded = true;
-        
-        dataArray = [];
-        var parser = new DOMParser();
-
-        for (var i = 0; i < resp.length; i++) {
-            xmlDoc = parser.parseFromString(resp[i].data, "text/xml");
-            dataArray[i] = xmlDoc;
-        }
-        
-        currentXML = dataArray;
-        return 
-  }
-    
-    }); 
-    });
-
 //Generates a report when 'generate report' button is pressed.
  function generateReport() {
  	document.getElementById('reportDiv').innerHTML = "Report";
@@ -387,4 +362,11 @@ $(function () {     $('#chartGen').click(function(event) {
  	document.getElementById('reportDiv').innerHTML = "";
  }
 
+
+
+$(function () {     $('#chartGen').click(function(event) {
+  genGraph();
+
+ });
+ });
 
