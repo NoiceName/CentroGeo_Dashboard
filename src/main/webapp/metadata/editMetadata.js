@@ -121,7 +121,8 @@ $(function() {
 							if(resp.result =='true'){
 								//close the page modal and pop up alert!
 								alert("success!");
-								console.log("success!")
+								refreshSimulations();
+								console.log("success!");
 							}
 							else {			
 								alert("oops! something wrong..");				
