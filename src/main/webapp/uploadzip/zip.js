@@ -58,17 +58,19 @@ $("#zipform").submit(function (evt) {
 				if(resp.result=='true') {
 					alignDIV.remove();
 					button.disabled = false;
+					refreshSimulations();
 					alert("Successfully uploaded zip file");
 				} else {
 					alignDIV.remove();
 					button.disabled = false;
-					console.log("dont delete this");
+					refreshSimulations();
 					alert(resp.result)
 				}
     		},
     		error: function (jqXHR, textStatus, errorThrown) {
     			alignDIV.remove();
     			button.disabled = false;
+    			refreshSimulations();
     			alert(jqXHR.responseText)
     		}
         
