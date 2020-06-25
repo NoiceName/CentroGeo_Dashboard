@@ -377,11 +377,3 @@ $(function () {     $('#changePass').click(function(event) {
  	document.getElementById('reportDiv').innerHTML = "";
  }
 
-
-
-$(function () {     $('#chartGen').click(function(event) {
-  genGraph();
-
- });
- });
-
