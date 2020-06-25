@@ -1,12 +1,9 @@
 package dao;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
-import de.mkammerer.argon2.Argon2Factory.Argon2Types;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+
 import model.Database;
 import model.User;
 
@@ -77,7 +74,6 @@ public enum UserDAO {
 		 * 1:user data entered successfully!
 		 */
 		PreparedStatement query = null;
-		int returnString = 0; // user data entered successfully!;
 		Connection conn = null;
 		
 		Database.loadPGSQL();
@@ -91,24 +87,35 @@ public enum UserDAO {
 					"values(?,?); ";
 			query = conn.prepareStatement(sql);
 			query.setString(1, user.getUserName());
-			
-			//hash_password
 			String password = user.getPassword();
-			Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
-			String passwordHash = argon2.hash(4, 1024 * 1024, 8, password);
-			query.setString(2, passwordHash);			
-			returnString = query.executeUpdate();
+						
+			//hasd_password using SCryptPasswordEncoder
+			int cpuCost = (int) Math.pow(2, 14); // factor to increase CPU costs
+			int memoryCost = 8;      // increases memory usage
+			int parallelization = 1; // currently not supported by Spring Security
+			int keyLength = 32;      // key length in bytes
+			int saltLength = 64;     // salt length in bytes
+
+			SCryptPasswordEncoder sCryptPasswordEncoder = new SCryptPasswordEncoder(
+			  cpuCost, 
+			  memoryCost,
+			  parallelization,
+			  keyLength,
+			  saltLength);
+			String hashedPassword = sCryptPasswordEncoder.encode(password);
+			
+			query.setString(2, hashedPassword);			
+			return query.executeUpdate();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			returnString = 0; // User data not entered;
+			return 0; // User data not entered;
 		}
 		finally {
 			query.close();
 			conn.close();
 		}
 		
-		return returnString;		
 	}	
 }
 

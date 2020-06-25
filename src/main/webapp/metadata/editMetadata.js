@@ -1,8 +1,5 @@
 
-	 //var options =['congestion','date'];
-	 //localStorage.setItem("tag-options", JSON.stringify(options));
-
-	 $(document).ready(function (){
+ $(document).ready(function (){
 	 	var domSelect = $('#tag');
 	  // check if localStorage has option list
 	    
@@ -20,8 +17,9 @@
     
 		}	
    });		
-
+	 
 $(function() {
+	//add new tags in the select list
 	$("#add-new-tag").click (function(event) {
 	   
 	     event.preventDefault();
@@ -46,10 +44,31 @@ $(function() {
 	   alert("New tag added!");
 	   
 	   });
-	   
+	
+	/**
+	 * select multiple tags,
+	 * For windows: Hold down the control (ctrl) button to select multiple options
+	 * For Mac: Hold down the command button to select multiple options 
+	 */ 
+	$('#tag').change(function(event){
+		event.preventDefault();
+		var choices = $('#tag option');
+		var values = [];
+	
+		for(i = 0;i<choices.length; i++){		 
+			if(choices[i].selected){
+				var currentOption = choices[i].text;
+				values.push(currentOption);
+			}
+		} 
+	    $('#tagValues').val(values);
+		console.log(values);		
+	});
+	
     $("#remove").click(function (event) {
 		 event.preventDefault();
 		 var options = [];
+		 var domSelect = $('#tag');
 		 
 		 if(options === null){
 			 alert('sorry, no tags can be deleted!');
@@ -57,39 +76,32 @@ $(function() {
 		 else {
 			 options = JSON.parse(localStorage.getItem('tag-options'));
 		 }
-		 
-        $("#tag option:selected").remove();
-		 var removeTag = domSelect.children("option:selected").val();
-		 
+		 var removeTag = $("#tag option:selected").val();        		
 		 var index = options.indexOf(removeTag);
 
-        if(index > -1){
+         if(index > -1){
 				options.splice(index, 1);
-          }
-
-    	   
-		 
-		 localStorage.setItem("tag-options", JSON.stringify(options));
+          }		 
+		 localStorage.setItem("tag-options", JSON.stringify(options)); 
+		 $("#tag option:selected").remove();
 		 console.log(JSON.parse(localStorage.getItem('tag-options')));
-        alert("Selected tag removed.");
+         alert("Selected tag removed.");
      });
-
-
-    
+	   
 	  $('#myForm' ).submit(function( event ) {
 			event.preventDefault();
 			
 			var title = $( '#title' );
 			var editor = $( '#editor' );
 			var date = $( '#date' );
-			var tag = $( '#tag' );
+			var tag = $( '#tagValues' );
 			var description = $( '#description' );
 			
 			var formData = JSON.stringify({
 				'title' : title.val(),
 				'editor' : editor.val(),
 				'date': date.val(),
-				'tag': tag.val(),
+				'tag_values': tag.val(),
 				'description': description.val()
 			});
 			

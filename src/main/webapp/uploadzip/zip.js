@@ -20,7 +20,7 @@ zipButton.addEventListener("click", function() {
 
 /*Sends the zip-file to the server.*/
 $("#zipform").submit(function (evt) {
-	const button = document.getElementById("submit");
+	const button = document.getElementById("zipSubmitButton");
 	button.disabled = true;
 	
 	var menu = document.getElementById("zipmenu");

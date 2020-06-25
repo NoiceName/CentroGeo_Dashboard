@@ -405,8 +405,30 @@ public enum ChartDAO {
 	}
 
 	public Chart getAverageRouteL(int simulationId) {
-		
-		return null;
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulationId);
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				double speed = result.getFloat("avgSpeedF");
+				double time = result.getFloat("time");
+				//Creating points on an speedByTimeChart.
+				ChartPoint point = new ChartPoint(time, speed);
+				points.add(point);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		return chart; 
 	}
 
 	

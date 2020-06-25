@@ -28,10 +28,10 @@ public class Metadata {
 		String name = metadataJson.getString("editor");
 				
 		String dateStr = metadataJson.getString("date");
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date date = sdf.parse(dateStr);
 		
-		String tag = metadataJson.getString("tag");
+		String tag = metadataJson.getString("tag_values");
 		String description = metadataJson.getString("description");
 		
 	  /*dummy data in the database:
