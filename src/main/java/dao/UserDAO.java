@@ -14,9 +14,7 @@ public enum UserDAO {
 	instance;
 
 	public void setUserPassword(String userName, String hashPassword){
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String query = "UPDATE projectschema.user SET password_hash = ? WHERE username = ?";
 		PreparedStatement statement = db.prepareStatement(query);
 		try {
@@ -33,12 +31,11 @@ public enum UserDAO {
 		PreparedStatement query = null;
 		String returnPassword = null;
 		Connection conn = null;
-		
-		Database.loadPGSQL();
-	    Database db = new Database();
+
+		Database db = DatabaseDAO.instance.getDatabase();
 		
 		try {	
-			conn = db.connectPGSQL();
+			conn = db.getConnection();
 
 			String sql = "select password_hash from projectschema.user "+
 			"where username = ? ";
@@ -55,18 +52,7 @@ public enum UserDAO {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		finally {
-			
-			if(conn!=null){
-			   try {
-				 
-				   conn.close();
-				
-			   } catch (SQLException e) {
-				e.printStackTrace();
-			   }
-			}
-		}	    
+
 		return returnPassword;
 	}
 	
@@ -79,13 +65,12 @@ public enum UserDAO {
 		PreparedStatement query = null;
 		int returnString = 0; // user data entered successfully!;
 		Connection conn = null;
-		
-		Database.loadPGSQL();
-	    Database db = new Database();
+
+		Database db = DatabaseDAO.instance.getDatabase();
 		
 		try {	
 			Database.loadPGSQL();
-			conn = db.connectPGSQL();
+			conn = db.getConnection();
 
 			String sql = "insert into projectschema.user "+
 					"values(?,?); ";
@@ -105,7 +90,6 @@ public enum UserDAO {
 		}
 		finally {
 			query.close();
-			conn.close();
 		}
 		
 		return returnString;		

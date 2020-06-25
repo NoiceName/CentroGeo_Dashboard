@@ -27,7 +27,6 @@ public enum ZipExtraction {
 	public Connection connection;
 
 	public void extract(InputStream stream) throws Exception {
-		DatabaseDAO.instance.setupDatabase();
 		Database db = DatabaseDAO.instance.getDatabase();
 
 		connection = db.getConnection();
