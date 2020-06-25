@@ -46,7 +46,7 @@ public enum SimulationDAO {
 	}
 	
 	
-	public int editMetadata(int title,String editor, Date date, String tag, String description){
+	public int editMetadata(int title,String name, Date date, String tag, String description){
 		
 		PreparedStatement query = null;
 		Connection conn = null;
@@ -63,7 +63,7 @@ public enum SimulationDAO {
 			"WHERE simulation_id = ?; ";
 						
 			query = conn.prepareStatement(sql);
-			query.setString(1, editor);	
+			query.setString(1, name);	
 			
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

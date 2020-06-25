@@ -34,6 +34,9 @@ public class Metadata {
 		String tag = metadataJson.getString("tag_values");
 		String description = metadataJson.getString("description");
 		
+		String printout = "date: " +date+"/n"+ "description: "+description;
+		System.out.println(printout);
+		
 	  /*dummy data in the database:
 	   * insert into projectschema.simulation values(1,'Jane',TO_DATE('09/06/2020', 'DD/MM/YYYY'),'congestion','testUpdate')
 	   */
