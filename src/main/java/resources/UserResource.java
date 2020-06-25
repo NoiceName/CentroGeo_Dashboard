@@ -14,13 +14,11 @@ import com.google.common.net.HttpHeaders;
 import cookie_manager.Secured;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+
 import cookie_manager.CookieManager;
 import dao.UserDAO;
 import model.User;
-
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
-import de.mkammerer.argon2.Argon2Factory.Argon2Types;
 
 
 @Path("/user_resource")
@@ -49,22 +47,32 @@ public class UserResource {
 	public Response login(String userInformation) {
 		JSONObject userJson = new JSONObject(userInformation);
 		String username = userJson.getString("username");
-		String password = userJson.getString("password");
+		String rawPassword = userJson.getString("password");
 
 		JSONObject response = new JSONObject();
+	    String returnHashedPassword = UserDAO.instance.getUserPassword(username);
 		
-		//verify hash_password
-		Argon2 argon2 = Argon2Factory.create(Argon2Types.ARGON2id);
-		String returnPasswordHash = UserDAO.instance.getUserPassword(username); 
-		boolean match = argon2.verify(returnPasswordHash, password);
-		
+		// verify password using SCryptPasswordEncoder
+		int cpuCost = (int) Math.pow(2, 14); // factor to increase CPU costs
+		int memoryCost = 8;      // increases memory usage
+		int parallelization = 1; // parallelization
+		int keyLength = 32;      // key length in bytes
+		int saltLength = 64;     // salt length in bytes
+
+		SCryptPasswordEncoder sCryptPasswordEncoder = new SCryptPasswordEncoder(
+		  cpuCost, 
+		  memoryCost,
+		  parallelization,
+		  keyLength,
+		  saltLength);
+		boolean match = sCryptPasswordEncoder.matches(rawPassword, returnHashedPassword);
 			
-		if (returnPasswordHash == null||!match){
+		if (returnHashedPassword == null||!match){
 			response.put("result", "false");
 			return Response.serverError().entity(response.toString()).build();
 		} else {
 			//Generate and save a new token and send it to the user inform of a cookie 
-			String token = CookieManager.assignCookie(new User(username,returnPasswordHash)); 
+			String token = CookieManager.assignCookie(new User(username,returnHashedPassword)); 
 			NewCookie authCookie = new NewCookie(HttpHeaders.AUTHORIZATION, token, "/",
 					null, null, 60*60*24, false, true);
 			response.put("result", "true");
