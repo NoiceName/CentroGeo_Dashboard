@@ -61,7 +61,7 @@ $(function() {
 				values.push(currentOption);
 			}
 		} 
-	    $('#tagValues').val(values);
+	    $('#tagValues').val(values.join(";"));
 		console.log(values);		
 	});
 	
@@ -96,7 +96,7 @@ $(function() {
 			var date = $( '#date' );
 			var tag = $( '#tagValues' );
 			var description = $( '#description' );
-			
+
 			var formData = JSON.stringify({
 				'title' : title.val(),
 				'simulation_name' : name.val(),

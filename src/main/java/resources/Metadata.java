@@ -32,12 +32,12 @@ public class Metadata {
 		String dateStr = metadataJson.getString("date");
 		System.out.println("datastring: "+dateStr);
 		
-		java.util.Date date = null;
+		java.util.Date date;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		if(dateStr!=null) {		
-		    date = sdf.parse(dateStr);
-		}
-		
+		if(dateStr==null||dateStr.isEmpty()) {		
+		   date = null;
+		}else {
+		date = sdf.parse(dateStr);}
 		String tag = metadataJson.getString("tag_values");
 		String description = metadataJson.getString("description");
 		

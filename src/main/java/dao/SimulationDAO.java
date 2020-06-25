@@ -73,10 +73,13 @@ public enum SimulationDAO {
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			
-			java.sql.Date sqlDate = null;
-			if(date != null){		
+			java.sql.Date sqlDate;
+			if(date == null){		
+				sqlDate = null;
+			}
+			else {
 			String stringDate= dateFormat.format(date);
-			sqlDate=  java.sql.Date.valueOf(stringDate);		
+			sqlDate=  java.sql.Date.valueOf(stringDate);
 			}
 			query.setDate(2, sqlDate);
 			
