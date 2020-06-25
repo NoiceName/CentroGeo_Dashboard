@@ -19,7 +19,6 @@ function onload() {
 
 // Function getting called whenever the "Generate Graph" button is pressed --> called when sucess() is ready
 function genGraph() {
-  console.log("Generating the graph");
 
   var simulation_id;
 
