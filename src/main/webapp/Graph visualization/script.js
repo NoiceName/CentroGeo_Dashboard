@@ -265,10 +265,15 @@ function getDataArray(serverResponse, xTitle) {
 
               for (var l = 0; l < serverResponse.length; l++) {
                 // when comparing 2 simulations retrieved data length may vary
-                if (l > serverResponse[l].data.length) {
+                if (k >= serverResponse[l].data.length) {
                   dataArray[k + 1].push(0);
                 } else {
+                  try {
                    dataArray[k + 1].push(serverResponse[l].data[k].y);
+                  } catch(err) {
+                    console.log("Something was wrong with the requested data. " + serverResponse[l].id + ", line " + k);
+                    console.log(serverResponse);
+                  }
                 }
               }
             }
@@ -376,12 +381,4 @@ $(function () {     $('#changePass').click(function(event) {
  	window.print();	
  	document.getElementById('reportDiv').innerHTML = "";
  }
-
-
-
-$(function () {     $('#chartGen').click(function(event) {
-  genGraph();
-
- });
- });
 
