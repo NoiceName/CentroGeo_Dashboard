@@ -2,23 +2,23 @@ var currentXML;
 var XMLloaded = false;
 
 var vehIds;
-var edgeIds
+var edgeIds;
+var laneIds;
+var simIds = [];
 
 
 function onload() {
-  console.log("page is loaded");
+
 }
 
 
  	google.charts.load('current', {'packages':['corechart']});
  	google.charts.load('current', {'packages':['bar']});
-  google.charts.load('current', {'packages':['line']});
 
 
 
 // Function getting called whenever the "Generate Graph" button is pressed --> called when sucess() is ready
 function genGraph() {
-  console.log("Generating the graph");
 
   var simulation_id;
 
@@ -32,10 +32,10 @@ function genGraph() {
 
   //check that user has given id options
   var userOptions;
-  if (getSelectedIds().length < 1) {
-    return
-  } else {
+  if (getSelectedIds().length >= 1) {
     userOptions = getSelectedIds();
+  } else {
+    userOptions = -1;
   }
   
   var chartType = "";
@@ -47,82 +47,8 @@ function genGraph() {
 
   // determine what graph should be drawn
 
-  //    GRAPH showing info about chosen vehicle over time
-	if (chartType == "vehInfo") {
-    var timeStamps = [];
-		//select choosen vehicle
-    var vehChoice = getSelectedIds()[0];
-    if (getSelectedIds().length < 1) {return}
-
-    var routeLengths = [];
-    var speeds = [];
-    var speedFactors = [];
-
-    for (var i = 0; i < currentXML.length; i++) {
-      var snapshot = currentXML[i];
-
-      // get route length, or if not exist: routeLenght = 0
-      try {
-        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        var result = nodes.iterateNext();
-        var routeId = result.getAttribute("route");
-
-        path = "/snapshot/route[@id=\""+ routeId + "\"]";
-        nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        result = nodes.iterateNext();
-        routeLengths[i] = result.getAttribute("edges").split("e").length -1;
-
-      } catch(err) {
-        routeLengths[i] = 0
-     }
-     // get vehicle speed, or if not exist: speed = 0;
-     try {
-        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        var result = nodes.iterateNext();
-        var speed = result.getAttribute("speed");
-        speeds[i] = parseFloat(speed);
-
-     } catch(err) {
-        speeds[i] = 0;
-     }
-     // get vehicle speedFactor, or if not exist: speedFactor = 0;
-     try {
-        var path = "/snapshot/vehicle[@id=\""+ vehChoice + "\"]";
-        var nodes = snapshot.evaluate(path, snapshot, null, XPathResult.ANY_TYPE, null);
-        var result = nodes.iterateNext();
-        var speedFactor = result.getAttribute("speedFactor");
-        speedFactors[i] = parseFloat(speedFactor);
-
-     } catch(err) {
-        speedFactors[i] = 0;
-     }
-
-
-
-     // get timeStamps
-        var timeStamp;
-        var time;
-
-        timeStamp = snapshot.getElementsByTagName('snapshot'); 
-        time = timeStamp[0].getAttribute("time");
-      
-        timeStamps[i] = parseFloat(time);
-    }
-
-    var dataArray = [[]];
-      dataArray[0] = ["Time stamp", "routeLength", "speed", "speedFactor"];
-
-      for (var i = 0; i < routeLengths.length; i++) {
-        dataArray[i+1] = [timeStamps[i], routeLengths[i], speeds[i], speedFactors[i]];
-      }
-
-      drawLineChart(dataArray, "Stats for vehicle: " + vehChoice, createChartSpace(), "time", "");
-	}
-
-  //    GRAPH showing edge appearance frequency 
-	else if (chartType == "edgeFr") {
+  //  GRAPH showing edge appearance frequency 
+	if (chartType == "edgeFr") {
 
     //get the Data using RESTful services
       for (var j = 0; j < userOptions.length; j++) {
@@ -132,13 +58,15 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (userOptions.length)) {
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawLineChart(dataArray, "Edge appearance frequency (Simulation " + simulation_id + ")", createChartSpace(), "time", "appearances");
         }
         })
       }
   } 
 
-  //    GRAPH showing #cars per lane
+  //  GRAPH showing #cars per lane
 	else if (chartType == "transVeh") {
     //select choosen lane
     var laneChoice;
@@ -152,6 +80,8 @@ function genGraph() {
           //all responses have been loaded, graph can be drawn.
           if (serverResponse.length == (laneChoice.length)) {
             dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
             drawLineChart(dataArray, "Number of lane transiting vehicles (Simulation " + simulation_id + ")", createChartSpace(), "time", "cars");
 
           }
@@ -159,10 +89,160 @@ function genGraph() {
       }
 	}
 
-	//draw a useless graph
-	else if (chartType == "otherC") {
-		drawPieChart(getXMLarray(currentXML[10]), "Vehicles and their speed", createChartSpace());
-	}
+  //  GRAPH showing info about chosen vehicle over time
+  else if (chartType == "vehInfo") {
+
+    $.get('/CentroGeo/resources/simulations/'+ simulation_id +'/charts/vehicle_information?vehicle_id=' + userOptions[0], function(data) {
+          for (var i = 0; i < 3; i++) {
+            serverResponse.push(data[i]);
+          }
+          //response has been loaded, graph can be drawn.
+            dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
+            drawLineChart(dataArray, "Stats for vehicle: " + userOptions[0] + " (Simulation " + simulation_id + ")", createChartSpace(), "time", "y");
+        
+        })
+  }
+
+  //  GRAPH showing the average route length over time
+  else if (chartType == "avgRoute") {
+    
+
+  }
+
+  //  GRAPH showing the average speed over time
+  else if (chartType == "avgSpeed") {
+    var simId = [];
+
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/average_vehicle_speed', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
+            drawLineChart(dataArray, "Average speed of the vehicles", createChartSpace(), "time", "speed (m/s)");
+
+          }
+        })
+      }
+  }
+
+  //  GRAPH showing the average speedFactor over time
+  else if (chartType == "avgSpeedF") {
+    var simId = [];
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/average_vehicle_speed_factor', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
+            drawThinLineChart(dataArray, "Average speed factor of the vehicles", createChartSpace(), "time", "speed factor");
+
+          }
+        })
+      }
+  }
+
+	//  GRAPH showing the total number of arrived cars over time
+	else if (chartType == "cumulVeh") {
+    var simId = [];
+
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/cumulative_number_of_arrived_vehicles', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
+            drawLineChart(dataArray, "Cumulative number of arrived vehicles", createChartSpace(), "time", "count");
+
+          }
+        })
+      }
+  }
+
+  //  GRAPH showing the number of transferred (teleported) vehicles over time
+  else if (chartType == "transferVeh") {
+    var simId = [];
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/number_of_transferred_vehicles', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
+            drawLineChart(dataArray, "Number of transferred vehicles", createChartSpace(), "time", "count");
+
+          }
+        })
+      }
+  }
+
+  //  GRAPH showing the number of running vehicles over time
+  else if (chartType == "runningVeh") {
+    var simId = [];
+
+    if (userOptions == -1) {
+      simId[0] = getSelectedSimulationID();
+    } else {
+      simId = userOptions;
+    }
+
+    //get the Data using RESTful services
+      for (var j = 0; j < simId.length; j++) {
+        $.get('/CentroGeo/resources/simulations/'+ simId[j] +'/charts/number_of_running_vehicles', function(data) {
+          serverResponse.push(data);
+
+          //all responses have been loaded, graph can be drawn.
+          if (serverResponse.length == (simId.length)) {
+            dataArray = getDataArray(serverResponse, "time");
+            //one of the selected options failed to return data
+            if (dataArray == -1) { return;}
+            drawLineChart(dataArray, "Number of running vehicles", createChartSpace(), "time", "count");
+
+          }
+        })
+      }
+  }
 
 }
 
@@ -170,67 +250,35 @@ function genGraph() {
 
 function getDataArray(serverResponse, xTitle) {
   var dataArray = [[]];
-            dataArray[0] = [xTitle];
+  dataArray[0] = [xTitle];
 
             for (var k = 0; k < serverResponse.length; k++) {
               dataArray[0].push(serverResponse[k].id); 
+              if (serverResponse[k].data.length == 0) {
+                alert("The selected option: " + serverResponse[k].id + ", does not contain enough datapoints to be represented on a graph");
+                return -1;
+              }
             }
 
             for (var k = 0; k < serverResponse[0].data.length; k++) {
-              // dataArray[k + 1] = [];
               dataArray[k + 1] = [serverResponse[0].data[k].x];
+
               for (var l = 0; l < serverResponse.length; l++) {
-                dataArray[k + 1].push(serverResponse[l].data[k].y);
+                // when comparing 2 simulations retrieved data length may vary
+                if (k >= serverResponse[l].data.length) {
+                  dataArray[k + 1].push(0);
+                } else {
+                  try {
+                   dataArray[k + 1].push(serverResponse[l].data[k].y);
+                  } catch(err) {
+                    console.log("Something was wrong with the requested data. " + serverResponse[l].id + ", line " + k);
+                    console.log(serverResponse);
+                  }
+                }
               }
             }
   return dataArray;
 }
-
-
-
-function drawBarChart(dataArray, title, id) {
-
-	var data = google.visualization.arrayToDataTable([
-		['Year', 'Sales', 'Expenses', 'Profit'],
-		['2014', 1000, 400, 200],
-		['2015', 1170, 460, 250],
-		['2016', 660, 1120, 300],
-		['2017', 1030, 540, 350]
-	]);
-
-	var options = {
-		chart: {
-			title: 'Mockup graph',
-			subtitle: 'Sales, Expenses, and Profit: 2014-2017',
-      height: 350,
-		},
-		bars: 'vertical' // Required for Material Bar Charts.
-	};
-
-	var chart = new google.charts.Bar(document.getElementById(id));
-
-	chart.draw(data, google.charts.Bar.convertOptions(options));
-
-}
-
-
-
-
-function drawPieChart(dataArray, title, id) {
-	var data = google.visualization.arrayToDataTable(dataArray);
-
-
-	var options = {
-		title: title,
-    height: 350,
-	};
-
-	var chart = new google.visualization.PieChart(document.getElementById(id));
-
-	chart.draw(data, options);
-}
-
-
 
 
 function drawLineChart(dataArray, title, id, hTitle, vTitle) {
@@ -239,8 +287,6 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 
 	var options = {
 		title: title,
-    //subtitle not supported in google core charts.
-    // subtitle: Simulation id,
 		curveType: 'none',
 		legend: { position: 'bottom' },
 		crosshair: { trigger: 'both' },
@@ -253,144 +299,81 @@ function drawLineChart(dataArray, title, id, hTitle, vTitle) {
 
 	var chart = new google.visualization.LineChart(document.getElementById(id));
   chart.draw(data, options);
+}
 
-// alt version using google material charts for subtitle
-//   var chart = new google.charts.Line(document.getElementById(id));
-//   chart.draw(data, google.charts.Line.convertOptions(options));
-	
+
+function drawThinLineChart(dataArray, title, id, hTitle, vTitle) {
+  var data = google.visualization.arrayToDataTable(dataArray);
+
+
+  var options = {
+    title: title,
+    curveType: 'none',
+    legend: { position: 'bottom' },
+    crosshair: { trigger: 'both' },
+    explorer: {axis: 'horizontal'},
+    hAxis: {title:hTitle, format:"#", minValue: 0, viewWindow: {min: 0}},
+    vAxis: {title:vTitle, format:"#", minValue: 1, maxValue: 1, viewWindow: {min: 0}},
+    // hard coded height, maybe change change this in the generatingGraph.js
+    height: 350,
+  };
+
+  var chart = new google.visualization.LineChart(document.getElementById(id));
+  chart.draw(data, options);
 }
 
 
 
-
-
-function getXMLarray(xmlFile) {
-
-	//Return array containing every vehicle + the speed of that vehicle
-	var vArray =  xmlFile.getElementsByTagName('vehicle');
-	var outArray = [[]];
-	outArray[0] = ["Vehicle id", "Speed"];
-
-	for (var i = 0; i < vArray.length; i++) {
-		outArray[i+1] = [];
-		outArray[i+1][0] = vArray[i].getAttribute("id");
-		outArray[i+1][1] = parseInt(vArray[i].getAttribute("speed"));
-	}
-
-
-	// console.log(outArray.slice(0, 6));
-	return outArray;
-}
-
-
-
-
-
-//populate the laneSelect with options
-function populateLaneSelect(xmlfile2) {
-
-	var xmlFile = xmlfile2;
-	var options = xmlFile.getElementsByTagName('lane'); 
-	var vLanes = [];
-
-	for (var i = 0; i < options.length; i++) {
-		vLanes[i] = [];
-		vLanes[i] = options[i].getAttribute("id");
-	}
-
-	selectEl = document.getElementById("laneSelect"); 
-
-	for (var i = 1; i < options.length; i++) {
-		selectEl.options.add(new Option(vLanes[i], vLanes[i]));
-	}
-
-	console.log("lanes populated");
-}
-
-
-
-
+//returns all lane id's of currently selected simulation
 function getLanesId() {
-
-  var snapshot = currentXML[1];
-  var lanesID = [];
-
-  var lanes = snapshot.getElementsByTagName('lane');
-
-  for (var i = 0; i < lanes.length; i++) {
-    lanesID[i] = [];
-    lanesID[i] = lanes[i].getAttribute("id");
-  }
-
-  return lanesID;
-
+  $.get('/CentroGeo/resources/simulations/'+ getSelectedSimulationID() +'/lane_ids', function(data) {
+          laneIds = data;
+        })
+  return laneIds;
 }
 
-//should return all the veh id's as an array
+//returns all the veh id's as an array
 function getVehId() {
-  vehIds = ["v10", "v25", "v40", "v61", "v135", "v254", "v316", "v479", "v524", "v698", "v702", "v866", "v978"];
+	$.get('/CentroGeo/resources/simulations/'+ getSelectedSimulationID() +'/vehicle_ids', function(data) {
+        vehIds = data;
+      })
   return vehIds;
 }
 
-//should return all the edge id's
+//returns all the edge id's
 function getEdgeId() {
-  edgeIds = ["e2", "e14", "e15", "e25", "e26", "e27", "e33", "e38", "e31", "e43"];
+	$.get('/CentroGeo/resources/simulations/'+ getSelectedSimulationID() +'/edge_ids', function(data) {
+        edgeIds = data;
+      })
   return edgeIds;
+}
+
+//returns all simulation id's f the database
+function getSimIds() {
+	$.get('/CentroGeo/resources/simulations/simulation_ids', function(data) {
+        for (var i = 0; i < data.length; i++) {
+          simIds[i] = data[i].toString();
+        }
+      })
+  return simIds;
 }
 
 
 
 
 $(function () {     $('#chartGen').click(function(event) {
-  genGraph();
+	genGraph();
 
- });
- });
+});
+});
 
- $(function () {     $(document).ready(function() {
-      //Statically set simulation id !!! that is sent to the server
-	  var simulation_id = '1';
 
-    $.ajax({
-      url: '/CentroGeo/resources/simulations/'+simulation_id+'/snapshots',
-      //try with application/json later
-      type: 'GET',
-      success: function (resp) {success(resp)},
-      error: function(jqXHR, textStatus, errorThrown) {
-        alert('Cannot contact the server!');
-      }
-    });
-    
+$(function () {     $('#changePass').click(function(event) {
+	location.replace("../login/change_password.html");
 
-  function success(resp) {
-    //resp is the data array
+});
+});
 
-        //avoid loading the data multiple times
-        console.log("XML retrieved");
-        alert("Simulation loaded!");
-        XMLloaded = true;
-
-//        console.log(resp);
-        
-
-        dataArray = [];
-        var parser = new DOMParser();
-
-        for (var i = 0; i < resp.length; i++) {
-            xmlDoc = parser.parseFromString(resp[i].data, "text/xml");
-            dataArray[i] = xmlDoc;
-        }
-        
-        
-//        populateLaneSelect(dataArray[1]);
-
-        currentXML = dataArray;
-
-    return xmlDoc;
-  }
-    
-    }); 
-    });
 
 //Generates a report when 'generate report' button is pressed.
  function generateReport() {
@@ -398,5 +381,4 @@ $(function () {     $('#chartGen').click(function(event) {
  	window.print();	
  	document.getElementById('reportDiv').innerHTML = "";
  }
-
 

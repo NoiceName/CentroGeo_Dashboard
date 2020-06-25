@@ -1,6 +1,5 @@
 /*Updates the text in the upload zip box.*/
 $(function() {
-	console.log('updated21')
 	const zipFile = document.getElementById("zip-file");
 	const zipButton = document.getElementById("zip-button");
 	const customText = document.getElementById("custom-text");
@@ -21,23 +20,30 @@ zipButton.addEventListener("click", function() {
 
 /*Sends the zip-file to the server.*/
 $("#zipform").submit(function (evt) {
+	const button = document.getElementById("zipSubmitButton");
+	button.disabled = true;
+	
+	var menu = document.getElementById("zipmenu");
+
+	var alignDIV = document.createElement("DIV");
+	alignDIV.setAttribute("class", "d-flex justify-content-center");
+	
+	var spinner = document.createElement("DIV");
+	spinner.setAttribute("class", "spinner-border");
+	spinner.setAttribute("role", "status");
+	alignDIV.appendChild(spinner);
+		
+	var span = document.createElement("SPAN");
+	span.setAttribute("class", "sr-only");
+	spinner.appendChild(span);
+	
+	menu.appendChild(alignDIV);
+
     var formData = new FormData();
     console.log(zipFile.files[0]);
-    // formData.append('zip', zipFile.files[0]);
     formData = zipFile.files[0];
     if (formData != null) {
     	$.ajax({
-    		xhr : function() {
-    			var xhr = new window.XMLHttpRequest();
-
-    			xhr.upload.addEventListener('progress', function(e) {
-    				if (e.lengthComputable) {
-					var percent = Math.round((e.loaded / e.total) * 100);
-					$('#progressBar').attr('aria-valuenow', percent).css('width', percent + '%').text(percent + '%');
-    				}	
-    			});
-    			return xhr;
-    		},
     		url: '/CentroGeo/resources/simulations',
     		type: 'POST',
     		data: formData,
@@ -49,9 +55,13 @@ $("#zipform").submit(function (evt) {
     		enctype: 'application/zip',
     		processData: false,
     		success: function (response) {
+    			alignDIV.remove();
+    			button.disabled = false;
     			alert("Successfully uploaded zip file");
     		},
     		error: function (jqXHR, textStatus, errorThrown) {
+    			alignDIV.remove();
+    			button.disabled = false;
     			alert(jqXHR.responseText)
     		}
         

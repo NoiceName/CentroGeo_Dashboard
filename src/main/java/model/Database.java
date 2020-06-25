@@ -9,9 +9,10 @@ import java.util.Properties;
 public class Database {
 	//Specify the parameters for the database here!
 	//The URL of the database (Note: the url string should begin with 'jdbc::postgresq:' "
-	String url= "jdbc:postgresql://bronto.ewi.utwente.nl/dab_di19202b_124";
-	String username ="dab_di19202b_124";
-	String password = "qY3D5KASvWJbHQpX";
+	//The username of the database user
+	String url = "";
+	String username = "";
+	String password = "";
 	//Do not change this variable
 	String schemaName = "projectschema";
 
@@ -39,6 +40,14 @@ public class Database {
 	 * Loads the driver for a pgsql database.
 	 */
 	public static void loadPGSQL(){
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void nloadPGSQL(){
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {

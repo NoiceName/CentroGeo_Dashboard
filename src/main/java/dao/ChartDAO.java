@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Array;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -61,6 +62,7 @@ public enum ChartDAO {
 		return chart; 
 	}
 	
+	
 	public Chart getSpeedByTimeChart(int simulation_id, String vehicle_id) {
 		Database db = new Database();
 		Database.loadPGSQL();
@@ -71,39 +73,103 @@ public enum ChartDAO {
 				"where s.simulation = ?\r\n" + 
 				"order by s.time) as vehicles\r\n" + 
 				"where veh_id = ?;";
-		PreparedStatement ps = db.prepareStatement(statement);	
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
 		Chart chart = null;
 		try {
 			ps.setInt(1, simulation_id);
 			ps.setString(2, vehicle_id);
 			ResultSet result = ps.executeQuery();
-			chart = new Chart(getChartPoints(result), vehicle_id);
+			while(result.next()) {
+				double speed = result.getFloat("speed");
+				double time = result.getFloat("time");
+				//Creating points on an speedByTimeChart.
+				ChartPoint point = new ChartPoint(time, speed);
+				points.add(point);
+			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "speed in m/s");
 		return chart; 
-		
 	}
 
+
+
 	public Chart getSpeedFactorByTimeChart(int simulation_id, String vehicle_id) {
-		return new Chart();
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "select time, speedFactor\r\n" + 
+				"from (select s.time, unnest(xpath('//vehicle/@speedFactor', s.data))::text as speedfactor, unnest(xpath('//vehicle/@id', s.data))::text as veh_id\r\n" + 
+				"from projectschema.snapshot s\r\n" + 
+				"where s.simulation = ?\r\n" + 
+				"order by s.time) as vehicles\r\n" + 
+				"where veh_id = ?;";
+		PreparedStatement ps = db.prepareStatement(statement);	
+		ArrayList<ChartPoint> points = new ArrayList<>();
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulation_id);
+			ps.setString(2, vehicle_id);
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				double speedFactor = result.getFloat("speedfactor");
+				double time = result.getFloat("time");
+				//Creating points on an speedByTimeChart.
+				ChartPoint point = new ChartPoint(time, speedFactor);
+				points.add(point);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "speedFactor");
+		return chart; 
 	}
 
 	public Chart getRouteLengthByTimeChart(int simulation_id, String vehicle_id) {
-		return new Chart();
-	}
-	
-	
-	private ArrayList<ChartPoint> getChartPoints(ResultSet result) throws SQLException {
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "SELECT routes.time, ROUND((CAST(SUM(l.length) AS numeric)/1000), 4) as length\r\n" + 
+				"FROM (	SELECT s.time, unnest(xpath('/snapshot/route/@edges', s.data))::text as edges, unnest(xpath('/snapshot/route/@id', s.data))::text as route_id \r\n" + 
+				"		FROM projectschema.snapshot s \r\n" + 
+				"		WHERE s.simulation = ?\r\n" + 
+				"		ORDER BY s.time) as routes, (	SELECT s1.time, unnest(xpath('//vehicle/@route', s1.data))::text as routeId, unnest(xpath('//vehicle/@id', s1.data))::text as veh_id \r\n" + 
+				"				  						FROM projectschema.snapshot s1 \r\n" + 
+				"										WHERE s1.simulation = ?\r\n" + 
+				"										ORDER BY s1.time) as vehicles, projectschema.lane l\r\n" + 
+				"WHERE route_id = routeId\r\n" + 
+				"AND vehicles.time = routes.time\r\n" + 
+				"AND vehicles.veh_id = ?\r\n" + 
+				"AND edges LIKE ('%' || REPLACE(l.lane_id, '_0', '') || ' %')\r\n" + 
+				"GROUP BY routes.time";
+		PreparedStatement ps = db.prepareStatement(statement);
 		ArrayList<ChartPoint> points = new ArrayList<>();
-		while(result.next()) {
-			double y = Double.parseDouble(result.getString("speed"));
-			double x = result.getFloat("time");
-			ChartPoint point = new ChartPoint(x, y);
-			points.add(point);
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulation_id);
+			ps.setInt(2, simulation_id);
+			ps.setString(3, vehicle_id);
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				double routeLength = result.getFloat("length");
+				double time = result.getFloat("time");
+				//Creating points on an routelength by time.
+				ChartPoint point = new ChartPoint(time, routeLength);
+				points.add(point);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
-		return points;
+		//Create a chart with the given points.
+		chart = new Chart(points, "route length in km");
+		return chart; 
 	}
 	
 	
@@ -130,14 +196,13 @@ public enum ChartDAO {
 			ps.setString(2, laneId);
 			ResultSet result = ps.executeQuery();
 			while(result.next()) {
-				String[] cars = result.getString("vehicles").split("v");
-				int count = cars.length -1;
+				String[] cars = result.getString("vehicles").split(" ");
+				int count = cars.length;
 				double time = result.getFloat("time");
 				//Creating points on an EdgeAppearanceChart.
 				ChartPoint point = new ChartPoint(time, count);
 				points.add(point);
 			}
-			System.out.println("all points added for " + laneId);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -145,6 +210,262 @@ public enum ChartDAO {
 				//Create a chart with the given points.
 		Chart chart = new Chart(points, laneId);
 		return chart; 
+
+	}
+	
+	public Chart getAverageVehicleSpeed(int simulationId) {
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "select time, speed\r\n" + 
+				"from (select s.time, unnest(xpath('//vehicle/@speed', s.data))::text as speed\r\n" + 
+				"from projectschema.snapshot s\r\n" + 
+				"where s.simulation = ? \r\n" + 
+				"order by s.time) as vehicles";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
+		try {
+			ps.setInt(1, simulationId);
+			ResultSet result = ps.executeQuery();
+			double prevTime = result.getFloat("time");
+			ArrayList<Double> speeds = new ArrayList<>();
+			while(result.next()) {
+				double speed = result.getFloat("speed");
+				double time = result.getFloat("time");
+				double totalSpeed = 0;
+				double avg = 0;
+				if(time == prevTime) {
+					if(speed > 0) {
+						speeds.add(speed);
+					}
+				} else {
+					for(int i = 0; i < speeds.size(); i++) {
+						 totalSpeed = totalSpeed + speeds.get(i);
+					}
+					avg = totalSpeed / speeds.size();
+					speeds.clear();
+				}
+				prevTime = time;
+				ChartPoint point = new ChartPoint(time, avg);
+				points.add(point);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		//Chart chart = new Chart(points, );
+		//return chart;
+		return null;
 		
 	}
+  
+	
+	/**
+     * Generate Cumulative Number of Arrived Vehicles chart
+     * @param simulationId - Id of a simulation
+     * @return chart object
+     * @throws SQLException
+     */
+	public Chart getVehicleNumber(int simulationId) throws SQLException {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT s.time, unnest(xpath('//delay/@end', s.data))::text as number " + 
+    			"FROM projectschema.snapshot s " + 
+    			"WHERE s.simulation = ?  " + 
+    			"ORDER BY time ASC";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+				double time = result.getFloat("time");
+				double number = Double.parseDouble(result.getString("number"));
+				//create points on chart of Cumulative Number of Arrived Vehicles
+				ChartPoint point = new ChartPoint(time, number);
+				points.add(point);								
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	    finally {
+	    	ps.close();
+	    }
+			Chart chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		    return chart;
+		    
+	}
+
+
+	/**
+     * Generate Number of running vehicles chart
+     * @param simulationId - Id of a simulation
+     * @return chart object
+     * @throws SQLException
+     */
+	public Chart getRunVehicles(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT s.time, unnest(xpath('//delay/@number', s.data))::text as number " + 
+    			"FROM projectschema.snapshot s " + 
+    			"WHERE s.simulation = ?  " + 
+    			"ORDER BY time ASC";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+				double time = result.getFloat("time");
+				double number = Double.parseDouble(result.getString("number"));
+				//create points on chart of Cumulative Number of Arrived Vehicles
+				ChartPoint point = new ChartPoint(time, number);
+				points.add(point);								
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+			Chart chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		    return chart;
+		    
+	}
+	
+	public Chart getAverageSpeed(int simulationId) {
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		// to omit the cars with a null speed, remove the SQL comment before the "WHERE speed > 0"
+		String statement = "SELECT time, ROUND(AVG(speed), 2) AS AVGspeed\r\n" + 
+				"FROM (	SELECT s.time, CAST(unnest(xpath('//vehicle/@speed', s.data))::text AS numeric) AS speed \r\n" + 
+				"		FROM projectschema.snapshot s\r\n" + 
+				"		WHERE s.simulation = ?\r\n" + 
+				"		ORDER BY s.time) AS vehicles\r\n" + 
+				"-- -WHERE speed > 0\r\n" + 
+				"GROUP BY time";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulationId);
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				double speed = result.getFloat("avgSpeed");
+				double time = result.getFloat("time");
+				//Creating points on an speedByTimeChart.
+				ChartPoint point = new ChartPoint(time, speed);
+				points.add(point);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		return chart; 
+	}
+	
+	
+	public Chart getAverageSpeedF(int simulationId) {
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "SELECT time, ROUND(AVG(speedF), 5) AS avgSpeedF\r\n" + 
+				"FROM (	SELECT s.time, CAST(unnest(xpath('//vehicle/@speedFactor', s.data))::text AS numeric) AS speedF \r\n" + 
+				"		FROM projectschema.snapshot s\r\n" + 
+				"		WHERE s.simulation = ?\r\n" + 
+				"		ORDER BY s.time) AS vehicles\r\n" + 
+				"GROUP BY time";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulationId);
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				double speed = result.getFloat("avgSpeedF");
+				double time = result.getFloat("time");
+				//Creating points on an speedByTimeChart.
+				ChartPoint point = new ChartPoint(time, speed);
+				points.add(point);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		return chart; 
+	}
+
+	public Chart getAverageRouteL(int simulationId) {
+		Database db = new Database();
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement = "";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>();
+		Chart chart = null;
+		try {
+			ps.setInt(1, simulationId);
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				double speed = result.getFloat("avgSpeedF");
+				double time = result.getFloat("time");
+				//Creating points on an speedByTimeChart.
+				ChartPoint point = new ChartPoint(time, speed);
+				points.add(point);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		//Create a chart with the given points.
+		chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		return chart; 
+	}
+
+	
+	//returns transferred (teleportd) vehicles over time.
+	public Chart getTransVehicles(int simulationId) {
+		Database db = new Database(); 
+		Database.loadPGSQL();
+		db.connectPGSQL();
+		String statement= "SELECT DISTINCT s1.time, COALESCE( (	SELECT COUNT(d.veh_ids)as number \r\n" + 
+				"					FROM (	SELECT s.time as time, unnest(xpath('/snapshot/vehicleTransfer/@id', s.data))::text as veh_ids \r\n" + 
+				"							FROM projectschema.snapshot s  \r\n" + 
+				"							WHERE s.simulation = ? \r\n" + 
+				"							ORDER BY s.time ) as d\r\n" + 
+				"				 			WHERE d.time = s1.time\r\n" + 
+				"							GROUP BY d.time), 0) as counted				   \r\n" + 
+				"FROM projectschema.snapshot s1\r\n" + 
+				"ORDER BY s1.time";
+		PreparedStatement ps = db.prepareStatement(statement);
+		ArrayList<ChartPoint> points = new ArrayList<>(); 
+		
+	    try {
+	    	ps.setInt(1, simulationId);
+	    	ResultSet result = ps.executeQuery();
+	    	while(result.next()) {
+				double time = result.getFloat("time");
+				int number = Integer.parseInt(result.getString("counted"));
+				//create points on chart of Cumulative Number of Arrived Vehicles
+				ChartPoint point = new ChartPoint(time, number);
+				points.add(point);								
+			}
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+			Chart chart = new Chart(points, "Simulation " + Integer.toString(simulationId));
+		    return chart;
+		    
+	}
+
 }

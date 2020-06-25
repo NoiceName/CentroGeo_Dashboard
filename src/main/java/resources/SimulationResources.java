@@ -19,6 +19,7 @@ import javax.xml.crypto.Data;
 
 import cookie_manager.Secured;
 import dao.SimulationDAO;
+import extraction.ZipExtraction;
 import model.Simulation;
 import org.json.JSONObject;
 
@@ -37,10 +38,10 @@ public class SimulationResources {
 	@Consumes("application/zip")
 	public Response addSimulation(InputStream stream){
 		try {
-			SimulationDAO.instance.addSimulation(stream);
+			ZipExtraction.instance.extract(stream);
 			return Response.ok().entity("").build();
 		} catch (Exception e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
 		}
 	}
@@ -54,10 +55,42 @@ public class SimulationResources {
 	
 	@DELETE
 	@Secured
+	@Path("/{simulation_id}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void deleteSimulation(@FormParam("id") String name){
-		System.out.println(name);
-		SimulationDAO.instance.deleteSimulation(name);
+	public void deleteSimulation(@PathParam("simulation_id") int id){
+		System.out.println("Deleting sim id: " + id);
+		SimulationDAO.instance.deleteSimulation(id);
 	}
 	
+	@GET
+	@Path("/simulation_ids")
+	@Produces("application/json")
+	public ArrayList<Integer> getSimulationIds() {
+		ArrayList<Integer> simIDs = SimulationDAO.instance.getSimulationIds();
+		return simIDs;
+	}
+	
+	@GET
+	@Path("/{simulation_id}/lane_ids")
+	@Produces("application/json")
+	public ArrayList<String> getLaneIds(@PathParam("simulation_id") int id) {
+		ArrayList<String> laneIDs = SimulationDAO.instance.getLaneIds(id);
+		return laneIDs;
+	}
+	
+	@GET
+	@Path("/{simulation_id}/edge_ids")
+	@Produces("application/json")
+	public ArrayList<String> getEdgeIds(@PathParam("simulation_id") int id) {
+		ArrayList<String> edgeIDs = SimulationDAO.instance.getEdgeIds(id);
+		return edgeIDs;
+	}
+	
+	@GET
+	@Path("/{simulation_id}/vehicle_ids")
+	@Produces("application/json")
+	public ArrayList<String> getVehicleIds(@PathParam("simulation_id") int id) {
+		ArrayList<String> vehicleIDs = SimulationDAO.instance.getVehicleIds(id);
+		return vehicleIDs;
+	}
 }

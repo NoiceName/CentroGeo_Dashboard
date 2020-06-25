@@ -17,9 +17,11 @@
 	<script src="Graph visualization/generatingGraphs.js"></script>
 	<script src="filtering-simulations/filter.js"></script>
 	<script src="metadata/editMetadata.js"></script>
+	<script src="filtering-simulations/deletingSimulation.js"></script>
 	<style>
 	  @media print {
-        #createChartButton, #genReportButton, #uploadSimButton{
+        #createChartButton, #genReportButton, #uploadSimButton, #selectSimulationButton, #editMetadataButton,
+        	#deleteSelectedSimulation, #selectedSimulation, #changePass{
            display: none;
         }
       }
@@ -32,17 +34,28 @@
 		<div class="row border-bottom">
 			<div class="col-12">
 				<ul class="nav justify-content-center" id="navigation-test">
-					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#selectSimulationMenu">Select Simulation</a></li>
-					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#createChartMenu">Create Chart</a></li>
 					<li class="nav-item">
-						<a class="nav-link" id="genReportButton" onclick="generateReport()">Generate Report</a>	
+						<a class="nav-link" id="uploadSimButton" data-toggle="modal" data-target="#uploadSimulationMenu">Upload Simulation</a>
 					</li>
+					<li class="nav-item"> <a class="nav-link" id="selectSimulationButton" data-toggle="modal" data-target="#selectSimulationMenu">Select Simulation</a></li>
 					<li class="nav-item">
-						<a class="nav-link" id="uploadSimButton" data-toggle="modal" data-target="#uploadSimulationMenu">Upload Simulation</a>	
+						<a class="nav-link" id="deleteSelectedSimulation" data-toggle="modal" data-target="#deleteSimConfirmation">Delete Simulation</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" id="editMetadataButton" data-toggle="modal" data-target="#editMetadataMenu">Edit Metadata</a>
 					</li>
+					<li class="nav-item"> <a class="nav-link" id="createChartButton" data-toggle="modal" data-target="#createChartMenu">Create Chart</a></li>
+					<li class="nav-item">
+						<a class="nav-link" id="genReportButton" onclick="generateReport()">Generate Report</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="changePass" href="../CentroGeo/login/change_password.html" style="color:black">Change Password</a>
+					</li>
+				</ul>			
+			</div>
+			<span class="col-12">
+				<ul class="nav justify-content-center" id="">
+                    <li class="nav-item" id="selectedSimulation">Selected Simulation: <span class="selectedSimulationDisplay"></span></li>
 				</ul>
 			</div>
 		</div>
@@ -65,36 +78,49 @@
 								<div class="row">
 									<!-- Chart Select --> 
 <div class="col-6 list-group" id="chartChoice" value=''>
-										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Number of vehicles on a line</a>		
-										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle Information</a>
-										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">Edge Appearance Frequency </a>
-										<a class="list-group-item list-group-item-action chart-type" id="uselessChartSelect" data-toggle="list" value="otherC">Useless Graph</a>			
+										<a class="list-group-item list-group-item-action chart-type" id="edgeFrChartSelect" data-toggle="list" value="edgeFr">Edge appearance frequency </a>
+										<a class="list-group-item list-group-item-action chart-type" id="lineChartSelect" data-toggle="list" value="transVeh">Lane transiting vehicles</a>		
+										<a class="list-group-item list-group-item-action chart-type" id="vehicleChartSelect" data-toggle="list" value="vehInfo">Vehicle info</a>
+										<a class="list-group-item list-group-item-action chart-type" id="avgRouteChartSelect" data-toggle="list" value="avgRoute">Average route length</a>
+										<a class="list-group-item list-group-item-action chart-type" id="avgVehSpeedChartSelect" data-toggle="list" value="avgSpeed">Average vehicle speed</a>
+										<a class="list-group-item list-group-item-action chart-type" id="avgVehSpeedFChartSelect" data-toggle="list" value="avgSpeedF">Average vehicle speed Factor</a>
+										<a class="list-group-item list-group-item-action chart-type" id="cumulChartSelect" data-toggle="list" value="cumulVeh">Cumulative number of arrived vehicles </a>	
+										<a class="list-group-item list-group-item-action chart-type" id="transChartSelect" data-toggle="list" value="transferVeh">Number of transferred vehicles </a>
+										<a class="list-group-item list-group-item-action chart-type" id="runningChartSelect" data-toggle="list" value="runningVeh">Number of running vehicles </a>		
 									</div>	
 									<!-- Chart Options -->
 									<div class="col-6">
 										<!-- First Row of options --> 
 										<div class="row">
+
 											<div class="input-group mb-3 d-none chart-options" id="lineChartOptions">
 												<div class="input-group-prepend">
 													<span class="input-group-text">Lane ID</span>
 												</div>
-												<input id="laneIdInput" type="text" class="form-control" placeholder="eg. :e_31">
+												<input id="laneIdInput" type="text" class="form-control" placeholder="eg. e31_0">
 											</div>
+
 											<div class="input-group mb-3 d-none chart-options" id="vehicleChartOptions">
 												<div class="input-group-prepend">
 													<span class="input-group-text">Vehicle ID</span>
 												</div>
 												<input id="vehIdInput" type="text" class="form-control" placeholder="eg. v40">
 											</div>
+
 											<div class="input-group mb-3 d-none chart-options" id="edgeFrOptions">
 												<div class="input-group-prepend">
 													<span class="input-group-text">Edge ID</span>
 												</div>
 												<input id="edgeIdInput" type="text" class="form-control" placeholder="eg. e43">
 											</div>
-											<div class="input-group mb-3 d-none chart-options" id="pieChartOptions">
-												Something to do with piecharts
+
+											<div class="input-group mb-3 d-none chart-options" id="simOptions">
+												<div class="input-group-prepend">
+													<span class="input-group-text">Simulation ID</span>
+												</div>
+												<input id="simIdInput" type="text" class="form-control" placeholder="eg. 2">
 											</div>
+
 										</div>
 										<!-- Second row of options --> 
 										<div class="row">
@@ -136,7 +162,7 @@
 						<div class="modal-header">
 							<h5 class="modal-title">Please select a simulation</h5>	
 						</div>	
-						<div class="modal-body">
+						<div class="modal-body" id="zipmenu">
 							<div class="container-fluid">
 								<form id="zipform">
 									<div class="form-row">
@@ -150,18 +176,13 @@
 									</div>
 									<div class="form-row mt-3">
 										<div class="col-12">
-											<button type="submit" id="submit" class="btn btn-block btn-success">Upload!</button>	
+											<button type="submit" id="zipSubmitButton" class="btn btn-block btn-success">Upload!</button>
 										</div>	
 									</div>
 								</form>
 								<br>
-								<div class="progress">
- 			 						<div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-    									0%
-  									</div>
-								</div>
+</div>
 							</div>
-							</div>	
 						</div>
 					</div>
 				</div>	
@@ -172,17 +193,20 @@
 				<div class="modal-dialog modal-dialog-centered modal-xl">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title">Please select a simulation</h5>	
+							<h5 class="modal-title">Please select a simulation</h5>
+							<h6 class="float-right">Selected Simulation: <span class="selectedSimulationDisplay"></span></h6>
 						</div>	
 						<div class="modal-body">
 							<div class="container-fluid">
 								<div class="row">
 									<div class="col-12">
 										<div class="row">
-											<div class="input-group mb-3">
-											  <input type="text" class="form-control" placeholder="Simulation Name or Tag" id="simulation-filter">
-											</div>	
-										</div> 
+											<div class="col-12">
+												<div class="input-group mb-3">
+												  <input type="text" class="form-control" placeholder="Simulation Name or Tag" id="simulation-filter">
+												</div>
+											</div>
+										</div>
 										<div class="row">
 											<div class="scroll-spy w-100" id="simulation-container">
 											<!--  Simulations go here -->
@@ -279,28 +303,47 @@
 		</div>
 						</div>
 													<!-- Edit metadata menu  -->
-		<div id="add-tag-modal" class="modal fade" role="dialog">
-			<div class="modal-dialog modal-sm">
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h5 class="modal-title">Add new tag</h5>
-					</div>
-					<div class="modal-body">
-						<form id = "tag-form">
-							<label for = "new-tag" >New tag</label>
-							<input type = "text" id = "newTag" name= "newTag" placeholder = "Tag name...">
-							<button type = "button" id= "add-new-tag"  class ="btn btn-outline-success btn-sm">Add</button>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>
-				</div>
+<div id="add-tag-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title">Add new tag</h5>
+			</div>
+			<div class="modal-body">
+				<form id = "tag-form">
+					<label for = "new-tag" >New tag</label>
+					<input type = "text" id = "newTag" name= "newTag" placeholder = "Tag name...">
+					<button type = "button" id= "add-new-tag"  class ="btn btn-outline-success btn-sm">Add</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
+</div>
+</div>
+</div>
+
+	<div id="deleteSimConfirmation" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Please confirm delete action</h5>
+				</div>
+				<div class="modal-body">
+                    <div id="deleteSimulationContainer">
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal" id="delSim">Delete</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 </body>

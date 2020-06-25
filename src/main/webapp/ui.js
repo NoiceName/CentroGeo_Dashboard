@@ -1,7 +1,16 @@
+//A div which corresponds to the simulation that has been selected by the user (null in the case that if no simulation has been selected);
 var selectedSimulation = null;
+
+//An array of objects containing the simulations loaded from the database
 var loadedSimulations = null;
 
 $(function () {
+	$("#edgeFrChartSelect").click(function () {
+		clearInputFields();
+		$("#edgeFrOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
 	$("#lineChartSelect").click(function () {
 		clearInputFields();
 		$("#lineChartOptions").removeClass('d-none');
@@ -14,15 +23,39 @@ $(function () {
 		clearSelectedAndFound();
 	});
 
-	$("#uselessChartSelect").click(function () {
+	$("#avgRouteChartSelect").click(function () {
 		clearInputFields();
-		$("#pieChartOptions").removeClass('d-none');
+		$("#simOptions").removeClass('d-none');
 		clearSelectedAndFound();
 	});
 
-	$("#edgeFrChartSelect").click(function () {
+	$("#avgVehSpeedChartSelect").click(function () {
 		clearInputFields();
-		$("#edgeFrOptions").removeClass('d-none');
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#avgVehSpeedFChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#cumulChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#transChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
+		clearSelectedAndFound();
+	});
+
+	$("#runningChartSelect").click(function () {
+		clearInputFields();
+		$("#simOptions").removeClass('d-none');
 		clearSelectedAndFound();
 	});
 	
@@ -53,11 +86,15 @@ $(function() {
 		removeBadges(foundContainer);
 		//If the input is longer than 3 characters
 		if(input.length >= 3) {
-			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
-			let filtered = getFilteredIds(input, ids);
-			filtered.forEach(function(item) {
+			try {
+				//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
+				let filtered = getFilteredIds(input, ids);
+				filtered.forEach(function(item) {
 				createBadgeAndAdd(item,p);
 			});
+			} catch(err) {
+				console.log("Waiting for server response...");
+			}
 		}
 		else if (input.length <= 2) {
 
@@ -80,11 +117,15 @@ $(function() {
 		removeBadges(foundContainer);
 		//If the input is longer than 3 characters
 		if(input.length >= 2) {
-			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
-			let filtered = getFilteredIds(input, ids);
-			filtered.forEach(function(item) {
+			try {
+				//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
+				let filtered = getFilteredIds(input, ids);
+				filtered.forEach(function(item) {
 				createBadgeAndAdd(item,p);
 			});
+			} catch(err) {
+				console.log("Waiting for server response...");
+			}
 		}
 		else if (input.length <= 1) {
 
@@ -106,17 +147,53 @@ $(function() {
 		removeBadges(foundContainer);
 		//If the input is longer than 2 characters
 		if(input.length >= 2) {
+			try {
 			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
 			let filtered = getFilteredIds(input, ids);
 			filtered.forEach(function(item) {
 				createBadgeAndAdd(item,p);
 			});
+			} catch(err) {
+				console.log("Waiting for server response...");
+			}
 		}
 		else if (input.length <= 1) {
 
 		}
 	}); 
 });
+
+
+//select simulationID from user input for several graphs
+$(function() {
+	var laneIdInput = $("#simIdInput");
+
+	laneIdInput.keyup(function() {
+		var ids = getSimIds();
+		var jsLaneIdInput = document.getElementById("simIdInput");
+		let input = jsLaneIdInput.value;
+		let p = document.getElementById('foundIdsContainer');
+		//clear the found input after each keystroke
+		let foundContainer = document.getElementById('foundIdsContainer');
+		removeBadges(foundContainer);
+		//If the input is longer than 2 characters
+		if(input.length >= 1) {
+			try {
+			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
+			let filtered = getFilteredIds(input, ids);
+			filtered.forEach(function(item) {
+				createBadgeAndAdd(item,p);
+			});
+			} catch(err) {
+				console.log("Waiting for server response...");
+			}
+		}
+		else if (input.length <= 0) {
+
+		}
+	}); 
+});
+
  
 //Removes all badges from a specified container
 function removeBadges(container){
@@ -214,13 +291,15 @@ $(function() {
 //Pulls the simulations from the API
 function refreshSimulations(){
 	clearSimulations();
-	$.get("/CentroGeo/resources/simulations", function (resp) {loadSimulations(resp);});
+	$.get("/CentroGeo/resources/simulations", function (resp) {
+		loadedSimulations = resp;
+		loadSimulations(resp);
+	});
 }
 
 //Given an array of simulation objects updates loads them into SelectSimulationMenu modal
 function loadSimulations(simulations){
 	//remove simulations here
-	loadedSimulations = simulations;
 	var container = document.getElementById('simulation-container');
 	for(var i = 0; i!=simulations.length; i++){
 		let simulation = createSimulationDiv(simulations[i]);
@@ -232,18 +311,37 @@ function loadSimulations(simulations){
 //Removes all simulations from the simulation container
 function clearSimulations(){
 	$('.simulation').remove();
-	loadedSimulatios = null;
+}
+
+//Returns all loaded simulations from the database
+function getLoadedSimulations(){
+	return loadedSimulations;
+}
+
+function clearSavedSimulations(){
+	loadedSimulations = null;
 }
 
 //Removes a specified simulation from the list
+//simulation_id is an string "integer"
 function removeSimulation(simulation_id){
+	let simulationContainer = document.getElementById('simulation-container');
+    let simulation = getSimulationDivById(simulation_id);
+    simulationContainer.removeChild(simulation);
 }
 
+//Simulation ID is a string in this case
+//Returns the Div of the specified simulation
 function getSimulationDivById(simulation_id){
 	let idArr = document.getElementsByClassName('simulation-id');
-	let idSpan = idArr[0];
-	let simulation = document.closest('.simulation');
-	console.log(simulation);
+	for(let i = 0; i!=idArr.length; i++){
+		if(idArr[i].innerText == simulation_id){
+			let idSpan = idArr[i];
+			let simulation = idSpan.closest('.simulation');
+			return simulation;
+		}
+	}
+	return null;
 }
 
 //Creating simulation div
@@ -320,10 +418,40 @@ function selectSimulation(){
 		deselectSimulation(selectedSimulation);
 	}
 	selectedSimulation = this;
+	let name = selectedSimulation.getElementsByClassName('simulation-name')[0].innerText;
+	setSelectedName(name);
 	this.classList.add('bg-dark');
 	this.classList.add('text-white');
 	this.classList.add('selected');
 	getSelectedSimulationID();
+}
+
+//Returns the div of the selected simulation
+function getSelectedSimulationDiv(){
+	return selectedSimulation;
+}
+
+function getSelectedSimulationObj(){
+	let id = getSelectedSimulationID();
+	if (id==-1) {
+		alert("Please select a simulation first!");
+	} else {
+		let sims = getLoadedSimulations()
+		for(var i = 0; i!=sims.length; i++){
+			if(sims[i].simulationId==id){
+				return sims[i];
+			}
+		}
+		return null;
+	}
+}
+
+//Display the name of the "selected simulation"
+function setSelectedName(simulationName){
+	let displays = document.getElementsByClassName('selectedSimulationDisplay');
+	for(let i = 0; i!=displays.length; i++){
+	    displays[i].innerText = simulationName;
+	}
 }
 
 //Deselect a particular simulation
@@ -331,6 +459,10 @@ function deselectSimulation(simulation){
 	simulation.classList.remove('bg-dark');
 	simulation.classList.remove('text-white');
 	simulation.classList.remove('selected');
+	selectedSimulation = null;
+}
+
+function clearSelectedSimulation(){
 	selectedSimulation = null;
 }
 
