@@ -12,11 +12,11 @@ public enum RoutesDAO {
 	public void addRoute(int simulationID, String id, float depart) throws SQLException {
 		Database db = DatabaseDAO.instance.getDatabase();
 
+		//language=PostgreSQL
 		String query = "INSERT INTO projectschema.vehicle (vehicle_id, simulation, depart) " +
 				"VALUES (?, ?, ?)";
 
-		// System.out.println(query);
-		// System.out.println("" + simulationID + " - " + id + " - " + depart);
+		// db.getConnection().setTransactionIsolation();
 
 		PreparedStatement statement = db.prepareStatement(query);
 		statement.setString(1, id);

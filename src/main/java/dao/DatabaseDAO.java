@@ -3,6 +3,7 @@ package dao;
 import model.Database;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public enum DatabaseDAO {
 	instance;
@@ -13,9 +14,17 @@ public enum DatabaseDAO {
 		db = new Database();
 		db.nloadPGSQL();
 		db.connectPGSQL();
+		try {
+			db.getConnection().setTransactionIsolation(db.getConnection().TRANSACTION_SERIALIZABLE);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Database getDatabase(){
+		if (db == null){
+			setupDatabase();
+		}
 		return db;
 	}
 }

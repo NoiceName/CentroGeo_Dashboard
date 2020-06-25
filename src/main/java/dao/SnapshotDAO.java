@@ -31,9 +31,7 @@ public enum SnapshotDAO {
 	 * @return
 	 */
 	public ArrayList<Snapshot> getSnapshotDumpXML(int simulation_id) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = ("select s.data, s.time, s.snapshot_id from \"projectschema\".snapshot s where s.simulation = ? order by s.time");
 		PreparedStatement st = db.prepareStatement(statement);
 		ArrayList<Snapshot> snapshots = new ArrayList<>();
@@ -76,9 +74,7 @@ public enum SnapshotDAO {
 	 * @return
 	 */
 	public JSONObject getStateDUMPJSON(int simulation_id) {
-		Database db = new Database();
-		Database.loadPGSQL();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = ("select s.snapshot_id, s.data from \"projectschema\".snapshot s where s.simulation = ?");
 		PreparedStatement st = db.prepareStatement(statement);
 		JSONObject resultObject = new JSONObject();
@@ -115,8 +111,7 @@ public enum SnapshotDAO {
 	 * @return
 	 */
 	public ArrayList<Snapshot> getAllSnapshotsForOneLane(int simulation_id, String lane_id){
-		Database db = new Database();
-		db.connectPGSQL();
+		Database db = DatabaseDAO.instance.getDatabase();
 		String statement = "select s.time, s.snapshot_id, sl.lane, count(sv.snapshot_vehicle_id)"
 				+ "from \"projectschema\".snapshot s, \"projectschema\".snapshotlane sl, \"projectschema\".snapshotvehicle sv"
 				+ "where s.snapshot_id = ?"
