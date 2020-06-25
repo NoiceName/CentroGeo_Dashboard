@@ -86,11 +86,15 @@ $(function() {
 		removeBadges(foundContainer);
 		//If the input is longer than 3 characters
 		if(input.length >= 3) {
-			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
-			let filtered = getFilteredIds(input, ids);
-			filtered.forEach(function(item) {
+			try {
+				//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
+				let filtered = getFilteredIds(input, ids);
+				filtered.forEach(function(item) {
 				createBadgeAndAdd(item,p);
 			});
+			} catch(err) {
+				console.log("Waiting for server response...");
+			}
 		}
 		else if (input.length <= 2) {
 
@@ -113,11 +117,15 @@ $(function() {
 		removeBadges(foundContainer);
 		//If the input is longer than 3 characters
 		if(input.length >= 2) {
-			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
-			let filtered = getFilteredIds(input, ids);
-			filtered.forEach(function(item) {
+			try {
+				//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
+				let filtered = getFilteredIds(input, ids);
+				filtered.forEach(function(item) {
 				createBadgeAndAdd(item,p);
 			});
+			} catch(err) {
+				console.log("Waiting for server response...");
+			}
 		}
 		else if (input.length <= 1) {
 
@@ -139,11 +147,15 @@ $(function() {
 		removeBadges(foundContainer);
 		//If the input is longer than 2 characters
 		if(input.length >= 2) {
+			try {
 			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
 			let filtered = getFilteredIds(input, ids);
 			filtered.forEach(function(item) {
 				createBadgeAndAdd(item,p);
 			});
+			} catch(err) {
+				console.log("Waiting for server response...");
+			}
 		}
 		else if (input.length <= 1) {
 
@@ -166,11 +178,15 @@ $(function() {
 		removeBadges(foundContainer);
 		//If the input is longer than 2 characters
 		if(input.length >= 1) {
+			try {
 			//Filter through the lane IDS in the simulation by the given input and append them as children to the foundIdsContainer
 			let filtered = getFilteredIds(input, ids);
 			filtered.forEach(function(item) {
 				createBadgeAndAdd(item,p);
 			});
+			} catch(err) {
+				console.log("Waiting for server response...");
+			}
 		}
 		else if (input.length <= 0) {
 
