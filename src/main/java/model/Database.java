@@ -10,9 +10,9 @@ public class Database {
 	//Specify the parameters for the database here!
 	//The URL of the database (Note: the url string should begin with 'jdbc::postgresq:' "
 	//The username of the database user
-//	String url = "jdbc:postgresql://localhost:5432/";
-//	String username = "postgres";
-//	String password = "password";
+	// String url = "jdbc:postgresql://localhost:5433/centrogeo";
+	// String username = "postgres";
+	// String password = "1YIrISqSsLxYFI8Itig6";
 	//Information used for testing when deploying
 	String url = "jdbc:postgresql://bronto.ewi.utwente.nl/";
 	String username = "dab_di19202b_2";

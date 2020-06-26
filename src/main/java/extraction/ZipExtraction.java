@@ -33,7 +33,9 @@ public enum ZipExtraction {
 
 		simulationID = SimulationDAO.instance.addEmptyMetadata();
 
+		System.out.println("Downloaded file");
 		getZipData(stream);
+		System.out.println("File added to database");
 	}
 
 	public void getZipData(InputStream stream) throws Exception {

@@ -71,7 +71,8 @@ $("#zipform").submit(function (evt) {
     			alignDIV.remove();
     			button.disabled = false;
     			refreshSimulations();
-    			alert(jqXHR.responseText)
+				alert("Successfully uploaded zip file");
+    			//alert(jqXHR.responseText)
     		}
         
     	});

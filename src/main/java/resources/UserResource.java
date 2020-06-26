@@ -98,13 +98,25 @@ public class UserResource {
 
 		System.out.println(username + oldPassword + newPassword);
 
-		//verify hash_password
-		Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
 		String returnPasswordHash = UserDAO.instance.getUserPassword(username);
-		boolean match = argon2.verify(returnPasswordHash, oldPassword);
+
+		// verify password using SCryptPasswordEncoder
+		int cpuCost = (int) Math.pow(2, 14); // factor to increase CPU costs
+		int memoryCost = 8;      // increases memory usage
+		int parallelization = 1; // parallelization
+		int keyLength = 32;      // key length in bytes
+		int saltLength = 64;     // salt length in bytes
+
+		SCryptPasswordEncoder sCryptPasswordEncoder = new SCryptPasswordEncoder(
+				cpuCost,
+				memoryCost,
+				parallelization,
+				keyLength,
+				saltLength);
+		boolean match = sCryptPasswordEncoder.matches(oldPassword, returnPasswordHash);
 
 		if (match){
-			String passwordHash = argon2.hash(4, 1024 * 1024, 8, newPassword);
+			String passwordHash = sCryptPasswordEncoder.encode(newPassword);
 			UserDAO.instance.setUserPassword(username, passwordHash);
 			response.put("result", "true");
 			return Response.ok().entity(response.toString()).build();
