@@ -18,7 +18,7 @@
            </div>
            <div class="row">
                <div class="col-12">
-                   <form class="form-group" action="/CentroGeo/resources/initialize_db" method="post">
+                   <form class="form-group" action="/CentroGeo/resources/initialize_db" method="post" id="initialiseDBForm">
                        <label for="databaseUrl">Database URL (as required by postgres)</label>
                        <input type="text" id="databaseUrl" class="form-control" name="database_url">
                        <small class="form-text text-muted">Eg. jdbc:postgresql://localhost:5432/</small>
@@ -26,7 +26,7 @@
                        <input type="text" id="databaseUsername" name="database_username" class="form-control">
                        <label for="databasePassword">Database Password</label>
                        <input type="password" id="databasePassword" class="form-control" name="database_password">
-                       <button type="submit" class="btn btn-primary btn-block">Submit!</button>
+                       <button class="btn btn-primary btn-block" id="send">Submit!</button>
                    </form>
                </div>
            </div>
