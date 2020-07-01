@@ -16,15 +16,12 @@ public class DatabaseParameterManager {
      * Writes login details to a json file and saves them if the file cannot be found
      * it will be created.
      */
-    public static void writeParameters(String username, String password, String url){
-        //Signals that the file is empty
-        boolean created = false;
+    public static void writeParameters(String username , String password, String url){
         if(!checkIfExists()){
             createJSONParameterFile();
-            created = true;
         }
         //In the case the file has not been created or the file is not empty
-        if(!created || !(readParameters().equals(new JSONArray()))){
+        if(!(readParameters().equals(new JSONArray()))){
             clearParameterFile();
         }
         //Read in the parameters into a JSONObject then into an array
@@ -65,13 +62,9 @@ public class DatabaseParameterManager {
     public static boolean checkIfExists(){
         File temp;
         boolean ex = false;
-        try {
-            temp = File.createTempFile("db_log", ".json");
-            if(temp.exists()){
-                ex = true;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        temp = new File("db_log.json");
+        if(temp.exists()){
+            ex = true;
         }
         return ex;
     }
@@ -87,9 +80,13 @@ public class DatabaseParameterManager {
     }
 
     /**
-     * Read database parameters return an array of JSONObjects (expected to be 1 object with admin)
+     * Read database parameters return an array of JSONObjects (expected to be 1 object with admin), creates a new file in the case it is empty.
      */
     public static JSONArray readParameters(){
+        //Signals that the file is empty
+        if(!checkIfExists()){
+            createJSONParameterFile();
+        }
         JSONParser jsonParser = new JSONParser();
         JSONArray arr = null;
         FileReader reader = null;
@@ -97,10 +94,9 @@ public class DatabaseParameterManager {
             reader = new FileReader("db_log.json");
             Object obj = jsonParser.parse(reader);
             arr = (JSONArray) obj;
-            System.out.println(arr);
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
-            e.printStackTrace();
+            System.out.println("Read parameter file does not exist");
         } catch (ParseException e) {
             //Return an empty array
             System.out.println("JSON file is empty");
