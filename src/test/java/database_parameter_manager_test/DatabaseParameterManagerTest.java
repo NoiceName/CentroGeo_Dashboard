@@ -13,17 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class DatabaseParameterManagerTest {
 
-    //Todo delete this test later
-    /**
-     * Check whether the program is able to test if a file exists
-     */
-//    @Test
-//    public void readTest(){
-//        System.out.println(DatabaseParameterManager.readParameters());
-//        assertTrue(true);
-//    }
-
-
     /**
      * Test to be able to write and read from a file
      */
