@@ -50,6 +50,11 @@ public class SimulationResources {
 		}
 	}
 
+	/**
+	 * In the case the server had an error connecting to the database it will set the array to have
+	 * 1 simulation which has an id of 0.
+	 * @return An array of simulations and its metadata
+	 */
 	@GET
 	@Produces("application/json")
 	public ArrayList<Simulation> getSimulations(){
