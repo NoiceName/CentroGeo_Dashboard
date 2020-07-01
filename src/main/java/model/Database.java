@@ -17,6 +17,7 @@ public class Database {
 	//	String url = "jdbc:postgresql://bronto.ewi.utwente.nl/";
 	//	String username = "dab_di19202b_2";
 	//	String password = "3JvJt7ETzXVak62M";
+
 	//Do not change this variable
 	String schemaName = "projectschema";
 
@@ -92,8 +93,32 @@ public class Database {
 		return null;
 	}
 
+	/**
+	 * Closes an open connection for this database
+	 */
+	public void closeConnection(){
+		try {
+			this.connection.close();
+		} catch (SQLException throwables) {
+		    System.out.println(throwables.getMessage());
+			throwables.printStackTrace();
+		}
+	}
+
 	public String getSchema() {
 		return this.schemaName;
+	}
+
+	public static void setUrl(String pasurl){
+		url = pasurl;
+	}
+
+	public static void setPassword(String pass){
+		password = pass;
+	}
+
+	public static void setUsername(String user){
+		username = user;
 	}
 
 	public Connection getConnection() {

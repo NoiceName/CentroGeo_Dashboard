@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Initialise</title>
+</head>
+<body>
+    <div class="row justify-content-md-center">
+       <div class="col-6">
+           <div class="row d-block p-2 bg-primary text-white">
+               <span>This form will attempt to connect to the specified database (PostgresSQL) in the case of the successful connection a schema called "projectschema" will be initialised</span>
+           </div>
+           <div class="row">
+               <span class="d-block p-2 bg-danger text-white">Please Note: Submitting this action will not work in the case you already have a schema called "projectschema" in your database server</span>
+           </div>
+           <div class="row">
+               <div class="col-12">
+                   <form class="form-group" action="/CentroGeo/resources/initialize_db" method="post">
+                       <label for="databaseUrl">Database URL (as required by postgres)</label>
+                       <input type="text" id="databaseUrl" class="form-control" name="database_url">
+                       <small class="form-text text-muted">Eg. jdbc:postgresql://localhost:5432/</small>
+                       <label for="databaseUsername">Database Username</label>
+                       <input type="text" id="databaseUsername" name="database_username" class="form-control">
+                       <label for="databasePassword">Database Password</label>
+                       <input type="password" id="databasePassword" class="form-control" name="database_password">
+                       <button type="submit" class="btn btn-primary btn-block">Submit!</button>
+                   </form>
+               </div>
+           </div>
+       </div>
+    </div>
+</body>
+</html>
