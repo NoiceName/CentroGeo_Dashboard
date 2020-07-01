@@ -93,9 +93,9 @@ public class Database {
 		//If there are no parameters or they have not been set
 		if (arr.equals(new JSONArray())) {
 			System.out.println("The parameter file is empty not setting parameters");
-			setUsername("");
-			setUrl("");
-			setPassword("");
+			setUsername("dab_di19202b_2");
+			setUrl("jdbc:postgresql://bronto.ewi.utwente.nl/");
+			setPassword("3JvJt7ETzXVak62M");
 		} else {
 			System.out.println("Setting database parameters from storage");
 			JSONObject params = (JSONObject) arr.get(0);
@@ -104,6 +104,8 @@ public class Database {
 			setPassword((String) params.get("password"));
 		}
 	}
+
+
 
 	/**
 	 * Creates a prepared statement from the connected database
@@ -135,20 +137,39 @@ public class Database {
 		return this.schemaName;
 	}
 
-	public static void setUrl(String pasurl){
+	public static void setParameters(String username, String password, String url){
+		DatabaseParameterManager.writeParameters(username,password,url);
+		setUsername(username);
+		setPassword(password);
+		setUrl(url);
+	}
+
+	private static void setUrl(String pasurl){
 		url = pasurl;
 	}
 
-	public static void setPassword(String pass){
+	private static void setPassword(String pass){
 		password = pass;
 	}
 
-	public static void setUsername(String user){
+	private static void setUsername(String user){
 		username = user;
 	}
 
 	public Connection getConnection() {
-		return this.connection;
+		return connection;
+	}
+
+	public String getPassword(){
+		return password;
+	}
+
+	public String getUrl(){
+		return url;
+	}
+
+	public String getUsername(){
+		return username;
 	}
 
 }

@@ -153,9 +153,7 @@ public enum InitDAO {
       }
 
       //Set database parameters
-      Database.setUrl(dbUrl);
-      Database.setPassword(password);
-      Database.setUsername(dbUsername);
+      Database.setParameters(dbUsername, password, dbUrl);
       resp.setResult("success");
       return resp;
    }
