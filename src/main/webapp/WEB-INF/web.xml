@@ -29,6 +29,9 @@
         </init-param>
 
     </servlet>
+    <listener>
+        <listener-class>server_initialiser.Config</listener-class>
+    </listener>
     <servlet-mapping>
     	<servlet-name>Resources</servlet-name>
     	<url-pattern>/resources/*</url-pattern>
