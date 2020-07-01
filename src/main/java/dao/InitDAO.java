@@ -156,7 +156,6 @@ public enum InitDAO {
       Database.setUrl(dbUrl);
       Database.setPassword(password);
       Database.setUsername(dbUsername);
-      //TODO set administrator in the database here
       resp.setResult("success");
       return resp;
    }
