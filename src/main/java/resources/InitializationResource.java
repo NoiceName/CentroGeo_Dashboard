@@ -2,6 +2,7 @@ package resources;
 
 import dao.InitDAO;
 import dao.UserDAO;
+import database_parameter_manager.DatabaseParameterManager;
 import model.Database;
 import model.InitResp;
 import model.User;

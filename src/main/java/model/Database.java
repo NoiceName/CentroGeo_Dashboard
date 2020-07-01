@@ -1,5 +1,9 @@
 package model;
 
+import database_parameter_manager.DatabaseParameterManager;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -60,6 +64,8 @@ public class Database {
 		}
 	}
 
+
+
 	/**
 	 * Connects to the specified PGSQL database
 	 * @return
@@ -77,6 +83,26 @@ public class Database {
 		this.connection = conn;
 		return conn;
 
+	}
+
+	/**
+	 * Read database parameters from the db_log.json file
+	 */
+	public static void readInParametersFromStorage() {
+		JSONArray arr = DatabaseParameterManager.readParameters();
+		//If there are no parameters or they have not been set
+		if (arr.equals(new JSONArray())) {
+			System.out.println("The parameter file is empty not setting parameters");
+			setUsername("");
+			setUrl("");
+			setPassword("");
+		} else {
+			System.out.println("Setting database parameters from storage");
+			JSONObject params = (JSONObject) arr.get(0);
+			setUsername((String) params.get("username"));
+			setUrl((String) params.get("url"));
+			setPassword((String) params.get("password"));
+		}
 	}
 
 	/**
