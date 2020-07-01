@@ -7,3 +7,4 @@ target/
 .settings/ 
 /lib/
 lib/
+db_log.json
