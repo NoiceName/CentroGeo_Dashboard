@@ -14,13 +14,9 @@ public class Database {
 	//Specify the parameters for the database here!
 	//The URL of the database (Note: the url string should begin with 'jdbc::postgresq:' "
 	//The username of the database user
-	static String url = "";
-	static String username = "";
-	static String password = "";
-	//Information used for testing when deploying
-	//	String url = "jdbc:postgresql://bronto.ewi.utwente.nl/";
-	//	String username = "dab_di19202b_2";
-	//	String password = "3JvJt7ETzXVak62M";
+	private static String url = "";
+	private static String username = "";
+	private static String password = "";
 
 	//Do not change this variable
 	String schemaName = "projectschema";
@@ -93,9 +89,9 @@ public class Database {
 		//If there are no parameters or they have not been set
 		if (arr.equals(new JSONArray())) {
 			System.out.println("The parameter file is empty not setting parameters");
-			setUsername("dab_di19202b_2");
-			setUrl("jdbc:postgresql://bronto.ewi.utwente.nl/");
-			setPassword("3JvJt7ETzXVak62M");
+			setUsername("");
+			setUrl("");
+			setPassword("");
 		} else {
 			System.out.println("Setting database parameters from storage");
 			JSONObject params = (JSONObject) arr.get(0);
@@ -103,8 +99,9 @@ public class Database {
 			setUrl((String) params.get("url"));
 			setPassword((String) params.get("password"));
 		}
+		System.out.println("The currently used parameters are:");
+		System.out.println(DatabaseParameterManager.readParameters());
 	}
-
 
 
 	/**
@@ -160,16 +157,17 @@ public class Database {
 		return connection;
 	}
 
-	public String getPassword(){
+	public static String getPassword(){
 		return password;
 	}
 
-	public String getUrl(){
+	public static String getUrl(){
 		return url;
 	}
 
-	public String getUsername(){
+	public static String getUsername(){
 		return username;
 	}
+
 
 }
