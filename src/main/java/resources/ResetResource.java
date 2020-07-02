@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 public class ResetResource {
 
     /**
-     * Resets the database parameters and redirects the user to the login page
+     * Resets the database parameters
      */
     @POST
     @Secured
