@@ -24,18 +24,6 @@ public class Database {
 	Connection connection;
 
 	/**
-	 * Saves a database with given parameters
-	 * @param url
-	 * @param username
-	 * @param password
-	 */
-	public Database(String url, String username, String password, String schemaName) {
-		this.url = url;
-		this.username = username;
-		this.password = password;
-	}
-
-	/**
 	 * Instantiates a database with default parameters
 	 */
 	public Database() {
@@ -68,11 +56,11 @@ public class Database {
 	 */
 	public Connection connectPGSQL() {
 		Properties props = new Properties();
-		props.setProperty("user", this.username);
-		props.setProperty("password", this.password);
+		props.setProperty("user", username);
+		props.setProperty("password", password);
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(this.url, props);
+			conn = DriverManager.getConnection(url, props);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
