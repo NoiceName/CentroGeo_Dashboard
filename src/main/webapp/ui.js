@@ -293,6 +293,11 @@ function refreshSimulations(){
 	clearSimulations();
 	$.get("/CentroGeo/resources/simulations", function (resp) {
 		loadedSimulations = resp;
+		if(resp!==[]){
+		    if(resp[0].simulationId === 0){
+				alert("Unable to connect to the database please check your database parameters!");
+			}
+		}
 		loadSimulations(resp);
 	});
 }

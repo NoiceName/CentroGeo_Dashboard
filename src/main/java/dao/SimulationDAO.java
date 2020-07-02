@@ -43,8 +43,10 @@ public enum SimulationDAO {
 				arr.add(sim);
 			}
 		} catch (SQLException e) {
+		    //Executed in the case the schema does not exist
+			Simulation sim = new Simulation(0, "", "", "", "");
+			arr.add(sim);
 			System.out.println(e.getMessage());
-			e.printStackTrace();
 		}
 		return arr;
 	}

@@ -9,6 +9,7 @@ info:
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
 basePath: /CentroGeo/
+
 schemes:
   - https
 
