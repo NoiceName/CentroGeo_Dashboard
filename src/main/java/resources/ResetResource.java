@@ -22,11 +22,13 @@ public class ResetResource {
     @Produces("application/json")
     public Response resetDatabase(@FormParam("action") String action){
         JSONObject resp = new JSONObject();
-        if(!(action.equals("reset"))){
+        System.out.println(action);
+        if(!(action.equals("RESET"))){
             resp.put("result", "false");
             return Response.ok().entity(resp.toString()).build();
         } else {
             Database.setParameters("", "", "");
+            System.out.println("Database disconnected...");
             resp.put("result", "true");
             return Response.ok().entity(resp.toString()).build();
         }

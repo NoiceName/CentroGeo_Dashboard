@@ -21,7 +21,7 @@ $(function() {
                         alert('One of the parameters was not given please check your input and try again');
                     }
                     else if (resp.result==='success'){
-                        alert('Database has been successfully initiated and admin user has been set!');
+                        window.location.replace('/CentroGeo/login/log_in.html');
                     }
                     else if (resp.result==="bad_created"){
                         alert('Database has already been initialised if you would like to reset the schema, please login and go to the reset page');
