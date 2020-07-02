@@ -21,9 +21,27 @@ public enum InitDAO {
     * @return - InitResp object which is set to success in the case the database was created
     * Set to bad_login in the case the login details are incorrect
     * Set to bad_exists in the case "projectschema" already exists.
+    * Set to bad_created in the case "projectschema" has already been initialised prior
+    * Set to bad_params in the case one of the parameters is an empty string
     * Set to success in the case a new "projectschema" has been created
     */
    public InitResp databaseInit(String dbUrl, String dbUsername, String password) {
+      //Check if database has already been initialised
+
+      //Todo test this!
+      //One of the given parameters is not given
+      if(dbUrl.equals("") || dbUsername.equals("") || password.equals("")){
+         InitResp resp = new InitResp("bad_params");
+         return resp;
+      }
+
+      //Todo test this!
+      //A database has already been initialised
+      if(!(Database.getUsername().equals("")&&Database.getPassword().equals("")&&Database.getUrl().equals(""))){
+          InitResp resp = new InitResp("bad_created");
+          return resp;
+      }
+
       Database.loadPGSQL();
       Properties props = new Properties();
       props.setProperty("user", dbUsername);
