@@ -41,7 +41,6 @@ public class DatabaseParameterManager {
         }
     }
 
-
     /**
      * Creates a new db_log.json file
      */
@@ -107,4 +106,17 @@ public class DatabaseParameterManager {
         return arr;
     }
 
+    /**
+     * @return - Absolute path of the file
+     * @requires - The file exists
+     */
+    public static String getFilePath(){
+        File jsonFile = new File("db_log.json");
+        return jsonFile.getAbsolutePath();
+    }
+
+
+
+
+    /* Todo add another variable to the database parameter file that will indicate whether the database can be initialised */
 }
