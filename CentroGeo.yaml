@@ -1,0 +1,340 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: CentroGeo Dashboard
+  # put the contact info for your development or API team
+
+# tags are used for organizing operations
+
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /CentroGeo/
+schemes:
+  - https
+
+paths:
+  /resources/simulations/{simulation_id}:
+    delete:
+      description: Deletes specified simulation
+      parameters:
+        - name: simulation_id
+          in: path
+          type: integer
+          required: true
+          description: ID of a simulation
+      responses:
+        "200":
+          description: Nothing is returned
+
+  /resources/simulations/{simulation_id}/charts/number_of_running_vehicles:
+    get:
+      description: Returns the cumilative number of running vehicles chart points
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+      responses:
+        '200':
+          description: X-Y points for the required chart
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Chart"
+
+  /resources/simulations/{simulation_id}/charts/average_vehicle_speed:
+    get:
+      description: Returns the average_vehicle_speed chart points
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+      responses:
+        '200':
+          description: X-Y points for the required chart
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Chart"
+
+  /resources/simulations/{simulation_id}/charts/cumulative_number_of_arrived_vehicles:
+    get:
+      description: Returns Cumilative Number of arrived vehicles chart points.
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+      responses:
+        '200':
+          description: X-Y points for the required chart
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Chart"
+
+  /resources/simulations/{simulation_id}/charts/edge_appereance:
+    get:
+      description: Returns information needed for generating a "Edge appereance frequency" chart
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+        - in: query
+          required: true
+          description: Array of the requested edges
+          name: edge_ids
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Edge Appereance chart information
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Chart"
+
+
+  /resources/simulations/{simulation_id}/charts/average_vehicle_speed_factor:
+    get:
+      description: Returns the average_vehicle_speed chart points
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+      responses:
+        '200':
+          description: X-Y points for the required chart
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Chart"
+
+  /resources/simulations/{simulation_id}/charts/transiting_vehicles:
+    get:
+      description: Returns information needed for generating a "Number of lane transiting vehicles" chart
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+        - in: query
+          required: true
+          description: Array of the requested lanes
+          name: lanes_ids
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Lane occupation information
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      time:
+                        type: number
+                      count:
+                        type: integer
+
+  /resources/simulations/{simulation_id}/charts/vehicle_information:
+    get:
+      description: Returns route_length, speed and speedfactor for the specified vehilce over time.
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+        - in: query
+          required: true
+          description: ID of requested vehicle
+          name: vehicle_id
+          type: string
+      responses:
+        '200':
+          description: Vehicle information
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                speed_by_time:
+                  $ref: "#/definitions/Chart"
+                speed_factor_by_time:
+                  $ref: "#/definitions/Chart"
+                route_length_by_time:
+                  $ref: "#/definitions/Chart"
+
+
+
+  /resources/simulations:
+    get:
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Array containing all simulations
+          schema:
+            type: object
+            properties:
+              simulations:
+                type: array
+                items:
+                  $ref: '#/definitions/Simulation'
+
+  /resources/simulations/{simulation_id}/charts/number_of_transferred_vehicles:
+    get:
+      description: Returns the points needed to generate the number of transferred vehicles chart.
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+      responses:
+        '200':
+          description: X-Y points for the required chart
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Chart"
+
+  /resources/simulations/{simulation_id}/lane_ids:
+    get:
+      description: Returns all lane id's belonging to the specified simulation
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+      responses:
+        '200':
+          description: An array of ids
+          schema:
+            $ref: "#/definitions/IdContainer"
+
+  /resources/simulations/simulation_ids:
+    get:
+      description: Returns all lane id's belonging to the specified simulation
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+      responses:
+        '200':
+          description: An array of ids
+          schema:
+            $ref: "#/definitions/IdContainer"
+
+
+
+  /resources/simulations/{simulation_id}/vehicle_ids:
+    get:
+      description: Returns all vehicle id's belonging to the specified simulation
+      produces:
+        - application/json
+      parameters:
+        - name: simulation_id
+          in: path
+          required: true
+          description: The ID of the requested simulation.
+          type: integer
+      responses:
+        '200':
+          description: An array of ids
+          schema:
+            $ref: "#/definitions/IdContainer"
+
+
+
+
+
+
+definitions:
+  Simulation:
+    type: object
+    properties:
+      simulation_id:
+        type: integer
+        description: ID of the simulation
+      name:
+        type: string
+        description: Name of the simulation
+      date:
+        type: string
+        description: Date when the simulation was created
+      tags:
+        type: string
+        description: Tags added to the simulation
+      description:
+        type: string
+        description: Description of the simulation
+
+  Chart:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ID of the chart (blank if no identifier is needed)
+      data:
+        type: array
+        description: Points of the requested chart
+        items:
+          $ref: "#/definitions/ChartPoint"
+
+  IdContainer:
+    type: object
+    properties:
+      ids:
+        type: array
+        items:
+          type: string
+
+
+  ChartPoint:
+    type: object
+    properties:
+      x:
+        type: number
+      y:
+        type: number
