@@ -109,6 +109,55 @@ paths:
             items:
               $ref: "#/definitions/Chart"
 
+  /resources/initialize_db:
+    post:
+      description: Creates a "projectschema" in the specified database
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: dbUrl
+          type: string
+          description: The URL of the database
+        - in: formData
+          name: dbUsername
+          type: string
+          description: The Username of the database
+        - in: formData
+          name: password
+          type: string
+          description: Database password
+      responses:
+        200:
+          description: A response in the case the server processes the request
+          schema:
+            type: object
+            properties:
+              result:
+                type: string
+
+  /resources/reset_db:
+    post:
+      description: Disconnects the back-end from the specified "projectschema" schema
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: action
+          type: string
+          description: the RESET keyword
+      responses:
+        200:
+          description: A response in the case the server processes the request
+          schema:
+            type: object
+            properties:
+              result:
+                type: string
 
   /resources/simulations/{simulation_id}/charts/average_vehicle_speed_factor:
     get:
@@ -296,7 +345,7 @@ paths:
   /resources/user_resource/login:
     post:
       description: Try to login using the username and the password
-      produces: 
+      produces:
         - application/json
       parameters:
         - name: username
@@ -315,14 +364,14 @@ paths:
           schema:
             type: object
             properties:
-              result: 
+              result:
                 type: boolean
-                
-                
+
+
   /resources/user_resource/change_password:
     post:
       description: Change your password
-      produces: 
+      produces:
         - application/json
       parameters:
         - name: username
@@ -346,14 +395,14 @@ paths:
           schema:
             type: object
             properties:
-              result: 
+              result:
                 type: boolean
-                
+
 
   /resources/simulations/metadata:
     post:
       description: Update simulation metadata
-      produces: 
+      produces:
         - application/json
       parameters:
         - name: title
@@ -387,9 +436,9 @@ paths:
           schema:
             type: object
             properties:
-              result: 
+              result:
                 type: boolean
-          
+
 
 
 
@@ -442,6 +491,3 @@ definitions:
         type: number
       y:
         type: number
-        
-  
-  
