@@ -9,7 +9,6 @@ info:
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
 basePath: /CentroGeo/
-
 schemes:
   - https
 
@@ -213,6 +212,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Simulation'
+    post:
+      consumes:
+        - application/zip
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Ok message
 
   /resources/simulations/{simulation_id}/charts/number_of_transferred_vehicles:
     get:
@@ -286,7 +293,103 @@ paths:
           schema:
             $ref: "#/definitions/IdContainer"
 
+  /resources/user_resource/login:
+    post:
+      description: Try to login using the username and the password
+      produces: 
+        - application/json
+      parameters:
+        - name: username
+          in: query
+          required: true
+          description: Username
+          type: string
+        - name: password
+          in: query
+          required: true
+          description: Password
+          type: string
+      responses:
+        '200':
+          description: json object containing boolean
+          schema:
+            type: object
+            properties:
+              result: 
+                type: boolean
+                
+                
+  /resources/user_resource/change_password:
+    post:
+      description: Change your password
+      produces: 
+        - application/json
+      parameters:
+        - name: username
+          in: query
+          required: true
+          description: Username
+          type: string
+        - name: oldPassword
+          in: query
+          required: true
+          description: newPassword
+          type: string
+        - name: password
+          in: query
+          required: true
+          description: Password
+          type: string
+      responses:
+        '200':
+          description: json object containing boolean
+          schema:
+            type: object
+            properties:
+              result: 
+                type: boolean
+                
 
+  /resources/simulations/metadata:
+    post:
+      description: Update simulation metadata
+      produces: 
+        - application/json
+      parameters:
+        - name: title
+          in: query
+          required: true
+          description: Title
+          type: string
+        - name: simulation_name
+          in: query
+          required: true
+          description: Name of the simulation
+          type: string
+        - name: date
+          in: query
+          required: true
+          description: Date associated to the simulation
+          type: string
+        - name: tag_values
+          in: query
+          required: true
+          description: Certain tags associated to the simulation
+          type: string
+        - name: description
+          in: query
+          required: true
+          description: Description of the simulation
+          type: string
+      responses:
+        '200':
+          description: json object containing boolean
+          schema:
+            type: object
+            properties:
+              result: 
+                type: boolean
+          
 
 
 
@@ -339,3 +442,6 @@ definitions:
         type: number
       y:
         type: number
+        
+  
+  
